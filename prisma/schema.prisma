@@ -1,0 +1,77 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  userId Int @id @default(autoincrement())
+  firstName String
+  lastName String
+  email String
+  userPassword String
+  isAdmin Boolean @default(false)
+  exp String
+  school String
+  skills String
+  company companies?
+  applications applications[]
+}
+
+model advertissements {
+  advertissementId Int @id @default(autoincrement())
+  title String
+  description String
+  date DateTime @default(now())
+  company companies @relation(fields: [companyId], references: [companyId])
+  companyId Int
+  wages Int
+  place String
+  workingTime String
+  expRequired String
+  applications applications[]
+}
+
+model companies {
+  companyId Int @id @default(autoincrement())
+  name String
+  user   user @relation(fields: [userId], references: [userId])
+  userId Int  @unique
+  advertissements advertissements[]
+}
+
+model applications {
+  applicationId Int @id @default(autoincrement())
+  user user? @relation(fields: [userId], references: [userId])
+  userId Int?
+  advertissements advertissements @relation(fields: [advertissementId], references: [advertissementId])
+  advertissementId Int
+  date DateTime @default(now())
+  status String
+  applicationinformation applicationinformation?
+  jobinformation jobinformation?
+}
+
+model applicationinformation {
+  lastName String
+  firstName String
+  email String
+  exp String
+  school String
+  skills String
+  application applications @relation(fields: [applicationId], references: [applicationId])
+  applicationId Int @unique
+}
+
+model jobinformation {
+  isSaved Boolean @default(false)
+  isApplied Boolean @default(false)
+  application applications @relation(fields: [applicationId], references: [applicationId])
+  applicationId Int @unique
+}
