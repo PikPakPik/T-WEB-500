@@ -1,6 +1,9 @@
 {
   "name": "t-web-501-nan_2",
   "version": "1.0.0",
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "description": "",
   "main": "index.js",
   "scripts": {
