@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AdsCard from "../components/cards/AdCard";
 
 const tabs = [
@@ -10,138 +10,27 @@ const tabs = [
   "Discover",
 ];
 
-const companies = [
-  {
-    name: "Google",
-    logo: "https://cdn.icon-icons.com/icons2/2428/PNG/512/google_black_logo_icon_147125.png",
-  },
-  {
-    name: "Spotify",
-    logo: "https://cdn.icon-icons.com/icons2/791/PNG/512/spotify_icon-icons.com_65503.png",
-  },
-  {
-    name: "Facebook",
-    logo: "https://cdn.icon-icons.com/icons2/1/PNG/256/social_facebook_fb_35.png"
-  }
-];
-
-const ads = [
-  {
-    title: "UX Internship",
-    description: "loremp ipsum dolor sit amet",
-    date: new Date(Date.now() - 172800000),
-    wages: 40000,
-    place: "France",
-    workingTime: "Full-time",
-    expRequired: "Junior",
-    company: companies[0],
-  },
-  {
-    title: "UX Internship",
-    description:
-      "loremp ipsum dolor sit ametuhdfgdydgysgsgs sdygsdfgfd fddfgddjhfdhfgd dsysdfgdfysgfdhdfhgdgf",
-    date: new Date(Date.now() - 172800000),
-    wages: 40000,
-    place: "France",
-    workingTime: "Full-time",
-    expRequired: "Junior",
-    company: companies[1],
-  },
-  {
-    title: "UX Internship",
-    description: "loremp ipsum dolor sit amet",
-    date: new Date(Date.now() - 172800000),
-    wages: 40000,
-    place: "France",
-    workingTime: "Full-time",
-    expRequired: "Junior",
-    company: companies[2],
-  },
-  {
-    title: "UX Internship",
-    description: "loremp ipsum dolor sit amet",
-    date: new Date(Date.now() - 172800000),
-    wages: 40000,
-    place: "France",
-    workingTime: "Full-time",
-    expRequired: "Junior",
-    company: companies[0],
-  },
-  {
-    title: "UX Internship",
-    description: "loremp ipsum dolor sit amet",
-    date: new Date(Date.now() - 172800000),
-    wages: 40000,
-    place: "France",
-    workingTime: "Full-time",
-    expRequired: "Junior",
-    company: companies[1],
-  },
-  {
-    title: "UX Internship",
-    description: "loremp ipsum dolor sit amet",
-    date: new Date(Date.now() - 172800000),
-    wages: 40000,
-    place: "France",
-    workingTime: "Full-time",
-    expRequired: "Junior",
-    company: companies[2],
-  },
-  {
-    title: "UX Internship",
-    description: "loremp ipsum dolor sit amet",
-    date: new Date(Date.now() - 172800000),
-    wages: 40000,
-    place: "France",
-    workingTime: "Full-time",
-    expRequired: "Junior",
-    company: companies[0],
-  },
-  {
-    title: "UX Internship",
-    description: "loremp ipsum dolor sit amet",
-    date: new Date(Date.now() - 172800000),
-    wages: 40000,
-    place: "France",
-    workingTime: "Full-time",
-    expRequired: "Junior",
-    company: companies[1],
-  },
-  {
-    title: "UX Internship",
-    description: "loremp ipsum dolor sit amet",
-    date: new Date(Date.now() - 172800000),
-    wages: 40000,
-    place: "France",
-    workingTime: "Full-time",
-    expRequired: "Junior",
-    company: companies[2],
-  },
-  {
-    title: "UX Internship",
-    description: "loremp ipsum dolor sit amet",
-    date: new Date(Date.now() - 172800000),
-    wages: 40000,
-    place: "France",
-    workingTime: "Full-time",
-    expRequired: "Junior",
-    company: companies[0],
-  },
-  {
-    title: "UX Internship",
-    description: "loremp ipsum dolor sit amet",
-    date: new Date(Date.now() - 172800000),
-    wages: 40000,
-    place: "France",
-    workingTime: "Full-time",
-    expRequired: "Junior",
-    company: companies[1],
-  },
-];
-
 const Home = () => {
   const [activeTab, setActiveTab] = useState("Découvrir");
   const [displayCount, setDisplayCount] = useState(9);
+  const [ads, setAds] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:3001")
+      .then((res) => res.json())
+      .then((data) => {
+        data.forEach((ad) => {
+          fetch(`http://localhost:3001/company/${ad.companyId}`)
+            .then((res) => res.json())
+            .then((company) => {
+              setAds((ads) => {
+                const newAds = [...ads, { ...ad, company: company }];
+                return newAds;
+              });
+            });
+        });
+      });
+  }, []);
 
   return (
     <div className="container mx-auto px-4 mt-5">
