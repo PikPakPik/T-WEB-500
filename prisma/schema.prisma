@@ -14,7 +14,7 @@ model user {
   userId       Int            @id @default(autoincrement())
   firstName    String
   lastName     String
-  email        String
+  email        String         @unique
   userPassword String
   isAdmin      Boolean        @default(false)
   exp          String
