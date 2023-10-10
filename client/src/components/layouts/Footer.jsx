@@ -1,9 +1,11 @@
 const Footer = () => {
-    return (
-        <header>
-            <h1>Footer</h1>
-        </header>
-    );
-}
+  return (
+    <footer className="footer footer-center p-4 bg-base-200 text-base-content">
+      <aside>
+        <p>Copyright © 2023 - All right reserved by Epitech Nantes</p>
+      </aside>
+    </footer>
+  );
+};
 
-export default Footer
+export default Footer;
