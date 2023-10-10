@@ -46,6 +46,7 @@ async function main() {
     },
     include: {
       user: true,
+      advertissements: true,
     },
   });
 }
