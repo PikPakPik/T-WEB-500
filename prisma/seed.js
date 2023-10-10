@@ -20,6 +20,7 @@ async function main() {
   const company = await prisma.companies.create({
     data: {
       name: "Prisma",
+      logo: "https://www.prisma.io/images/ogimage.png",
       user: {
         create: {
           firstName: "John",
