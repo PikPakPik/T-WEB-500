@@ -1,9 +1,9 @@
 import React from "react";
 
 const ThemeChange = () => {
-  const [theme, setTheme] = React.useState('business');
+  const [theme, setTheme] = React.useState('dark');
   const toggleTheme = () => {
-    setTheme(theme === 'business' ? 'light' : 'business');
+    setTheme(theme === 'dark' ? 'light' : 'dark');
   };
   React.useEffect(() => {
     document.querySelector('html').setAttribute('data-theme', theme);

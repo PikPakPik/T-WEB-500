@@ -6,14 +6,14 @@ const ProfileDropdown = () => {
       <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
         <div className="w-10 rounded-full">
           <img
-            src="https://avatars.githubusercontent.com/u/12592949?v=4"
+            src="https://imgur.com/mfutu50.png"
             alt="avatar"
           />
         </div>
       </label>
       <ul
         tabIndex={0}
-        className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+        className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content rounded-box w-52 bg-base-200 relative z-50"
       >
         <li>
           <a>Profile </a>
