@@ -21,6 +21,16 @@ const datamapper = {
     });
     return oneAdvertisement;
   },
+
+  //! Show all advertisements from one company
+  getCompanyAdvertisements: async (companyId) => {
+    const companyAdvertisements = await prisma.advertissements.findMany({
+      where: {
+        companyId: companyId,
+      },
+    });
+    return companyAdvertisements;
+  },
 };
 
 module.exports = datamapper;

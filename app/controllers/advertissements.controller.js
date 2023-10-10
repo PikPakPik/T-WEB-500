@@ -13,6 +13,15 @@ const controller = {
     const oneAdvertisement = await datamapper.getOneAdvertisement(advertId);
     res.json(oneAdvertisement);
   },
+
+  //! Show all advertisements from one company
+  getCompanyAdvertisements: async (req, res) => {
+    const companyId = parseInt(req.params.companyId);
+    const companyAdvertisements = await datamapper.getCompanyAdvertisements(
+      companyId
+    );
+    res.json(companyAdvertisements);
+  },
 };
 
 module.exports = controller;
