@@ -8,6 +8,10 @@ const usersController = require("../controllers/users.controller");
 // Define routes advertissements
 router.get("/", advertissementsController.getAdvertissements);
 router.get("/advert/:advertId", advertissementsController.getOneAdvertisement);
+router.get(
+  "/advertCompany/:companyId",
+  advertissementsController.getCompanyAdvertisements
+);
 
 // Define routes users
 router.post("/signup", usersController.createUser);
