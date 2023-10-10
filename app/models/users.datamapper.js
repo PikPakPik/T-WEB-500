@@ -27,6 +27,23 @@ const datamapper = {
     });
     return createdUser;
   },
+
+  //! login with JWT
+
+  login: async (email, userPassword) => {
+    const user = await prisma.user.findMany({
+      where: {
+        email: email,
+      },
+    });
+    // if (!user) {
+    //   return null;
+    // }
+    // if (user.userPassword !== userPassword) {
+    //   return null;
+    // }
+    return user;
+  },
 };
 
 module.exports = datamapper;
