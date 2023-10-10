@@ -19,18 +19,22 @@ const Home = () => {
     fetch("http://localhost:3001")
       .then((res) => res.json())
       .then((data) => {
-        data.forEach((ad) => {
-          fetch(`http://localhost:3001/company/${ad.companyId}`)
-            .then((res) => res.json())
-            .then((company) => {
-              setAds((ads) => {
-                const newAds = [...ads, { ...ad, company: company }];
-                return newAds;
-              });
-            });
+        const promises = data.map((ad) =>
+          fetch(`http://localhost:3001/company/${ad.companyId}`).then((res) =>
+            res.json()
+          )
+        );
+        
+        Promise.all(promises).then((companies) => {
+          const newAds = data.map((ad, index) => ({
+            ...ad,
+            company: companies[index],
+          }));
+          setAds(newAds);
         });
       });
   }, []);
+  
 
   return (
     <div className="container mx-auto px-4 mt-5">
