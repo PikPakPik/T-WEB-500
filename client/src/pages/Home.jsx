@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import { Icon } from "@iconify/react";
-import moment from "moment";
-import AdsCard from "../components/ads/AdsCard";
+import AdsCard from "../components/cards/AdCard";
 
 const tabs = [
   "Découvrir",
@@ -12,10 +10,20 @@ const tabs = [
   "Discover",
 ];
 
-const companyGoogle = {
-  name: "Google",
-  logo: "https://cdn3.iconfinder.com/data/icons/transparent-on-dark-grey/500/icon-05-512.png",
-};
+const companies = [
+  {
+    name: "Google",
+    logo: "https://cdn.icon-icons.com/icons2/2428/PNG/512/google_black_logo_icon_147125.png",
+  },
+  {
+    name: "Spotify",
+    logo: "https://cdn.icon-icons.com/icons2/791/PNG/512/spotify_icon-icons.com_65503.png",
+  },
+  {
+    name: "Facebook",
+    logo: "https://cdn.icon-icons.com/icons2/1/PNG/256/social_facebook_fb_35.png"
+  }
+];
 
 const ads = [
   {
@@ -26,7 +34,7 @@ const ads = [
     place: "France",
     workingTime: "Full-time",
     expRequired: "Junior",
-    company: companyGoogle,
+    company: companies[0],
   },
   {
     title: "UX Internship",
@@ -37,7 +45,7 @@ const ads = [
     place: "France",
     workingTime: "Full-time",
     expRequired: "Junior",
-    company: companyGoogle,
+    company: companies[1],
   },
   {
     title: "UX Internship",
@@ -47,7 +55,7 @@ const ads = [
     place: "France",
     workingTime: "Full-time",
     expRequired: "Junior",
-    company: companyGoogle,
+    company: companies[2],
   },
   {
     title: "UX Internship",
@@ -57,7 +65,7 @@ const ads = [
     place: "France",
     workingTime: "Full-time",
     expRequired: "Junior",
-    company: companyGoogle,
+    company: companies[0],
   },
   {
     title: "UX Internship",
@@ -67,7 +75,7 @@ const ads = [
     place: "France",
     workingTime: "Full-time",
     expRequired: "Junior",
-    company: companyGoogle,
+    company: companies[1],
   },
   {
     title: "UX Internship",
@@ -77,7 +85,7 @@ const ads = [
     place: "France",
     workingTime: "Full-time",
     expRequired: "Junior",
-    company: companyGoogle,
+    company: companies[2],
   },
   {
     title: "UX Internship",
@@ -87,7 +95,7 @@ const ads = [
     place: "France",
     workingTime: "Full-time",
     expRequired: "Junior",
-    company: companyGoogle,
+    company: companies[0],
   },
   {
     title: "UX Internship",
@@ -97,7 +105,7 @@ const ads = [
     place: "France",
     workingTime: "Full-time",
     expRequired: "Junior",
-    company: companyGoogle,
+    company: companies[1],
   },
   {
     title: "UX Internship",
@@ -107,7 +115,7 @@ const ads = [
     place: "France",
     workingTime: "Full-time",
     expRequired: "Junior",
-    company: companyGoogle,
+    company: companies[2],
   },
   {
     title: "UX Internship",
@@ -117,7 +125,7 @@ const ads = [
     place: "France",
     workingTime: "Full-time",
     expRequired: "Junior",
-    company: companyGoogle,
+    company: companies[0],
   },
   {
     title: "UX Internship",
@@ -127,7 +135,7 @@ const ads = [
     place: "France",
     workingTime: "Full-time",
     expRequired: "Junior",
-    company: companyGoogle,
+    company: companies[1],
   },
 ];
 
@@ -157,11 +165,11 @@ const Home = () => {
           <AdsCard ad={ad} index={index} />
         ))}
       </div>
-      {ads.length > displayCount && ( // If there are more ads to display
+      {ads.length > displayCount && (
         <div className="flex justify-center">
           <button
             className="mt-4 bg-blue-500 text-white p-2 rounded-full"
-            onClick={() => setDisplayCount(displayCount + 6)} // 3. Increase count
+            onClick={() => setDisplayCount(displayCount + 6)}
           >
             View More
           </button>
