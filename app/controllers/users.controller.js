@@ -47,15 +47,15 @@ const controller = {
 
     try {
       const user = await datamapper.login(email, userPassword);
+      // console.log(user);
+      // console.log(user[0].userId);
       //If the user give wrong email or password
       if (!user) {
         return res.status(401).send("Wrong email or password");
       }
 
-      return res.json(user);
-
       //if the user give the right email and password then we create a JWT
-      const token = await loginService.authentify(user.id);
+      const token = await loginService.authentify(user[0].userId);
 
       if (!token) {
         throw new Error("Error while creating the token");
@@ -64,10 +64,10 @@ const controller = {
       //We send the token
       const response = {
         logged: true,
-        pseudo: user.firstName,
+        pseudo: user[0].firstName,
         token: token,
       };
-      console.log(response);
+      // console.log(response);
       return res.json(response);
 
       //If there is an error
