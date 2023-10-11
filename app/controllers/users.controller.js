@@ -50,7 +50,7 @@ const controller = {
       // console.log(user);
       // console.log(user[0].userId);
       //If the user give wrong email or password
-      if (!user) {
+      if (!user[0]) {
         return res.status(401).send("Wrong email or password");
       }
 
