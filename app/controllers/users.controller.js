@@ -1,5 +1,7 @@
 const datamapper = require("../models/users.datamapper");
 const loginService = require("../services/login.service");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 const controller = {
   //! Create a new user
@@ -17,12 +19,15 @@ const controller = {
     } = req.body;
 
     try {
+      //Hash the password
+      const hashedPassword = await bcrypt.hash(userPassword, saltRounds);
+
       //Create the user if he doesn't exist
       const createdUser = await datamapper.createUser(
         firstName,
         lastName,
         email,
-        userPassword,
+        hashedPassword,
         isAdmin,
         exp,
         school,
