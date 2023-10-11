@@ -34,7 +34,7 @@ const datamapper = {
     const user = await prisma.user.findMany({
       where: {
         email: email,
-        userPassword: userPassword,
+        // userPassword: userPassword,
       },
     });
     return user;

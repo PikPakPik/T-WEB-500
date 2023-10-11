@@ -51,11 +51,18 @@ const controller = {
     const { email, userPassword } = req.body;
 
     try {
-      const user = await datamapper.login(email, userPassword);
-      // console.log(user);
-      // console.log(user[0].userId);
+      const user = await datamapper.login(email);
+
+      let isPasswordValid = false;
+      if (user[0]) {
+        isPasswordValid = await bcrypt.compare(
+          userPassword,
+          user[0].userPassword
+        );
+      }
+
       //If the user give wrong email or password
-      if (!user[0]) {
+      if (!user[0] || !isPasswordValid) {
         return res.status(401).send("Wrong email or password");
       }
 
