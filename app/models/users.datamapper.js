@@ -39,6 +39,17 @@ const datamapper = {
     });
     return user;
   },
+
+  //! Get one user
+
+  getOneUser: async (userId) => {
+    const user = await prisma.user.findUnique({
+      where: {
+        userId: userId,
+      },
+    });
+    return user;
+  },
 };
 
 module.exports = datamapper;

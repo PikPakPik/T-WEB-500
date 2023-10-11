@@ -88,6 +88,30 @@ const controller = {
       res.status(500).send("Error while logging in");
     }
   },
+
+  //! Get one user
+  getOneUser: async (req, res) => {
+    //Get the userId from the request params
+    const userId = parseInt(req.params.userId);
+
+    try {
+      //Get the user from the database
+      const user = await datamapper.getOneUser(userId);
+
+      //If the user doesn't exist
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+
+      //If the user exist
+      return res.json(user);
+
+      //If there is an error
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Error while getting the user");
+    }
+  },
 };
 
 module.exports = controller;
