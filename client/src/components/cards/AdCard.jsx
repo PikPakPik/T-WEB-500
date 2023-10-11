@@ -1,5 +1,6 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import moment from "moment";
+import { Link } from "react-router-dom";
 const colors = [
   "bg-red-300",
   "bg-blue-300",
@@ -14,10 +15,12 @@ const AdsCard = ({ ad, index }) => {
       key={index}
       className="flex flex-col rounded-3xl shadow-lg overflow-hidden relative" // Add 'relative' here
     >
-      <button className="absolute top-2 right-2 bg-base-300 rounded-3xl px-2 py-1 text-md flex flex-row items-center">
-        View
-        <Icon icon="fluent-mdl2:go" className="w-3 ml-1" />
-      </button>
+      <Link to={"/ad/" + ad.advertissementId}>
+        <button className="absolute top-2 right-2 bg-base-300 rounded-3xl px-2 py-1 text-md flex flex-row items-center">
+          View
+          <Icon icon="fluent-mdl2:go" className="w-3 ml-1" />
+        </button>
+      </Link>
       <div
         className={`flex-1 p-6 flex flex-col justify-between ${
           colors[index % colors.length]

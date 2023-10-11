@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { AuthProvider } from './context/AuthContext'
+import AdDetail from "./pages/Ad/AdDetail";
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/ad/:avertissementId" element={<AdDetail />} />
           </Routes>
         </Layout>
       </AuthProvider>
