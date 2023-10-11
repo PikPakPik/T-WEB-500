@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 const Login = () => {
+  const auth = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     userPassword: "",
@@ -9,20 +11,7 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    fetch("http://localhost:3001/login/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) {
-          alert(data.error);
-        } else {
-          alert("Connexion réussie !");
-        }
-      })
-      .catch((err) => console.log(err));
+    auth.login({ email: formData.email, userPassword: formData.userPassword })
   };
 
   const handleInputChange = (e) => {
