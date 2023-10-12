@@ -17,8 +17,9 @@ router.get(
 
 // Define routes users
 router.post("/signup", usersController.createUser);
-router.post("/login", auth.isLogged, usersController.login);
+router.post("/login", usersController.login);
 router.get("/user/:userId", usersController.getOneUser);
+router.get("/me", auth.isLogged, usersController.getMe);
 
 // Define routes company
 router.get("/company/:companyId", compagnyController.getOneCompany);

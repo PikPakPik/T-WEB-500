@@ -17,7 +17,7 @@ const AuthProvider = ({ children }) => {
         const initAuth = async () => {
             const storedToken = window.localStorage.getItem("token")
             if (storedToken) {
-                fetch(process.env.API_URL + '/login', {
+                fetch('http://localhost:3001/me', {
                     headers: {
                         Authorization: `Bearer ${storedToken}`
                     }
@@ -27,6 +27,7 @@ const AuthProvider = ({ children }) => {
                         setUser(data)
                     })
                     .catch(err => {
+                        console.error(err)
                         localStorage.removeItem('token')
                         setUser(null)
                     })
@@ -47,7 +48,6 @@ const AuthProvider = ({ children }) => {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
                 if (data.error) {
                     throw new Error(data.error)
                 }
@@ -63,7 +63,7 @@ const AuthProvider = ({ children }) => {
         setUser(null)
         window.localStorage.removeItem('userData')
         window.localStorage.removeItem("token")
-        Router.push('/')
+        window.location.reload()
     }
 
     const values = {

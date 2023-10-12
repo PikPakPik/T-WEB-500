@@ -26,24 +26,37 @@ const AdsCard = ({ ad, index }) => {
           colors[index % colors.length]
         }`}
       >
-        <div className="flex-1">
-          <p className="text-sm font-light text-black">
-            <div className="flex items-center">
-              <img
-                src={ad.company.logo}
-                alt="logo"
-                className="w-12  h-12   inline-block mr-2"
-              />
-              <div className="flex flex-col">
-                <p className="text-xl font-semibold text-gray-900">
-                  {ad.title}
-                </p>
-                <a href="#" className="hover:underline">
-                  {ad.company.name}
-                </a>
-              </div>
+        <div className="flex-1 text-sm font-light text-black">
+          <div className="flex items-center">
+            <img
+              src={ad.company.logo}
+              alt="logo"
+              className="w-12  h-12   inline-block mr-2"
+            />
+            <div className="flex flex-col">
+              <p className="text-xl font-semibold text-gray-900">{ad.title}</p>
+              <a href="#" className="hover:underline">
+                {ad.company.name}
+              </a>
             </div>
-          </p>
+          </div>
+          <div className="flex flex-row gap-3 mt-3">
+            <div className="badge badge-outline md:whitespace-nowrap md:text-xs">
+              <Icon icon="fluent:location-24-regular" className="w-4 mr-1" />
+              {ad.place}
+            </div>
+            <div className="badge badge-outline md:whitespace-nowrap md:text-xs">
+              <Icon
+                icon="material-symbols:school-outline"
+                className="w-4 mr-1"
+              />
+              {ad.expRequired}
+            </div>
+            <div className="badge badge-outline md:whitespace-nowrap md:text-xs">
+              <Icon icon="ri:time-line" className="w-4 mr-1" />
+              {ad.workingTime}
+            </div>
+          </div>
           <p className="mt-3 text-base text-gray-500">
             {ad.description.slice(0, 86)}...
           </p>
