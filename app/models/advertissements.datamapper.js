@@ -32,6 +32,16 @@ const datamapper = {
     return companyAdvertisements;
   },
 
+  //! Get one company by userId
+  getOneCompany: async (userId) => {
+    const getCompagny = await prisma.companies.findMany({
+      where: {
+        userId: userId,
+      },
+    });
+    return getCompagny;
+  },
+
   //! Create an advertisement
   createAdvertisement: async (
     companyId,
@@ -42,18 +52,15 @@ const datamapper = {
     workingTime,
     expRequired
   ) => {
-    const newAdvertisement = await prisma.company.create({
+    const newAdvertisement = await prisma.advertissements.create({
       data: {
-        advertissements: {
-          create: {
-            title: title,
-            description: description,
-            wages: wages,
-            place: place,
-            workingTime: workingTime,
-            expRequired: expRequired,
-          },
-        },
+        title: title,
+        description: description,
+        companyId: companyId,
+        wages: wages,
+        place: place,
+        workingTime: workingTime,
+        expRequired: expRequired,
       },
     });
     return newAdvertisement;
