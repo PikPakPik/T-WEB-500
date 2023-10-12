@@ -24,6 +24,11 @@ const ProfileDropdown = () => {
               Se connecter
             </Link>
           </li>
+          <li>
+            <Link to="/register" className="flex items-center gap-2">
+              S'inscrire
+            </Link>
+          </li>
         </ul>
       )}
 
