@@ -1,4 +1,5 @@
 const datamapper = require("../models/advertissements.datamapper");
+const loginService = require("../services/login.service");
 
 const controller = {
   //! Show all advertissements
@@ -21,6 +22,37 @@ const controller = {
       companyId
     );
     res.json(companyAdvertisements);
+  },
+
+  //! Create an advertisement
+  createAdvertisement: async (req, res) => {
+    const { title, description, place, workingTime, expRequired } = req.body;
+    const wages = parseInt(req.body.wages);
+
+    //Recup the userId from the token
+    // const userId = user.userId;
+    // console.log(userId);
+    const token = req.headers.authorization?.replace("Bearer ", "");
+    const user = loginService.getUser(token);
+    const userId = user.id;
+
+    //Search the company with the userId
+    const company = await datamapper.getOneCompany(userId);
+    const companyId = parseInt(company[0].companyId);
+
+    //TODO : Finish the function for create a advert with the companyId and the userId
+
+    const newAdvertisement = await datamapper.createAdvertisement(
+      companyId,
+      title,
+      description,
+      wages,
+      place,
+      workingTime,
+      expRequired
+    );
+
+    res.json(newAdvertisement);
   },
 };
 
