@@ -112,6 +112,27 @@ const controller = {
       res.status(500).send("Error while getting the user");
     }
   },
+
+  //! Get the current user with the token
+  getMe: async (req, res) => {
+    const token = req.headers.authorization?.replace("Bearer ", "");
+
+    try {
+      //We traduce the token into a JS object
+      const verifiedToken = loginService.getUser(token);
+
+      //Get the user from the database
+      const user = await datamapper.getOneUser(verifiedToken.id);
+
+      //If the user exist
+      return res.json(user);
+
+      //If there is an error
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Error while getting the user");
+    }
+  }
 };
 
 module.exports = controller;
