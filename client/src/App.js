@@ -7,12 +7,11 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { AuthProvider } from './context/AuthContext'
 import AdDetail from "./pages/Ad/AdDetail";
-
 function App() {
-
   useEffect(() => {
     themeChange(false)
   }, [])
+
   return (
     <>
       <AuthProvider>
