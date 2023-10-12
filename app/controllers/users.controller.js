@@ -1,5 +1,7 @@
 const datamapper = require("../models/users.datamapper");
 const loginService = require("../services/login.service");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 const controller = {
   //! Create a new user
@@ -17,12 +19,15 @@ const controller = {
     } = req.body;
 
     try {
+      //Hash the password
+      const hashedPassword = await bcrypt.hash(userPassword, saltRounds);
+
       //Create the user if he doesn't exist
       const createdUser = await datamapper.createUser(
         firstName,
         lastName,
         email,
-        userPassword,
+        hashedPassword,
         isAdmin,
         exp,
         school,
@@ -46,11 +51,18 @@ const controller = {
     const { email, userPassword } = req.body;
 
     try {
-      const user = await datamapper.login(email, userPassword);
-      // console.log(user);
-      // console.log(user[0].userId);
+      const user = await datamapper.login(email);
+
+      let isPasswordValid = false;
+      if (user[0]) {
+        isPasswordValid = await bcrypt.compare(
+          userPassword,
+          user[0].userPassword
+        );
+      }
+
       //If the user give wrong email or password
-      if (!user[0]) {
+      if (!user[0] || !isPasswordValid) {
         return res.status(401).send("Wrong email or password");
       }
 
@@ -76,6 +88,51 @@ const controller = {
       res.status(500).send("Error while logging in");
     }
   },
+
+  //! Get one user
+  getOneUser: async (req, res) => {
+    //Get the userId from the request params
+    const userId = parseInt(req.params.userId);
+
+    try {
+      //Get the user from the database
+      const user = await datamapper.getOneUser(userId);
+
+      //If the user doesn't exist
+      if (!user) {
+        return res.status(404).send("User not found");
+      }
+
+      //If the user exist
+      return res.json(user);
+
+      //If there is an error
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Error while getting the user");
+    }
+  },
+
+  //! Get the current user with the token
+  getMe: async (req, res) => {
+    const token = req.headers.authorization?.replace("Bearer ", "");
+
+    try {
+      //We traduce the token into a JS object
+      const verifiedToken = loginService.getUser(token);
+
+      //Get the user from the database
+      const user = await datamapper.getOneUser(verifiedToken.id);
+
+      //If the user exist
+      return res.json(user);
+
+      //If there is an error
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Error while getting the user");
+    }
+  }
 };
 
 module.exports = controller;

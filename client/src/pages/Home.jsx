@@ -55,7 +55,7 @@ const Home = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
         {ads.slice(0, displayCount).map((ad, index) => (
-          <AdsCard ad={ad} index={index} />
+          <AdsCard ad={ad} index={index} key={index}/>
         ))}
       </div>
       {ads.length > displayCount && (

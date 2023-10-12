@@ -16,18 +16,18 @@ module.exports = {
     return token;
   },
 
-  // La fonction permet de récupérer les données utilisateur à partir du token
+  // The functions recup the user's data from the token
   getUser(token) {
     if (!token) {
       return null;
     }
     try {
-      // On vérifie et convertit le token en objet JS
+      // We check and convert the token into a JS object
       const user = jwt.verify(token, process.env.JWT_SECRET);
       if (!user) {
         return null;
       }
-      // On renvoie au contrôleur l'objet contenant les infos
+      // We return the user's data to the controller
       return user;
     } catch (err) {
       console.error(err);

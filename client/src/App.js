@@ -5,21 +5,25 @@ import { themeChange } from 'theme-change'
 import { useEffect } from "react";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-
+import { AuthProvider } from './context/AuthContext'
+import AdDetail from "./pages/Ad/AdDetail";
 function App() {
-
   useEffect(() => {
     themeChange(false)
   }, [])
+
   return (
     <>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
-      </Layout>
+      <AuthProvider>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/ad/:avertissementId" element={<AdDetail />} />
+          </Routes>
+        </Layout>
+      </AuthProvider>
     </>
   );
 }
