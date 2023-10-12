@@ -19,6 +19,15 @@ const AdDetail = () => {
   const { avertissementId } = useParams();
   const { user } = useAuth();
 
+  const [formData, setFormData] = useState({
+    firstName: user.firstName || "",
+    lastName: user.lastName || "",
+    email: user.email || "",
+    exp: user.exp || "",
+    school: user.school || "",
+    skills: user.skills || "",
+  });
+
   useEffect(() => {
     // Fonction asynchrone pour récupérer les données
     (async () => {
@@ -137,6 +146,7 @@ const AdDetail = () => {
               type="text"
               placeholder="John"
               className="input input-bordered w-full"
+              value={formData.firstName}
             />
             <label htmlFor="lastName" className="label">
               Nom
@@ -146,6 +156,7 @@ const AdDetail = () => {
               type="text"
               placeholder="Doe"
               className="input input-bordered w-full"
+              value={formData.lastName}
             />
             <label htmlFor="email" className="label">
               Email
@@ -155,6 +166,7 @@ const AdDetail = () => {
               type="email"
               placeholder="johndoe@exemple.com"
               className="input input-bordered w-full"
+              value={formData.email}
             />
             <label htmlFor="exp" className="label">
               Expérience
@@ -163,6 +175,7 @@ const AdDetail = () => {
               name="exp"
               className="select select-bordered w-full"
               required
+              value={formData.exp}
             >
               <option selected disabled>
                 --Choisir une option--
@@ -180,6 +193,7 @@ const AdDetail = () => {
               type="text"
               placeholder="Ecole 42"
               className="input input-bordered w-full"
+              value={formData.school}
             />
             <label htmlFor="skills" className="label">
               Compétences
@@ -189,6 +203,7 @@ const AdDetail = () => {
               type="text"
               placeholder="React, Node.js, ..."
               className="input input-bordered w-full"
+              value={formData.skills}
             />
           </form>
           <div className="modal-action border-t-2 mt-6 pt-4 flex justify-between gap-4">
