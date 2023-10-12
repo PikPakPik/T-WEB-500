@@ -22,6 +22,27 @@ const controller = {
     );
     res.json(companyAdvertisements);
   },
+
+  //! Create an advertisement
+  createAdvertisement: async (req, res) => {
+    const { title, description, place, workingTime, expRequired } = req.body;
+    const wages = parseInt(req.body.wages);
+
+    //Recup the userId from the token
+    const userId = 
+
+    const newAdvertisement = await datamapper.createAdvertisement(
+      companyId,
+      title,
+      description,
+      wages,
+      place,
+      workingTime,
+      expRequired
+    );
+
+    res.json(newAdvertisement);
+  },
 };
 
 module.exports = controller;

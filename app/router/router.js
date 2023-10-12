@@ -6,6 +6,7 @@ const advertissementsController = require("../controllers/advertissements.contro
 const usersController = require("../controllers/users.controller");
 const compagnyController = require("../controllers/company.controller");
 const auth = require("../middleware/auth.middleware");
+const applicationController = require("../controllers/applications.controller");
 
 // Define routes advertissements
 router.get("/", advertissementsController.getAdvertissements);
@@ -14,17 +15,22 @@ router.get(
   "/advertCompany/:companyId",
   advertissementsController.getCompanyAdvertisements
 );
+router.post(
+  "/advert",
+  auth.isLogged,
+  advertissementsController.createAdvertisement
+);
 
 // Define routes users
 router.post("/signup", usersController.createUser);
-router.post("/login", auth.isLogged, usersController.login);
+router.post("/login", usersController.login);
 router.get("/user/:userId", usersController.getOneUser);
 
 // Define routes company
 router.get("/company/:companyId", compagnyController.getOneCompany);
 
 // Define routes applications
-// router.post("/application", advertissementsController.getApplications);
+// router.post("/application", applicationController.createApplication);
 
 // Export router
 module.exports = router;

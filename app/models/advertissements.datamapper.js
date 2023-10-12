@@ -31,6 +31,33 @@ const datamapper = {
     });
     return companyAdvertisements;
   },
+
+  //! Create an advertisement
+  createAdvertisement: async (
+    companyId,
+    title,
+    description,
+    wages,
+    place,
+    workingTime,
+    expRequired
+  ) => {
+    const newAdvertisement = await prisma.company.create({
+      data: {
+        advertissements: {
+          create: {
+            title: title,
+            description: description,
+            wages: wages,
+            place: place,
+            workingTime: workingTime,
+            expRequired: expRequired,
+          },
+        },
+      },
+    });
+    return newAdvertisement;
+  },
 };
 
 module.exports = datamapper;
