@@ -1,5 +1,6 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import moment from "moment";
+import { Link } from "react-router-dom";
 const colors = [
   "bg-red-300",
   "bg-blue-300",
@@ -14,33 +15,48 @@ const AdsCard = ({ ad, index }) => {
       key={index}
       className="flex flex-col rounded-3xl shadow-lg overflow-hidden relative" // Add 'relative' here
     >
-      <button className="absolute top-2 right-2 bg-base-300 rounded-3xl px-2 py-1 text-md flex flex-row items-center">
-        View
-        <Icon icon="fluent-mdl2:go" className="w-3 ml-1" />
-      </button>
+      <Link to={"/ad/" + ad.advertissementId}>
+        <button className="absolute top-2 right-2 bg-base-300 rounded-3xl px-2 py-1 text-md flex flex-row items-center">
+          View
+          <Icon icon="fluent-mdl2:go" className="w-3 ml-1" />
+        </button>
+      </Link>
       <div
         className={`flex-1 p-6 flex flex-col justify-between ${
           colors[index % colors.length]
         }`}
       >
-        <div className="flex-1">
-          <p className="text-sm font-light text-black">
-            <div className="flex items-center">
-              <img
-                src={ad.company.logo}
-                alt="logo"
-                className="w-12  h-12   inline-block mr-2"
-              />
-              <div className="flex flex-col">
-                <p className="text-xl font-semibold text-gray-900">
-                  {ad.title}
-                </p>
-                <a href="#" className="hover:underline">
-                  {ad.company.name}
-                </a>
-              </div>
+        <div className="flex-1 text-sm font-light text-black">
+          <div className="flex items-center">
+            <img
+              src={ad.company.logo}
+              alt="logo"
+              className="w-12  h-12   inline-block mr-2"
+            />
+            <div className="flex flex-col">
+              <p className="text-xl font-semibold text-gray-900">{ad.title}</p>
+              <a href="#" className="hover:underline">
+                {ad.company.name}
+              </a>
             </div>
-          </p>
+          </div>
+          <div className="flex flex-row gap-3 mt-3">
+            <div className="badge badge-outline md:whitespace-nowrap md:text-xs">
+              <Icon icon="fluent:location-24-regular" className="w-4 mr-1" />
+              {ad.place}
+            </div>
+            <div className="badge badge-outline md:whitespace-nowrap md:text-xs">
+              <Icon
+                icon="material-symbols:school-outline"
+                className="w-4 mr-1"
+              />
+              {ad.expRequired}
+            </div>
+            <div className="badge badge-outline md:whitespace-nowrap md:text-xs">
+              <Icon icon="ri:time-line" className="w-4 mr-1" />
+              {ad.workingTime}
+            </div>
+          </div>
           <p className="mt-3 text-base text-gray-500">
             {ad.description.slice(0, 86)}...
           </p>
