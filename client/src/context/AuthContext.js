@@ -1,23 +1,31 @@
-import { createContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { createContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+// Constantes pour les URLs et les clés
+const API_URL = 'http://localhost:3001';
+const TOKEN_KEY = 'token';
+
 const defaultProvider = {
     user: null,
     setUser: () => null,
     login: () => Promise.resolve(),
-    logout: () => Promise.resolve()
-}
+    logout: () => Promise.resolve(),
+};
 
-const AuthContext = createContext(defaultProvider)
+const AuthContext = createContext(defaultProvider);
 
 const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(defaultProvider.user)
-    const navigate = useNavigate()
+    const [user, setUser] = useState(defaultProvider.user);
+    const navigate = useNavigate();
+    
     useEffect(() => {
         const initAuth = async () => {
-            const storedToken = window.localStorage.getItem("token");
+            // Utilisation de la constante pour le TOKEN_KEY et la méthode getItem pour récupérer le token
+            const storedToken = window.localStorage.getItem(TOKEN_KEY);
             if (storedToken) {
                 try {
-                    const response = await fetch('http://localhost:3001/me', {
+                    // Utilisation de la constante pour API_URL et la méthode fetch pour récupérer les données
+                    const response = await fetch(`${API_URL}/me`, {
                         headers: {
                             Authorization: `Bearer ${storedToken}`
                         }
@@ -38,42 +46,44 @@ const AuthProvider = ({ children }) => {
         initAuth();
     }, []);
 
-
+    // Fonction pour gérer l'authentification
     const handleLogin = (params, errorCallback) => {
-        fetch('http://localhost:3001/login', {
+        // Utilisation de la constante pour API_URL et la méthode fetch pour envoyer les données 
+        fetch(`${API_URL}/login`, {
             method: 'POST',
             body: JSON.stringify(params),
             headers: {
                 'Content-Type': 'application/json'
             }
         })
-            .then(res => {
-                if (res.ok) {
-                    return res.json();
-                } else {
-                    if (res.status === 401) {
-                        return Promise.reject(new Error('Identifiant ou mot de passe incorrect'))
-                    }
+        .then(res => {
+            if (res.ok) {
+                return res.json();
+            } else {
+                if (res.status === 401) {
+                    return Promise.reject(new Error('Identifiant ou mot de passe incorrect'));
                 }
-            })
-            .then(data => {
-                setUser(data)
-                window.localStorage.setItem("token", data.token)
-                navigate('/')
-                window.location.reload()
-            })
-            .catch(err => {
-                if (errorCallback) errorCallback(err)
-            })
+            }
+        })
+        .then(data => {
+            setUser(data);
+            // Utilisation de la constante pour le TOKEN_KEY et la méthode setItem pour stocker le token
+            window.localStorage.setItem(TOKEN_KEY, data.token);
+            navigate('/');
+            window.location.reload();
+        })
+        .catch(err => {
+            if (errorCallback) errorCallback(err);
+        });
     }
 
-
+    // Fonction pour gérer la déconnexion
     const handleLogout = () => {
-        setUser(null)
-        window.localStorage.removeItem('userData')
-        window.localStorage.removeItem("token")
-        navigate('/login')
-        window.location.reload()
+        setUser(null);
+        // Utilisation de la constante pour le TOKEN_KEY et la méthode removeItem pour supprimer le token
+        window.localStorage.removeItem(TOKEN_KEY);
+        navigate('/login');
+        window.location.reload();
     }
 
     const values = {
@@ -81,9 +91,9 @@ const AuthProvider = ({ children }) => {
         setUser,
         login: handleLogin,
         logout: handleLogout
-    }
+    };
 
-    return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>
+    return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
 }
 
-export { AuthContext, AuthProvider }
+export { AuthContext, AuthProvider };

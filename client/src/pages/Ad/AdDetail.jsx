@@ -3,6 +3,7 @@ import moment from "moment";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
+// Fonction pour récupérer les détails de l'annonce et de l'entreprise
 const fetchAdAndCompany = async (avertissementId) => {
   const res1 = await fetch(`http://localhost:3001/advert/${avertissementId}`);
   const ad = await res1.json();
@@ -17,21 +18,24 @@ const AdDetail = () => {
   const { avertissementId } = useParams();
 
   useEffect(() => {
+    // Fonction asynchrone pour récupérer les données
     (async () => {
       try {
         const fetchedAd = await fetchAdAndCompany(avertissementId);
         setAd(fetchedAd);
-        setLoading(false);
+        setLoading(false); // Fin du chargement
       } catch (error) {
         console.error("Error fetching ad and company data:", error);
       }
     })();
   }, [avertissementId]);
 
+  // Affichage de l'état de chargement
   if (loading) {
     return <div>loading...</div>;
   }
 
+  // Destructuration des données de l'annonce
   const {
     title,
     company: { logo, name },
@@ -90,13 +94,12 @@ const AdDetail = () => {
                 Posté il y a{" "}
                 {moment.utc(date).local().startOf("seconds").fromNow()}
               </div>
-              <span className="font-bold uppercase self-end">
-                {wages}€/an
-              </span>
+              <span className="font-bold uppercase self-end">{wages}€/an</span>
             </div>
           </div>
         </div>
       </div>
+      {/* Description de l'annonce */}
       <div className="flex flex-col mt-16">
         <h2 className="text-2xl font-bold">Description</h2>
         <p className="mt-3 text-base text-gray-500">{description}</p>

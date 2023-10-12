@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { isValidEmail } from "../utils/validateEmail";
 
+// (Définition des composants pour chaque étape)
 const Step1 = ({ formData, handleInputChange }) => (
   <div>
     <label className="label"> Prénom </label>
@@ -99,9 +100,11 @@ const Step4 = ({ formData, handleInputChange }) => (
   </div>
 );
 
+// Tableau des composants d'étapes
 const stepsComponents = [Step1, Step2, Step3, Step4];
 
 const Register = () => {
+  // Gestion de l'état local
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -115,6 +118,7 @@ const Register = () => {
   });
   const [error, setError] = useState("");
 
+  // Fonction de validation du formulaire
   const isFormValid = () => {
     switch (currentStep) {
       case 1:
@@ -133,12 +137,13 @@ const Register = () => {
         return false;
     }
   };
-
+  // Gestion des changements dans les champs du formulaire
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
+  // Soumission du formulaire
   const handleSubmit = (e) => {
     e.preventDefault();
     fetch("http://localhost:3001/signup/", {
@@ -167,7 +172,8 @@ const Register = () => {
         console.log(err);
       });
   };
-
+  
+  // Sélection du composant de l'étape courante
   const CurrentStepComponent = stepsComponents[currentStep - 1];
 
   return (

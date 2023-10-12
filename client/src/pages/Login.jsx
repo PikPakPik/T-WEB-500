@@ -3,17 +3,18 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 
 const Login = () => {
+  // Utilisation du hook personnalisé useAuth
   const { login: authLogin } = useAuth();
   const [formData, setFormData] = useState({ email: "", userPassword: "" });
   const [error, setError] = useState("");
 
-  // Validate user inputs
+  // Validation des inputs de l'utilisateur
   const validateInputs = () => {
     const { email, userPassword } = formData;
     return email && userPassword;
   };
 
-  // Handle login submission
+  // Gestion de la soumission du formulaire de login
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -23,6 +24,7 @@ const Login = () => {
     }
 
     setError("");
+    // Tentative de connexion via le hook useAuth
     authLogin(
       { email: formData.email, userPassword: formData.userPassword },
       () => {
@@ -31,12 +33,12 @@ const Login = () => {
     );
   };
 
-  // Handle form field changes
+  // Gestion des changements dans les champs du formulaire
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    // Mise à jour de l'état formData
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-
   return (
     <div className="relative flex flex-col justify-center mt-32 overflow-hidden">
       <div className="w-full p-6 mx-auto bg-base-300 rounded-md shadow-md lg:max-w-lg">
