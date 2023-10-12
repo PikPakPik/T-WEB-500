@@ -7,7 +7,7 @@ const datamapper = {
     firstName,
     lastName,
     email,
-    userPassword,
+    hashedPassword,
     isAdmin,
     exp,
     school,
@@ -18,7 +18,7 @@ const datamapper = {
         firstName: firstName,
         lastName: lastName,
         email: email,
-        userPassword: userPassword,
+        userPassword: hashedPassword,
         isAdmin: isAdmin,
         exp: exp,
         school: school,
@@ -34,7 +34,18 @@ const datamapper = {
     const user = await prisma.user.findMany({
       where: {
         email: email,
-        userPassword: userPassword,
+        // userPassword: userPassword,
+      },
+    });
+    return user;
+  },
+
+  //! Get one user
+
+  getOneUser: async (userId) => {
+    const user = await prisma.user.findUnique({
+      where: {
+        userId: userId,
       },
     });
     return user;
