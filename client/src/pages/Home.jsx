@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import AdsCard from "../components/cards/AdCard";
 
+const FETCH_URL = "http://localhost:3001";
+const INITIAL_DISPLAY_COUNT = 9;
+const INCREMENT_COUNT = 6;
 const tabs = [
   "Découvrir",
   "Sauvegardées",
@@ -10,31 +13,33 @@ const tabs = [
   "Discover",
 ];
 
+const fetchAdsAndCompanies = async () => {
+  const adsRes = await fetch(FETCH_URL);
+  const adsData = await adsRes.json();
+
+  const promises = adsData.map((ad) =>
+    fetch(`${FETCH_URL}/company/${ad.companyId}`).then((res) => res.json())
+  );
+
+  const companies = await Promise.all(promises);
+  return adsData.map((ad, index) => ({ ...ad, company: companies[index] }));
+};
+
 const Home = () => {
   const [activeTab, setActiveTab] = useState("Découvrir");
-  const [displayCount, setDisplayCount] = useState(9);
+  const [displayCount, setDisplayCount] = useState(INITIAL_DISPLAY_COUNT);
   const [ads, setAds] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3001")
-      .then((res) => res.json())
-      .then((data) => {
-        const promises = data.map((ad) =>
-          fetch(`http://localhost:3001/company/${ad.companyId}`).then((res) =>
-            res.json()
-          )
-        );
-        
-        Promise.all(promises).then((companies) => {
-          const newAds = data.map((ad, index) => ({
-            ...ad,
-            company: companies[index],
-          }));
-          setAds(newAds);
-        });
-      });
+    (async () => {
+      try {
+        const fetchedAds = await fetchAdsAndCompanies();
+        setAds(fetchedAds);
+      } catch (error) {
+        console.error("Error fetching ads and companies:", error);
+      }
+    })();
   }, []);
-  
 
   return (
     <div className="container mx-auto px-4 mt-5">
@@ -62,7 +67,7 @@ const Home = () => {
         <div className="flex justify-center">
           <button
             className="mt-4 bg-blue-500 text-white p-2 rounded-full"
-            onClick={() => setDisplayCount(displayCount + 6)}
+            onClick={() => setDisplayCount(displayCount + INCREMENT_COUNT)}
           >
             View More
           </button>

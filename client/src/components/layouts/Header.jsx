@@ -1,17 +1,22 @@
-import { Link } from "react-router-dom";
-import ProfileDropdown from "./Profile";
-import { useAuth } from "../../hooks/useAuth";
-
-const { default: ThemeChange } = require("./ThemeChange");
+import React from 'react';
+import { Link } from 'react-router-dom';
+import ThemeChange from './ThemeChange';
+import ProfileDropdown from './Profile';
+import { useAuth } from '../../hooks/useAuth';
 
 const Header = () => {
-  const auth = useAuth();
+  const { user } = useAuth();
+
+  const renderUserName = () => user ? user.firstName : '';
+
   return (
-    <div className="flex flex-row justify-between m-5">
+    <div className="flex justify-between m-5">
       <Link to="/">
-        <h1 className="text-3xl">Salut {auth.user ? auth.user.firstName : ""} 👋</h1>
+        <h1 className="text-3xl">
+          Salut {renderUserName()} 👋
+        </h1>
       </Link>
-      <div className="flex flex-row gap-4">
+      <div className="flex gap-4">
         <ThemeChange />
         <ProfileDropdown />
       </div>
