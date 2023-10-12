@@ -29,6 +29,7 @@ router.get("/me", auth.isLogged, usersController.getMe);
 
 // Define routes company
 router.get("/company/:companyId", compagnyController.getOneCompany);
+router.post("/company", auth.isLogged, compagnyController.createCompany);
 
 // Define routes applications
 // router.post("/application", applicationController.createApplication);
