@@ -2,6 +2,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import moment from "moment";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useAuth } from "../../hooks/useAuth";
 
 // Fonction pour récupérer les détails de l'annonce et de l'entreprise
 const fetchAdAndCompany = async (avertissementId) => {
@@ -16,6 +17,7 @@ const AdDetail = () => {
   const [ad, setAd] = useState(null);
   const [loading, setLoading] = useState(true);
   const { avertissementId } = useParams();
+  const { user } = useAuth();
 
   useEffect(() => {
     // Fonction asynchrone pour récupérer les données
@@ -57,25 +59,30 @@ const AdDetail = () => {
               <img
                 src={logo}
                 alt="logo"
-                className="w-12  h-12   inline-block mr-2"
+                className="w-28 h-28 inline-block mr-2"
               />
-              <p className="text-xl font-semibold">{name}</p>
-            </div>
-            <div className="flex flex-row gap-3 mt-3">
-              <div className="badge badge-outline md:whitespace-nowrap md:text-xs">
-                <Icon icon="fluent:location-24-regular" className="w-4 mr-1" />
-                {place}
-              </div>
-              <div className="badge badge-outline md:whitespace-nowrap md:text-xs">
-                <Icon
-                  icon="material-symbols:school-outline"
-                  className="w-4 mr-1"
-                />
-                {expRequired}
-              </div>
-              <div className="badge badge-outline md:whitespace-nowrap md:text-xs">
-                <Icon icon="ri:time-line" className="w-4 mr-1" />
-                {workingTime}
+              <div className="flex flex-col">
+                <p className="text-xl font-semibold">{name}</p>
+                <div className="flex md:flex-row flex-col gap-3 mt-3">
+                  <div className="badge badge-outline md:whitespace-nowrap md:text-xs">
+                    <Icon
+                      icon="fluent:location-24-regular"
+                      className="w-4 mr-1"
+                    />
+                    {place}
+                  </div>
+                  <div className="badge badge-outline md:whitespace-nowrap md:text-xs">
+                    <Icon
+                      icon="material-symbols:school-outline"
+                      className="w-4 mr-1"
+                    />
+                    {expRequired}
+                  </div>
+                  <div className="badge badge-outline md:whitespace-nowrap md:text-xs">
+                    <Icon icon="ri:time-line" className="w-4 mr-1" />
+                    {workingTime}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -95,6 +102,15 @@ const AdDetail = () => {
                 {moment.utc(date).local().startOf("seconds").fromNow()}
               </div>
               <span className="font-bold uppercase self-end">{wages}€/an</span>
+              {/* Bouton pour postuler */}
+              <button
+                className="btn btn-info"
+                onClick={() =>
+                  document.getElementById("my_modal_5").showModal()
+                }
+              >
+                Je postule
+              </button>
             </div>
           </div>
         </div>
@@ -104,6 +120,91 @@ const AdDetail = () => {
         <h2 className="text-2xl font-bold">Description</h2>
         <p className="mt-3 text-base text-gray-500">{description}</p>
       </div>
+
+      {/* Modal */}
+      <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box">
+          <div className="font-bold text-lg">
+            Je postule chez <span className="underline">{name}</span>
+          </div>
+          <hr className="my-6" />
+          <form className="space-y-2">
+            <label htmlFor="firstName" className="label">
+              Prénom
+            </label>
+            <input
+              name="firstName"
+              type="text"
+              placeholder="John"
+              className="input input-bordered w-full"
+            />
+            <label htmlFor="lastName" className="label">
+              Nom
+            </label>
+            <input
+              name="lastName"
+              type="text"
+              placeholder="Doe"
+              className="input input-bordered w-full"
+            />
+            <label htmlFor="email" className="label">
+              Email
+            </label>
+            <input
+              name="email"
+              type="email"
+              placeholder="johndoe@exemple.com"
+              className="input input-bordered w-full"
+            />
+            <label htmlFor="exp" className="label">
+              Expérience
+            </label>
+            <select
+              name="exp"
+              className="select select-bordered w-full"
+              required
+            >
+              <option selected disabled>
+                --Choisir une option--
+              </option>
+              <option value="jeune">Jeune diplômé</option>
+              <option value="junior">Junior</option>
+              <option value="confirme">Confirmé</option>
+              <option value="senior">Senior</option>
+            </select>
+            <label htmlFor="school" className="label">
+              Ecole
+            </label>
+            <input
+              name="school"
+              type="text"
+              placeholder="Ecole 42"
+              className="input input-bordered w-full"
+            />
+            <label htmlFor="skills" className="label">
+              Compétences
+            </label>
+            <input
+              name="skills"
+              type="text"
+              placeholder="React, Node.js, ..."
+              className="input input-bordered w-full"
+            />
+          </form>
+          <div className="modal-action border-t-2 mt-6 pt-4 flex justify-between gap-4">
+            <button
+              className="btn btn-primary"
+              onClick={() => document.getElementById("my_modal_5").close()}
+            >
+              Envoyer
+            </button>
+            <form method="dialog">
+              {/* Formulaire de candidature */}
+              <button className="btn">Annuler</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };
