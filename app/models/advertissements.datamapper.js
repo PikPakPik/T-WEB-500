@@ -31,6 +31,40 @@ const datamapper = {
     });
     return companyAdvertisements;
   },
+
+  //! Get one company by userId
+  getOneCompany: async (userId) => {
+    const getCompagny = await prisma.companies.findMany({
+      where: {
+        userId: userId,
+      },
+    });
+    return getCompagny;
+  },
+
+  //! Create an advertisement
+  createAdvertisement: async (
+    companyId,
+    title,
+    description,
+    wages,
+    place,
+    workingTime,
+    expRequired
+  ) => {
+    const newAdvertisement = await prisma.advertissements.create({
+      data: {
+        title: title,
+        description: description,
+        companyId: companyId,
+        wages: wages,
+        place: place,
+        workingTime: workingTime,
+        expRequired: expRequired,
+      },
+    });
+    return newAdvertisement;
+  },
 };
 
 module.exports = datamapper;
