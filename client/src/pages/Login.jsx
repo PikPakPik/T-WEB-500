@@ -8,16 +8,28 @@ const Login = () => {
     email: "",
     userPassword: "",
   });
+  const [error, setError] = useState(""); 
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    auth.login({ email: formData.email, userPassword: formData.userPassword })
+
+    if(!formData.email || !formData.userPassword) {
+      setError("Veuillez remplir tous les champs");
+      return;
+    } else {
+      setError("");
+    }
+
+    auth.login({ email: formData.email, userPassword: formData.userPassword }, () => {
+      setError("Email ou mot de passe incorrect");
+    })
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
+
   return (
     <div className="relative flex flex-col justify-center h-screen overflow-hidden">
       <div className="w-full p-6 m-auto bg-base-300 rounded-md shadow-md lg:max-w-lg">
@@ -35,6 +47,7 @@ const Login = () => {
               onChange={handleInputChange}
               placeholder="Email Address"
               className="w-full input input-bordered input-primary"
+              required
             />
           </div>
           <div>
@@ -47,15 +60,18 @@ const Login = () => {
               onChange={handleInputChange}
               placeholder="Enter Password"
               className="w-full input input-bordered input-primary"
+              required
             />
           </div>
-          {/* <a href="#" class="text-xs text-gray-600 hover:underline hover:text-blue-600">Forget Password?</a> */}
+          {error && ( 
+            <div className="text-red-500">{error}</div>
+          )}
           <div className="flex justify-between gap-4">
             <button className="btn btn-primary" onClick={handleLogin}>
               Me connecter
             </button>
             <Link to="/register">
-              <button className="btn btn-secondary">M'inscire</button>
+              <button className="btn btn-secondary">M'inscrire</button>
             </Link>
           </div>
         </form>

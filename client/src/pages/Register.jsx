@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { isValidEmail } from "../utils/validateEmail";
 
 const Register = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -13,17 +15,18 @@ const Register = () => {
     userPassword: "",
     confirmUserPassword: "",
   });
+  const [error, setError] = useState("");
 
   const isFormValid = () => {
     switch (currentStep) {
       case 1:
         return formData.firstName && formData.lastName;
       case 2:
-        return formData.email;
+        return formData.email && isValidEmail(formData.email);
       case 3:
         return formData.exp && formData.school && formData.skills;
       case 4:
-        return formData.userPassword && formData.confirmUserPassword;
+        return formData.userPassword && formData.confirmUserPassword && formData.userPassword === formData.confirmUserPassword;
       default:
         return false;
     }
@@ -41,15 +44,26 @@ const Register = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),
     })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) {
-          alert(data.error);
+      .then((res) => {
+        if(res.ok) {
+          return res.json();
         } else {
-          alert("Inscription réussie !");
+          if(res.status === 409) {
+            setError("Cet email est déjà utilisé");
+          }
         }
       })
-      .catch((err) => console.log(err));
+      .then((data) => {
+        if (data.error) {
+          setError(data.error);
+        } else {
+          toast.success("Votre compte a bien été créé");
+          window.location.href = "/login";
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   };
 
   const renderForm = () => {
@@ -95,8 +109,15 @@ const Register = () => {
         return (
           <div>
             <label className="label"> Expérience </label>
-            <select name="exp" onChange={handleInputChange} className="select select-bordered w-full" required>
-              <option defaultValue="true" disabled>--Choisir une option--</option>
+            <select
+              name="exp"
+              onChange={handleInputChange}
+              className="select select-bordered w-full"
+              required
+            >
+              <option defaultValue="true" disabled>
+                --Choisir une option--
+              </option>
               <option value="jeune">Jeune diplômé</option>
               <option value="junior">Junior</option>
               <option value="confirme">Confirmé</option>
@@ -171,11 +192,17 @@ const Register = () => {
         <hr className="my-6" />
         <form className="space-y-4">
           {renderForm()}
+          {error && ( 
+            <div className="text-red-500">{error}</div>
+          )}
           <div className="flex justify-between gap-4">
             {currentStep !== 1 && (
               <button
                 className="btn btn-secondary"
-                onClick={() => setCurrentStep(currentStep - 1)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCurrentStep(currentStep - 1);
+                }}
               >
                 Précédent
               </button>
@@ -183,11 +210,13 @@ const Register = () => {
             {currentStep !== 4 && (
               <button
                 className="btn btn-primary"
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
                   if (isFormValid()) {
                     setCurrentStep(currentStep + 1);
+                    setError("");
                   } else {
-                    alert("Veuillez remplir tous les champs pour continuer.");
+                    setError("Veuillez remplir tous les champs correctement");
                   }
                 }}
               >
