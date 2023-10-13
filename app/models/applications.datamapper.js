@@ -69,6 +69,20 @@ const datamapper = {
     });
     return newApplication;
   },
+
+  //! Get all applications of the user
+  getUserApplications: async (userId) => {
+    const applications = await prisma.applications.findMany({
+      where: {
+        userId: userId,
+      },
+      include: {
+        advertissements: true,
+        applicationinformation: true,
+      },
+    });
+    return applications;
+  },
 };
 
 module.exports = datamapper;

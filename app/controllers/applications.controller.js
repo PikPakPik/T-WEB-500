@@ -21,7 +21,6 @@ const controller = {
         userId
       );
 
-      //   res.json(newApplication);
       const applicationId = newApplication.applicationId;
 
       const newApplicationInformation =
@@ -43,7 +42,6 @@ const controller = {
     }
 
     const newApplication = await datamapper.applyToAdvert(advertissementId);
-    // res.json(newApplication);
 
     const applicationId = newApplication.applicationId;
 
@@ -63,6 +61,19 @@ const controller = {
       application: newApplication,
     };
     return res.json(responseData);
+  },
+
+  //!Get all applications of a user
+  getUserApplications: async (req, res) => {
+    const token = req.headers.authorization?.replace("Bearer ", "");
+    if (token) {
+      const user = loginService.getUser(token);
+      const userId = user.id;
+
+      const applications = await datamapper.getUserApplications(userId);
+      return res.json(applications);
+    }
+    return res.status(401).json({ error: "Unauthorized" });
   },
 };
 

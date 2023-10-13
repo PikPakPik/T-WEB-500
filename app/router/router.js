@@ -33,6 +33,7 @@ router.post("/company", compagnyController.createCompany);
 
 // Define routes applications
 router.post("/application/:advertId", applicationController.applyToAdvert);
+router.get("/application", applicationController.getUserApplications);
 
 // Export router
 module.exports = router;
