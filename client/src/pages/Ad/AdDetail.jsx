@@ -19,7 +19,7 @@ const AdDetail = () => {
   const { avertissementId } = useParams();
   const { user } = useAuth();
 
-  const [formData, setFormData] = useState({
+  const [formData] = useState({
     firstName: user.firstName || "",
     lastName: user.lastName || "",
     email: user.email || "",
