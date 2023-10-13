@@ -38,6 +38,20 @@ const datamapper = {
     });
     return isAdmin;
   },
+
+  //! Update one company
+  updateCompany: async (companyId, name, logo) => {
+    const updatedCompany = await prisma.companies.update({
+      where: {
+        companyId: companyId,
+      },
+      data: {
+        name: name,
+        logo: logo,
+      },
+    });
+    return updatedCompany;
+  },
 };
 
 module.exports = datamapper;
