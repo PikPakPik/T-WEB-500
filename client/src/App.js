@@ -8,6 +8,7 @@ import Layout from "./components/layouts/Layout";
 import { AuthProvider } from "./context/AuthContext";
 import { themeChange } from "theme-change";
 import NoFound from "./pages/NoFound";
+import Profile from "./pages/Profile/Profile";
 
 const AppRoutes = () => (
   <Routes>
