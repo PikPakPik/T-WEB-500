@@ -41,7 +41,6 @@ const datamapper = {
   },
 
   //! Get one user
-
   getOneUser: async (userId) => {
     const user = await prisma.user.findUnique({
       where: {
@@ -49,6 +48,34 @@ const datamapper = {
       },
     });
     return user;
+  },
+
+  //! Update one user
+  updateUser: async (
+    userId,
+    firstName,
+    lastName,
+    email,
+    hashedPassword,
+    exp,
+    school,
+    skills
+  ) => {
+    const updatedUser = await prisma.user.update({
+      where: {
+        userId: userId,
+      },
+      data: {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        userPassword: hashedPassword,
+        exp: exp,
+        school: school,
+        skills: skills,
+      },
+    });
+    return updatedUser;
   },
 };
 
