@@ -2,6 +2,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import moment from "moment";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useAuth } from "../../hooks/useAuth";
 
 // Fonction pour récupérer les détails de l'annonce et de l'entreprise
 const fetchAdAndCompany = async (avertissementId) => {
@@ -67,25 +68,30 @@ const AdDetail = () => {
               <img
                 src={logo}
                 alt="logo"
-                className="w-12  h-12   inline-block mr-2"
+                className="w-28 h-28 inline-block mr-2"
               />
-              <p className="text-xl font-semibold">{name}</p>
-            </div>
-            <div className="flex flex-row gap-3 mt-3">
-              <div className="badge badge-outline md:whitespace-nowrap md:text-xs">
-                <Icon icon="fluent:location-24-regular" className="w-4 mr-1" />
-                {place}
-              </div>
-              <div className="badge badge-outline md:whitespace-nowrap md:text-xs">
-                <Icon
-                  icon="material-symbols:school-outline"
-                  className="w-4 mr-1"
-                />
-                {expRequired}
-              </div>
-              <div className="badge badge-outline md:whitespace-nowrap md:text-xs">
-                <Icon icon="ri:time-line" className="w-4 mr-1" />
-                {workingTime}
+              <div className="flex flex-col">
+                <p className="text-xl font-semibold">{name}</p>
+                <div className="flex md:flex-row flex-col gap-3 mt-3">
+                  <div className="badge badge-outline md:whitespace-nowrap md:text-xs">
+                    <Icon
+                      icon="fluent:location-24-regular"
+                      className="w-4 mr-1"
+                    />
+                    {place}
+                  </div>
+                  <div className="badge badge-outline md:whitespace-nowrap md:text-xs">
+                    <Icon
+                      icon="material-symbols:school-outline"
+                      className="w-4 mr-1"
+                    />
+                    {expRequired}
+                  </div>
+                  <div className="badge badge-outline md:whitespace-nowrap md:text-xs">
+                    <Icon icon="ri:time-line" className="w-4 mr-1" />
+                    {workingTime}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -105,6 +111,15 @@ const AdDetail = () => {
                 {moment.utc(date).local().startOf("seconds").fromNow()}
               </div>
               <span className="font-bold uppercase self-end">{wages}€/an</span>
+              {/* Bouton pour postuler */}
+              <button
+                className="btn btn-info"
+                onClick={() =>
+                  document.getElementById("my_modal_5").showModal()
+                }
+              >
+                Je postule
+              </button>
             </div>
           </div>
         </div>

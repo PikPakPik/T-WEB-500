@@ -16,6 +16,7 @@ const AppRoutes = () => (
     <Route path="/register" element={<Register />} />
     <Route path="/profile" element={<Profile />} />
     <Route path="/ad/:avertissementId" element={<AdDetail />} />
+    <Route path="*" element={<NoFound />} />
   </Routes>
 );
 
