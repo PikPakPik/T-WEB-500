@@ -27,8 +27,7 @@ const controller = {
   //! Create an advertisement
   createAdvertisement: async (req, res) => {
     const { title, description, place, workingTime, expRequired } = req.body;
-    const wage = req.body.wages;
-    const wages = parseInt(wage);
+    const wages = parseInt(req.body.wages);
 
     //Recup the userId from the token
     const token = req.headers.authorization?.replace("Bearer ", "");
@@ -51,6 +50,35 @@ const controller = {
     );
 
     res.json(newAdvertisement);
+  },
+
+  //! Create a job information
+  createJobInformation: async (req, res) => {
+    //Recup the userId from the token
+    const token = req.headers.authorization?.replace("Bearer ", "");
+    const user = loginService.getUser(token);
+    const userId = user.id;
+
+    //Recup the advertId from the params & the jobInformation from the body
+    const advertId = parseInt(req.params.advertId);
+    const { isSaved, isApplied } = req.body;
+
+    //Create the jobInformation
+    const newJobInformation = await datamapper.createJobInformation(
+      advertId,
+      userId,
+      isSaved,
+      isApplied
+    );
+    res.json(newJobInformation);
+  },
+
+  //TODO: finish this delete route
+  //! Delete an advertisement
+  deleteAdvertisement: async (req, res) => {
+    const advertId = parseInt(req.params.advertId);
+    const deletedAdvertisement = await datamapper.deleteAdvertisement(advertId);
+    res.json(deletedAdvertisement);
   },
 };
 

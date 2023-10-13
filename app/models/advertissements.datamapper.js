@@ -70,6 +70,38 @@ const datamapper = {
     });
     return newAdvertisement;
   },
+
+  //! Create a job information
+  createJobInformation: async (advertId, userId, isSaved, isApplied) => {
+    const jobInformation = await prisma.jobinformation.create({
+      data: {
+        isSaved: isSaved,
+        isApplied: isApplied,
+        advertissement: {
+          connect: {
+            advertissementId: advertId,
+          },
+        },
+        user: {
+          connect: {
+            userId: userId,
+          },
+        },
+      },
+    });
+    return jobInformation;
+  },
+
+  //!Delete a advertisement
+  //TODO: finish this delete route
+  deleteAdvertisement: async (advertId) => {
+    const deletedAdvertisement = await prisma.advertissements.delete({
+      where: {
+        advertissementId: advertId,
+      },
+    });
+    return deletedAdvertisement;
+  },
 };
 
 module.exports = datamapper;

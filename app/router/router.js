@@ -20,6 +20,17 @@ router.post(
   auth.isLogged,
   advertissementsController.createAdvertisement
 );
+router.post(
+  "/advert/:advertId",
+  auth.isLogged,
+  advertissementsController.createJobInformation
+);
+//TODO: finish this delete route
+router.delete(
+  "/advert/:advertId",
+  auth.isLogged,
+  advertissementsController.deleteAdvertisement
+);
 
 // Define routes users
 router.post("/signup", usersController.createUser);
