@@ -1,5 +1,5 @@
 const datamapper = require("../models/users.datamapper");
-const companydatamapper = require("../models/company.datamapper");
+const avertissementdatamapper = require("../models/advertissements.datamapper");
 const loginService = require("../services/login.service");
 const bcrypt = require("bcrypt");
 const { getUserCompany } = require("../models/users.datamapper");
@@ -129,7 +129,13 @@ const controller = {
       // If isAdmin is true, we send the user and his company
       if (user.isAdmin) {
         const company = await getUserCompany(user.userId);
+        if (!company) return res.json(user);
         user.company = company;
+
+        const advertissements = await avertissementdatamapper.getCompanyAdvertisements(
+          company.companyId
+        );
+        user.company.advertissements = advertissements;
       }
 
       //If the user exist
