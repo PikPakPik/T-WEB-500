@@ -40,6 +40,15 @@ const datamapper = {
     return user;
   },
 
+  getUserCompany: async (userId) => {
+    const company = await prisma.companies.findUnique({
+      where: {
+        userId: userId,
+      },
+    });
+    return company;
+  },
+
   //! Get one user
 
   getOneUser: async (userId) => {
