@@ -56,7 +56,12 @@ const datamapper = {
       data: {
         title: title,
         description: description,
-        companyId: companyId,
+        date: new Date(),
+        company: {
+          connect: {
+            companyId: companyId,
+          },
+        },
         wages: wages,
         place: place,
         workingTime: workingTime,
@@ -64,6 +69,60 @@ const datamapper = {
       },
     });
     return newAdvertisement;
+  },
+
+  //! Create a job information
+  createJobInformation: async (advertId, userId, isSaved, isApplied) => {
+    const jobInformation = await prisma.jobinformation.create({
+      data: {
+        isSaved: isSaved,
+        isApplied: isApplied,
+        advertissement: {
+          connect: {
+            advertissementId: advertId,
+          },
+        },
+        user: {
+          connect: {
+            userId: userId,
+          },
+        },
+      },
+    });
+    return jobInformation;
+  },
+
+  //! Get all saved advertissements from one user
+  getSavedAdvert: async (userId) => {
+    const savedAdvert = await prisma.jobinformation.findMany({
+      where: {
+        userId: userId,
+        isSaved: true,
+      },
+    });
+    return savedAdvert;
+  },
+
+  //! Get all applied advertissements from one user
+  getAppliedAdvert: async (userId) => {
+    const appliedAdvert = await prisma.jobinformation.findMany({
+      where: {
+        userId: userId,
+        isApplied: true,
+      },
+    });
+    return appliedAdvert;
+  },
+
+  //!Delete a advertisement
+  //TODO: finish this delete route
+  deleteAdvertisement: async (advertId) => {
+    const deletedAdvertisement = await prisma.advertissements.delete({
+      where: {
+        advertissementId: advertId,
+      },
+    });
+    return deletedAdvertisement;
   },
 };
 
