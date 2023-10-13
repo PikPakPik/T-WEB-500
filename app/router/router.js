@@ -52,10 +52,14 @@ router.put("/user", auth.isLogged, usersController.updateUser);
 // Define routes company
 router.get("/company/:companyId", compagnyController.getOneCompany);
 router.post("/company", compagnyController.createCompany);
+router.put(
+  "/company/:companyId",
+  auth.isLogged,
+  compagnyController.updateCompany
+);
 
 // Define routes applications
 router.post("/application/:advertId", applicationController.applyToAdvert);
-// router.get("/application", applicationController.getUserApplications);
 
 // Export router
 module.exports = router;
