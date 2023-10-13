@@ -25,6 +25,11 @@ router.post(
   auth.isLogged,
   advertissementsController.createJobInformation
 );
+router.put(
+  "/jobInformation/:advertId",
+  auth.isLogged,
+  advertissementsController.updateAdvertisement
+);
 router.get(
   "/savedAdvert",
   auth.isLogged,

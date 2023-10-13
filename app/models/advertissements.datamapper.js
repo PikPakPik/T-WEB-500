@@ -92,6 +92,22 @@ const datamapper = {
     return jobInformation;
   },
 
+  //! Update an Job Information
+
+  updateJobInformation: async (advertId, userId, isSaved, isApplied) => {
+    const updateJobinformation = await prisma.jobinformation.update({
+      where: {
+        advertissementId: advertId,
+        userId: userId,
+      },
+      data: {
+        isSaved: isSaved,
+        isApplied: isApplied,
+      },
+    });
+    return updateJobinformation;
+  },
+
   //! Get all saved advertissements from one user
   getSavedAdvert: async (userId) => {
     const savedAdvert = await prisma.jobinformation.findMany({
