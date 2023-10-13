@@ -24,6 +24,22 @@ const datamapper = {
     return newApplication;
   },
 
+  //! If the user is not logged, Apply to an advertissement
+  applyToAdvert: async (advertissementId) => {
+    const newApplication = await prisma.applications.create({
+      data: {
+        date: new Date(),
+        status: "Active",
+        advertissements: {
+          connect: {
+            advertissementId: advertissementId,
+          },
+        },
+      },
+    });
+    return newApplication;
+  },
+
   //! Create application information
   createApplicationInformation: async (
     firstName,
@@ -52,36 +68,6 @@ const datamapper = {
       });
 
     return newApplicationInformation;
-  },
-
-  //! If the user is not logged, Apply to an advertissement
-  applyToAdvert: async (advertissementId) => {
-    const newApplication = await prisma.applications.create({
-      data: {
-        date: new Date(),
-        status: "Active",
-        advertissements: {
-          connect: {
-            advertissementId: advertissementId,
-          },
-        },
-      },
-    });
-    return newApplication;
-  },
-
-  //! Get all applications of the user
-  getUserApplications: async (userId) => {
-    const applications = await prisma.applications.findMany({
-      where: {
-        userId: userId,
-      },
-      include: {
-        advertissements: true,
-        applicationinformation: true,
-      },
-    });
-    return applications;
   },
 };
 

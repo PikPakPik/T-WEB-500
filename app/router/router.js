@@ -25,6 +25,16 @@ router.post(
   auth.isLogged,
   advertissementsController.createJobInformation
 );
+router.get(
+  "/savedAdvert",
+  auth.isLogged,
+  advertissementsController.getSavedAdvert
+);
+router.get(
+  "/appliedAdvert",
+  auth.isLogged,
+  advertissementsController.getAppliedAdvert
+);
 //TODO: finish this delete route
 router.delete(
   "/advert/:advertId",
@@ -45,7 +55,7 @@ router.post("/company", compagnyController.createCompany);
 
 // Define routes applications
 router.post("/application/:advertId", applicationController.applyToAdvert);
-router.get("/application", applicationController.getUserApplications);
+// router.get("/application", applicationController.getUserApplications);
 
 // Export router
 module.exports = router;

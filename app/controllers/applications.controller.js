@@ -16,13 +16,16 @@ const controller = {
       const user = loginService.getUser(token);
       const userId = user.id;
 
+      //Create the application and the application information
       const newApplication = await datamapper.applyToAdvertUserLogged(
         advertissementId,
         userId
       );
 
+      // recup the applicationId
       const applicationId = newApplication.applicationId;
 
+      //Create the application information
       const newApplicationInformation =
         await datamapper.createApplicationInformation(
           firstName,
@@ -34,6 +37,7 @@ const controller = {
           applicationId
         );
 
+      //Return the response
       const responseData = {
         application: newApplication,
         applicationInformation: newApplicationInformation,
@@ -41,10 +45,13 @@ const controller = {
       return res.json(responseData);
     }
 
+    //Create the application and the application information
     const newApplication = await datamapper.applyToAdvert(advertissementId);
 
+    // recup the applicationId
     const applicationId = newApplication.applicationId;
 
+    //Create the application information
     const newApplicationInformation =
       await datamapper.createApplicationInformation(
         firstName,
@@ -56,24 +63,12 @@ const controller = {
         applicationId
       );
 
+    //Return the response
     const responseData = {
       applicationInformation: newApplicationInformation,
       application: newApplication,
     };
     return res.json(responseData);
-  },
-
-  //!Get all applications of a user
-  getUserApplications: async (req, res) => {
-    const token = req.headers.authorization?.replace("Bearer ", "");
-    if (token) {
-      const user = loginService.getUser(token);
-      const userId = user.id;
-
-      const applications = await datamapper.getUserApplications(userId);
-      return res.json(applications);
-    }
-    return res.status(401).json({ error: "Unauthorized" });
   },
 };
 

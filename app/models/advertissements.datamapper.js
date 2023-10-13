@@ -92,6 +92,28 @@ const datamapper = {
     return jobInformation;
   },
 
+  //! Get all saved advertissements from one user
+  getSavedAdvert: async (userId) => {
+    const savedAdvert = await prisma.jobinformation.findMany({
+      where: {
+        userId: userId,
+        isSaved: true,
+      },
+    });
+    return savedAdvert;
+  },
+
+  //! Get all applied advertissements from one user
+  getAppliedAdvert: async (userId) => {
+    const appliedAdvert = await prisma.jobinformation.findMany({
+      where: {
+        userId: userId,
+        isApplied: true,
+      },
+    });
+    return appliedAdvert;
+  },
+
   //!Delete a advertisement
   //TODO: finish this delete route
   deleteAdvertisement: async (advertId) => {

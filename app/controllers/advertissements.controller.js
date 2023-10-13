@@ -73,6 +73,30 @@ const controller = {
     res.json(newJobInformation);
   },
 
+  //! Show all saved advertisements
+  getSavedAdvert: async (req, res) => {
+    //Recup the userId from the token
+    const token = req.headers.authorization?.replace("Bearer ", "");
+    const user = loginService.getUser(token);
+    const userId = user.id;
+
+    //Get all saved advertisements
+    const savedAdvert = await datamapper.getSavedAdvert(userId);
+    res.json(savedAdvert);
+  },
+
+  //! Show all applied advertisements
+  getAppliedAdvert: async (req, res) => {
+    //Recup the userId from the token
+    const token = req.headers.authorization?.replace("Bearer ", "");
+    const user = loginService.getUser(token);
+    const userId = user.id;
+
+    //Get all applied advertisements
+    const appliedAdvert = await datamapper.getAppliedAdvert(userId);
+    res.json(appliedAdvert);
+  },
+
   //TODO: finish this delete route
   //! Delete an advertisement
   deleteAdvertisement: async (req, res) => {
