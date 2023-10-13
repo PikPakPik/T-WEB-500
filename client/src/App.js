@@ -7,6 +7,7 @@ import AdDetail from "./pages/Ad/AdDetail";
 import Layout from "./components/layouts/Layout";
 import { AuthProvider } from "./context/AuthContext";
 import { themeChange } from "theme-change";
+import NoFound from "./pages/NoFound";
 
 const AppRoutes = () => (
   <Routes>
@@ -14,6 +15,7 @@ const AppRoutes = () => (
     <Route path="/login" element={<Login />} />
     <Route path="/register" element={<Register />} />
     <Route path="/ad/:avertissementId" element={<AdDetail />} />
+    <Route path="*" element={<NoFound />} />
   </Routes>
 );
 
