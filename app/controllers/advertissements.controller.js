@@ -27,11 +27,10 @@ const controller = {
   //! Create an advertisement
   createAdvertisement: async (req, res) => {
     const { title, description, place, workingTime, expRequired } = req.body;
-    const wages = parseInt(req.body.wages);
+    const wage = req.body.wages;
+    const wages = parseInt(wage);
 
     //Recup the userId from the token
-    // const userId = user.userId;
-    // console.log(userId);
     const token = req.headers.authorization?.replace("Bearer ", "");
     const user = loginService.getUser(token);
     const userId = user.id;
@@ -40,8 +39,7 @@ const controller = {
     const company = await datamapper.getOneCompany(userId);
     const companyId = parseInt(company[0].companyId);
 
-    //TODO : Finish the function for create a advert with the companyId and the userId
-
+    //Create the advertisement
     const newAdvertisement = await datamapper.createAdvertisement(
       companyId,
       title,

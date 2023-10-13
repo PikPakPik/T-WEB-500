@@ -56,7 +56,12 @@ const datamapper = {
       data: {
         title: title,
         description: description,
-        companyId: companyId,
+        date: new Date(),
+        company: {
+          connect: {
+            companyId: companyId,
+          },
+        },
         wages: wages,
         place: place,
         workingTime: workingTime,
