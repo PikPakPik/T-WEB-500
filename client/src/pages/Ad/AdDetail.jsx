@@ -16,6 +16,16 @@ const AdDetail = () => {
   const [ad, setAd] = useState(null);
   const [loading, setLoading] = useState(true);
   const { avertissementId } = useParams();
+  const { user } = useAuth();
+
+  const [formData, setFormData] = useState({
+    firstName: user.firstName || "",
+    lastName: user.lastName || "",
+    email: user.email || "",
+    exp: user.exp || "",
+    school: user.school || "",
+    skills: user.skills || "",
+  });
 
   useEffect(() => {
     // Fonction asynchrone pour récupérer les données
@@ -104,6 +114,97 @@ const AdDetail = () => {
         <h2 className="text-2xl font-bold">Description</h2>
         <p className="mt-3 text-base text-gray-500">{description}</p>
       </div>
+
+      {/* Modal */}
+      <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+        <div className="modal-box">
+          <div className="font-bold text-lg">
+            Je postule chez <span className="underline">{name}</span>
+          </div>
+          <hr className="my-6" />
+          <form className="space-y-2">
+            <label htmlFor="firstName" className="label">
+              Prénom
+            </label>
+            <input
+              name="firstName"
+              type="text"
+              placeholder="John"
+              className="input input-bordered w-full"
+              value={formData.firstName}
+            />
+            <label htmlFor="lastName" className="label">
+              Nom
+            </label>
+            <input
+              name="lastName"
+              type="text"
+              placeholder="Doe"
+              className="input input-bordered w-full"
+              value={formData.lastName}
+            />
+            <label htmlFor="email" className="label">
+              Email
+            </label>
+            <input
+              name="email"
+              type="email"
+              placeholder="johndoe@exemple.com"
+              className="input input-bordered w-full"
+              value={formData.email}
+            />
+            <label htmlFor="exp" className="label">
+              Expérience
+            </label>
+            <select
+              name="exp"
+              className="select select-bordered w-full"
+              required
+              value={formData.exp}
+            >
+              <option selected disabled>
+                --Choisir une option--
+              </option>
+              <option value="jeune">Jeune diplômé</option>
+              <option value="junior">Junior</option>
+              <option value="confirme">Confirmé</option>
+              <option value="senior">Senior</option>
+            </select>
+            <label htmlFor="school" className="label">
+              Ecole
+            </label>
+            <input
+              name="school"
+              type="text"
+              placeholder="Ecole 42"
+              className="input input-bordered w-full"
+              value={formData.school}
+            />
+            <label htmlFor="skills" className="label">
+              Compétences
+            </label>
+            <input
+              name="skills"
+              type="text"
+              placeholder="React, Node.js, ..."
+              className="input input-bordered w-full"
+              value={formData.skills}
+            />
+          </form>
+          <div className="modal-action border-t-2 mt-6 pt-4 flex justify-between gap-4">
+            <button
+              className="btn btn-primary"
+              onClick={() => document.getElementById("my_modal_5").close()}
+            >
+              Envoyer
+            </button>
+            <form method="dialog">
+              {/* Formulaire de candidature */}
+              <button className="btn">Annuler</button>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };
