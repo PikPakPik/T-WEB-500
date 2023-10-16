@@ -68,6 +68,45 @@ const controller = {
       res.status(500).send(error.message);
     }
   },
+
+  //! Delete a company
+  deleteCompany: async (req, res) => {
+    //Recup the companyId
+    const companyId = parseInt(req.params.companyId);
+
+    //Recup the userId from the token
+    const token = req.headers.authorization?.replace("Bearer ", "");
+    const user = loginService.getUser(token);
+    const userId = user.id;
+
+    //To know if the user is an admin
+    const isAdmin = await datamapper.isAdmin(userId);
+    if (!isAdmin) {
+      return res.status(403).send("You are not an admin");
+    }
+
+    //Check if the user is the admin of the company
+    const company = await datamapper.getCompany(companyId);
+    if (company.userId !== userId) {
+      return res.status(403).send("You are not the admin of this company");
+    }
+
+    //Delete the company and his advertissements
+    try {
+      const deletedAdvert = await datamapper.deleteAdvertFromCompany(companyId);
+      const deletedCompany = await datamapper.deleteCompany(companyId);
+
+      //Send the response
+      const response = {
+        deletedAdvert,
+        deletedCompany,
+      };
+      res.json(response);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error.message);
+    }
+  },
 };
 
 module.exports = controller;

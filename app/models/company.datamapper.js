@@ -52,6 +52,25 @@ const datamapper = {
     });
     return updatedCompany;
   },
+
+  //! Delete a advertissement from a company
+  deleteAdvertFromCompany: async (companyId) => {
+    const deletedAdvert = await prisma.advertissements.delete({
+      where: {
+        companyId: companyId,
+      },
+    });
+    return deletedAdvert;
+  },
+
+  //! Delete a company
+  deleteCompany: async (companyId) => {
+    const deletedCompany = await prisma.companies.delete({
+      where: {
+        companyId: companyId,
+      },
+    });
+  },
 };
 
 module.exports = datamapper;
