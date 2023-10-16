@@ -21,9 +21,14 @@ router.post(
   advertissementsController.createAdvertisement
 );
 router.post(
-  "/advert/:advertId",
+  "/advert/:advertId/save",
   auth.isLogged,
-  advertissementsController.createJobInformation
+  advertissementsController.isJobInformationExist
+);
+router.put(
+  "/jobInformation/:advertId",
+  auth.isLogged,
+  advertissementsController.isJobInformationExist
 );
 router.get(
   "/savedAdvert",
@@ -51,11 +56,16 @@ router.put("/user", auth.isLogged, usersController.updateUser);
 
 // Define routes company
 router.get("/company/:companyId", compagnyController.getOneCompany);
-router.post("/company", compagnyController.createCompany);
+router.post("/company", auth.isLogged, compagnyController.createCompany);
 router.put(
   "/company/:companyId",
   auth.isLogged,
   compagnyController.updateCompany
+);
+router.delete(
+  "/company/:companyId",
+  auth.isLogged,
+  compagnyController.deleteCompany
 );
 
 // Define routes applications

@@ -22,6 +22,17 @@ const datamapper = {
     return oneAdvertisement;
   },
 
+  //! Show job Information if exist
+  getJobInformation: async (advertId, userId) => {
+    const jobInformation = await prisma.jobinformation.findMany({
+      where: {
+        advertissementId: advertId,
+        userId: userId,
+      },
+    });
+    return jobInformation;
+  },
+
   //! Show all advertisements from one company
   getCompanyAdvertisements: async (companyId) => {
     const companyAdvertisements = await prisma.advertissements.findMany({
@@ -90,6 +101,24 @@ const datamapper = {
       },
     });
     return jobInformation;
+  },
+
+  //! Update an Job Information
+
+  updateJobInformation: async (advertId, userId, isSaved, isApplied) => {
+    const updateJobinformation = await prisma.jobinformation.update({
+      where: {
+        advertissementId_userId: {
+          advertissementId: advertId, // la variable que vous avez passée en argument
+          userId: userId  // la variable que vous avez passée en argument
+        }
+      },
+      data: {
+        isSaved: isSaved,
+        isApplied: isApplied,
+      },
+    });
+    return updateJobinformation;
   },
 
   //! Get all saved advertissements from one user
