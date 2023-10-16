@@ -20,19 +20,46 @@ router.post(
   auth.isLogged,
   advertissementsController.createAdvertisement
 );
+router.post(
+  "/advert/:advertId",
+  auth.isLogged,
+  advertissementsController.createJobInformation
+);
+router.get(
+  "/savedAdvert",
+  auth.isLogged,
+  advertissementsController.getSavedAdvert
+);
+router.get(
+  "/appliedAdvert",
+  auth.isLogged,
+  advertissementsController.getAppliedAdvert
+);
+//TODO: finish this delete route
+router.delete(
+  "/advert/:advertId",
+  auth.isLogged,
+  advertissementsController.deleteAdvertisement
+);
 
 // Define routes users
 router.post("/signup", usersController.createUser);
 router.post("/login", usersController.login);
 router.get("/user/:userId", usersController.getOneUser);
 router.get("/me", auth.isLogged, usersController.getMe);
+router.put("/user", auth.isLogged, usersController.updateUser);
 
 // Define routes company
 router.get("/company/:companyId", compagnyController.getOneCompany);
-router.post("/company", auth.isLogged, compagnyController.createCompany);
+router.post("/company", compagnyController.createCompany);
+router.put(
+  "/company/:companyId",
+  auth.isLogged,
+  compagnyController.updateCompany
+);
 
 // Define routes applications
-// router.post("/application", applicationController.createApplication);
+router.post("/application/:advertId", applicationController.applyToAdvert);
 
 // Export router
 module.exports = router;

@@ -9,27 +9,35 @@ import { AuthProvider } from "./context/AuthContext";
 import { themeChange } from "theme-change";
 import NoFound from "./pages/NoFound";
 import Profile from "./pages/Profile/Profile";
-
-const AppRoutes = () => (
-  <Routes>
-    <Route path="/" element={<Home />} />
-    <Route path="/login" element={<Login />} />
-    <Route path="/register" element={<Register />} />
-    <Route path="/profile" element={<Profile />} />
-    <Route path="/ad/:avertissementId" element={<AdDetail />} />
-    <Route path="*" element={<NoFound />} />
-  </Routes>
-);
+import { useAuth } from "./hooks/useAuth";
 
 const App = () => {
+  const ProtectedRoute = ({ element, fallback }) => {
+    const { user } = useAuth();
+    return user ? element : fallback;
+  };
+  
+  const GuestRoute = ({ element, fallback }) => {
+    const { user } = useAuth();
+    return !user ? element : fallback;
+  };
+
   useEffect(() => {
     themeChange(false);
   }, []);
+  
 
   return (
     <AuthProvider>
       <Layout>
-        <AppRoutes />
+        <Routes>
+        <Route path="/" element={<Home />} />
+          <Route path="/login" element={<GuestRoute element={<Login />} redirectTo={<Home />} />} />
+          <Route path="/register" element={<GuestRoute element={<Register />} redirectTo={<Home />} />} />
+          <Route path="/profile" element={<ProtectedRoute element={<Profile />} redirectTo={<Home />} />} />
+          <Route path="/ad/:avertissementId" element={<AdDetail />} />
+          <Route path="*" element={<NoFound />} />
+        </Routes>
       </Layout>
     </AuthProvider>
   );

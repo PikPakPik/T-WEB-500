@@ -1,6 +1,8 @@
 const datamapper = require("../models/users.datamapper");
+const avertissementdatamapper = require("../models/advertissements.datamapper");
 const loginService = require("../services/login.service");
 const bcrypt = require("bcrypt");
+const { getUserCompany } = require("../models/users.datamapper");
 const saltRounds = 10;
 
 const controller = {
@@ -124,6 +126,18 @@ const controller = {
       //Get the user from the database
       const user = await datamapper.getOneUser(verifiedToken.id);
 
+      // If isAdmin is true, we send the user and his company
+      if (user.isAdmin) {
+        const company = await getUserCompany(user.userId);
+        if (!company) return res.json(user);
+        user.company = company;
+
+        const advertissements = await avertissementdatamapper.getCompanyAdvertisements(
+          company.companyId
+        );
+        user.company.advertissements = advertissements;
+      }
+
       //If the user exist
       return res.json(user);
 
@@ -132,7 +146,51 @@ const controller = {
       console.log(error);
       res.status(500).send("Error while getting the user");
     }
-  }
+  },
+
+  //! Update the current user
+  updateUser: async (req, res) => {
+    //Recup the userId from the token
+    const token = req.headers.authorization?.replace("Bearer ", "");
+    const userId = loginService.getUser(token).id;
+
+    //Get the data from the request body
+    const { firstName, lastName, email, userPassword, exp, school, skills } =
+      req.body;
+
+    //Hash the password if the user give one
+    let hashedPassword = null;
+    if (userPassword) {
+      hashedPassword = await bcrypt.hash(userPassword, saltRounds);
+    }
+
+    //Update the user
+    try {
+      const updatedUser = await datamapper.updateUser(
+        userId,
+        firstName,
+        lastName,
+        email,
+        hashedPassword,
+        exp,
+        school,
+        skills
+      );
+
+      //If the user doesn't exist
+      if (!updatedUser) {
+        return res.status(404).send("User not found");
+      }
+
+      //If the user exist
+      return res.json(updatedUser);
+
+      //If there is an error
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("Error while updating the user");
+    }
+  },
 };
 
 module.exports = controller;
