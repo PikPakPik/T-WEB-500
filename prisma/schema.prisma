@@ -37,7 +37,7 @@ model advertissements {
   workingTime      String
   expRequired      String
   applications     applications[]
-  jobinformation   jobinformation?
+  jobinformation   jobinformation[]
 }
 
 model companies {
@@ -75,7 +75,9 @@ model jobinformation {
   isSaved          Boolean         @default(false)
   isApplied        Boolean         @default(false)
   advertissement   advertissements @relation(fields: [advertissementId], references: [advertissementId])
-  advertissementId Int             @unique
+  advertissementId Int
   user             user            @relation(fields: [userId], references: [userId])
   userId           Int
+
+  @@id([advertissementId, userId])
 }

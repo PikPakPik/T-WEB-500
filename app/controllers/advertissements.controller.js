@@ -80,15 +80,16 @@ const controller = {
     const token = req.headers.authorization?.replace("Bearer ", "");
     const user = loginService.getUser(token);
     const userId = user.id;
+    const { isSaved, isApplied } = req.body;
 
     //Recup the advertId from the params
     const advertId = parseInt(req.params.advertId);
 
     //Check if the job information exist
     const jobInformation = await datamapper.getJobInformation(advertId, userId);
-    res.json(jobInformation);
 
-    if (jobInformation) {
+    if (jobInformation.length !== 0) {
+      console.log("jobInformation exist");
       //*Update the jobInformation
       const updatedJobInformation = await datamapper.updateJobInformation(
         advertId,
@@ -99,6 +100,7 @@ const controller = {
 
       res.json(updatedJobInformation);
     } else {
+        console.log("jobInformation not exist");
       //*Create the jobInformation
       const newJobInformation = await datamapper.createJobInformation(
         advertId,

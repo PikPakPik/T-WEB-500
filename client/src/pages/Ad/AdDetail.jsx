@@ -1,14 +1,22 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import moment from "moment";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { useAuth } from "../../hooks/useAuth";
 
 // Fonction pour récupérer les détails de l'annonce et de l'entreprise
 const fetchAdAndCompany = async (avertissementId) => {
-  const res1 = await fetch(`http://localhost:3001/advert/${avertissementId}`);
+  const res1 = await fetch(`http://localhost:3001/advert/${avertissementId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + window.localStorage.token || "",
+    },
+  });
   const ad = await res1.json();
-  const res2 = await fetch(`http://localhost:3001/company/${ad.companyId}`);
+  const res2 = await fetch(
+    `http://localhost:3001/company/${ad.oneAdvertisement.companyId}`,
+  );
   const company = await res2.json();
   return { ...ad, company };
 };
@@ -16,17 +24,34 @@ const fetchAdAndCompany = async (avertissementId) => {
 const AdDetail = () => {
   const [ad, setAd] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isApplied, setIsApplied] = useState(false);
   const { avertissementId } = useParams();
   const { user } = useAuth();
 
-  const [formData] = useState({
-    firstName: user.firstName || "",
-    lastName: user.lastName || "",
-    email: user.email || "",
-    exp: user.exp || "",
-    school: user.school || "",
-    skills: user.skills || "",
-  });
+  const [formData, setFormData] = useState({});
+
+  const toggleSavedStatus = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:3001/advert/${avertissementId}/save`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${window.localStorage.token || ""}`,
+          },
+          body: JSON.stringify({ isSaved: !isSaved, isApplied: !isApplied }),
+        },
+      );
+
+      if (res.ok) {
+        setIsSaved(!isSaved); // Mettre à jour le state
+      }
+    } catch (error) {
+      console.error("Failed to save:", error);
+    }
+  };
 
   useEffect(() => {
     // Fonction asynchrone pour récupérer les données
@@ -34,12 +59,51 @@ const AdDetail = () => {
       try {
         const fetchedAd = await fetchAdAndCompany(avertissementId);
         setAd(fetchedAd);
+
+        console.log("fetchedAd", fetchedAd);
+        setFormData({
+          firstName: user ? user.firstName : "",
+          lastName: user ? user.lastName : "",
+          email: user ? user.email : "",
+          exp: user ? user.exp : "",
+          school: user ? user.school : "",
+          skills: user ? user.skills : "",
+        });
+
+        setIsSaved(fetchedAd.jobInformation[0].isSaved);
         setLoading(false); // Fin du chargement
       } catch (error) {
         console.error("Error fetching ad and company data:", error);
       }
     })();
-  }, [avertissementId]);
+  }, [avertissementId, user]);
+
+  const onInputChange = (e) => {
+    formData[e.target.name] = e.target.value;
+  };
+
+  const sendApplication = async () => {
+    const token = user ? "Bearer " + window.localStorage.token : "";
+    try {
+      const res = await fetch(
+        "http://localhost:3001/application/" + avertissementId,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: token },
+          body: JSON.stringify({
+            ...formData,
+          }),
+        },
+      );
+      const data = await res.json();
+      if (res.ok) {
+        setIsApplied(true);
+        document.getElementById("my_modal_5").close();
+      }
+    } catch (error) {
+      console.error("Error sending application:", error);
+    }
+  };
 
   // Affichage de l'état de chargement
   if (loading) {
@@ -47,15 +111,18 @@ const AdDetail = () => {
   }
 
   // Destructuration des données de l'annonce
-  const {
-    title,
+  let {
+    oneAdvertisement: {
+      title,
+      place,
+      expRequired,
+      workingTime,
+      date,
+      wages,
+      description,
+    },
     company: { logo, name },
-    place,
-    expRequired,
-    workingTime,
-    date,
-    wages,
-    description,
+    jobInformation,
   } = ad;
 
   return (
@@ -100,8 +167,14 @@ const AdDetail = () => {
               <button className="btn btn-outline btn-circle btn-sm">
                 <Icon icon="fluent:share-24-regular" />
               </button>
-              <button className="btn btn-outline btn-circle btn-sm hover:text-red-600">
-                <Icon icon="mdi:heart" />
+              <button
+                className="btn btn-outline btn-circle btn-sm hover:text-red-600"
+                onClick={toggleSavedStatus}
+              >
+                <Icon
+                  icon="mdi:heart"
+                  className={isSaved ? "text-red-600" : ""}
+                />
               </button>
             </div>
             <div className="flex flex-col gap-3 mt-3">
@@ -146,7 +219,8 @@ const AdDetail = () => {
               type="text"
               placeholder="John"
               className="input input-bordered w-full"
-              value={formData.firstName}
+              onChange={onInputChange}
+              defaultValue={formData.firstName}
             />
             <label htmlFor="lastName" className="label">
               Nom
@@ -156,7 +230,8 @@ const AdDetail = () => {
               type="text"
               placeholder="Doe"
               className="input input-bordered w-full"
-              value={formData.lastName}
+              onChange={onInputChange}
+              defaultValue={formData.lastName}
             />
             <label htmlFor="email" className="label">
               Email
@@ -166,7 +241,8 @@ const AdDetail = () => {
               type="email"
               placeholder="johndoe@exemple.com"
               className="input input-bordered w-full"
-              value={formData.email}
+              onChange={onInputChange}
+              defaultValue={formData.email}
             />
             <label htmlFor="exp" className="label">
               Expérience
@@ -175,7 +251,8 @@ const AdDetail = () => {
               name="exp"
               className="select select-bordered w-full"
               required
-              value={formData.exp}
+              defaultValue={formData.exp}
+              onChange={onInputChange}
             >
               <option selected disabled>
                 --Choisir une option--
@@ -193,7 +270,8 @@ const AdDetail = () => {
               type="text"
               placeholder="Ecole 42"
               className="input input-bordered w-full"
-              value={formData.school}
+              onChange={onInputChange}
+              defaultValue={formData.school}
             />
             <label htmlFor="skills" className="label">
               Compétences
@@ -203,14 +281,12 @@ const AdDetail = () => {
               type="text"
               placeholder="React, Node.js, ..."
               className="input input-bordered w-full"
-              value={formData.skills}
+              onChange={onInputChange}
+              defaultValue={formData.skills}
             />
           </form>
           <div className="modal-action border-t-2 mt-6 pt-4 flex justify-between gap-4">
-            <button
-              className="btn btn-primary"
-              onClick={() => document.getElementById("my_modal_5").close()}
-            >
+            <button className="btn btn-primary" onClick={sendApplication}>
               Envoyer
             </button>
             <form method="dialog">
