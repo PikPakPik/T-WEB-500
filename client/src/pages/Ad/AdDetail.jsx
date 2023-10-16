@@ -26,6 +26,7 @@ const AdDetail = () => {
     (async () => {
       try {
         const fetchedAd = await fetchAdAndCompany(avertissementId);
+        console.log(fetchedAd);
         setAd(fetchedAd);
         setLoading(false);
       } catch (error) {
@@ -104,7 +105,23 @@ const AdDetail = () => {
               <button className="btn btn-outline btn-circle btn-sm">
                 <Icon icon="fluent:share-24-regular" />
               </button>
-              <button className="btn btn-outline btn-circle btn-sm hover:text-red-600">
+              <button
+                className="btn btn-outline btn-circle btn-sm hover:text-red-600"
+                onClick={() => {
+                  fetch(
+                    `http://localhost:3001/advert/${avertissementId}/like`,
+                    {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      body: JSON.stringify({
+                        userId: user.id,
+                      }),
+                    },
+                  );
+                }}
+              >
                 <Icon icon="mdi:heart" />
               </button>
             </div>
