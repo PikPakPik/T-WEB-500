@@ -4,8 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e8e4f119-b026-45b1-af58-a8fbcd202e06" name="Changes" comment="refactor: :bug: Fix when go to ad detail error showed about user">
+    <list default="true" id="e8e4f119-b026-45b1-af58-a8fbcd202e06" name="Changes" comment="WIP">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/prisma/migrations/20231016134404_/migration.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/controllers/advertissements.controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/advertissements.controller.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/advertissements.datamapper.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/advertissements.datamapper.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/src/pages/Ad/AdDetail.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/pages/Ad/AdDetail.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prisma/migrations/20231013110710_/migration.sql" beforeDir="false" afterPath="$PROJECT_DIR$/prisma/migrations/20231013110710_/migration.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/prisma/schema.prisma" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,6 +20,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
+    <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
         <entry key="$PROJECT_DIR$" value="main" />
@@ -52,27 +60,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "feat/saved-apply",
-    "last_opened_file_path": "/Users/atressel/Documents/Epitech/Projets/T-WEB-501/T-WEB-501-NAN_2",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "prettierjs.PrettierConfiguration.Package": "/Users/atressel/.npm-global/lib/node_modules/prettier",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "settings.javascript.prettier",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat/saved-apply&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/atressel/Documents/Epitech/Projets/T-WEB-501/T-WEB-501-NAN_2&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/atressel/.npm-global/lib/node_modules/prettier&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.javascript.prettier&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -88,7 +96,7 @@
       <workItem from="1697391427226" duration="517000" />
       <workItem from="1697391951416" duration="587000" />
       <workItem from="1697392547825" duration="1618000" />
-      <workItem from="1697440406552" duration="11960000" />
+      <workItem from="1697440406552" duration="18732000" />
     </task>
     <task id="LOCAL-00001" summary="idk: :globe_with_meridians: idea file projects">
       <option name="closed" value="true" />
@@ -114,7 +122,23 @@
       <option name="project" value="LOCAL" />
       <updated>1697448249852</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="WIP">
+      <option name="closed" value="true" />
+      <created>1697462412113</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1697462412113</updated>
+    </task>
+    <task id="LOCAL-00005" summary="WIP">
+      <option name="closed" value="true" />
+      <created>1697462472366</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1697462472366</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -148,7 +172,8 @@
     <MESSAGE value="idk: :globe_with_meridians: idea file projects" />
     <MESSAGE value="feat: :sparkles: Add informations of company and can modify it" />
     <MESSAGE value="refactor: :bug: Fix when go to ad detail error showed about user" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor: :bug: Fix when go to ad detail error showed about user" />
+    <MESSAGE value="WIP" />
+    <option name="LAST_COMMIT_MESSAGE" value="WIP" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -108,8 +108,10 @@ const datamapper = {
   updateJobInformation: async (advertId, userId, isSaved, isApplied) => {
     const updateJobinformation = await prisma.jobinformation.update({
       where: {
-        advertissementId: advertId,
-        userId: userId,
+        advertissementId_userId: {
+          advertissementId: advertId, // la variable que vous avez passée en argument
+          userId: userId  // la variable que vous avez passée en argument
+        }
       },
       data: {
         isSaved: isSaved,

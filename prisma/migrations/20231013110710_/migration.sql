@@ -15,9 +15,6 @@ ALTER TABLE `jobinformation` DROP COLUMN `applicationId`,
     ADD COLUMN `advertissementId` INTEGER NOT NULL,
     ADD COLUMN `userId` INTEGER NOT NULL;
 
--- CreateIndex
-CREATE UNIQUE INDEX `jobinformation_advertissementId_key` ON `jobinformation`(`advertissementId`);
-
 -- AddForeignKey
 ALTER TABLE `jobinformation` ADD CONSTRAINT `jobinformation_advertissementId_fkey` FOREIGN KEY (`advertissementId`) REFERENCES `advertissements`(`advertissementId`) ON DELETE RESTRICT ON UPDATE CASCADE;
 

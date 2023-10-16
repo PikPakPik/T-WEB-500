@@ -6,9 +6,17 @@ import { useAuth } from "../../hooks/useAuth";
 
 // Fonction pour récupérer les détails de l'annonce et de l'entreprise
 const fetchAdAndCompany = async (avertissementId) => {
-  const res1 = await fetch(`http://localhost:3001/advert/${avertissementId}`);
+  const res1 = await fetch(`http://localhost:3001/advert/${avertissementId}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + window.localStorage.token || "",
+    },
+  });
   const ad = await res1.json();
-  const res2 = await fetch(`http://localhost:3001/company/${ad.companyId}`);
+  const res2 = await fetch(
+    `http://localhost:3001/company/${ad.oneAdvertisement.companyId}`,
+  );
   const company = await res2.json();
   return { ...ad, company };
 };
@@ -16,19 +24,43 @@ const fetchAdAndCompany = async (avertissementId) => {
 const AdDetail = () => {
   const [ad, setAd] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isApplied, setIsApplied] = useState(false);
   const { avertissementId } = useParams();
   const { user } = useAuth();
 
   const [formData, setFormData] = useState({});
+
+  const toggleSavedStatus = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:3001/advert/${avertissementId}/save`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${window.localStorage.token || ""}`,
+          },
+          body: JSON.stringify({ isSaved: !isSaved, isApplied: !isApplied }),
+        },
+      );
+
+      if (res.ok) {
+        setIsSaved(!isSaved); // Mettre à jour le state
+      }
+    } catch (error) {
+      console.error("Failed to save:", error);
+    }
+  };
 
   useEffect(() => {
     // Fonction asynchrone pour récupérer les données
     (async () => {
       try {
         const fetchedAd = await fetchAdAndCompany(avertissementId);
-        console.log(fetchedAd);
         setAd(fetchedAd);
 
+        console.log("fetchedAd", fetchedAd);
         setFormData({
           firstName: user ? user.firstName : "",
           lastName: user ? user.lastName : "",
@@ -37,13 +69,14 @@ const AdDetail = () => {
           school: user ? user.school : "",
           skills: user ? user.skills : "",
         });
-        
+
+        setIsSaved(fetchedAd.jobInformation[0].isSaved);
         setLoading(false); // Fin du chargement
       } catch (error) {
         console.error("Error fetching ad and company data:", error);
       }
     })();
-  }, [avertissementId, formData, user]);
+  }, [avertissementId, user]);
 
   const onInputChange = (e) => {
     formData[e.target.name] = e.target.value;
@@ -60,31 +93,36 @@ const AdDetail = () => {
           body: JSON.stringify({
             ...formData,
           }),
-        }
+        },
       );
-      console.log(formData);
       const data = await res.json();
-      console.log(data);
+      if (res.ok) {
+        setIsApplied(true);
+        document.getElementById("my_modal_5").close();
+      }
     } catch (error) {
       console.error("Error sending application:", error);
     }
   };
-  
+
   // Affichage de l'état de chargement
   if (loading) {
     return <div>loading...</div>;
   }
 
   // Destructuration des données de l'annonce
-  const {
-    title,
+  let {
+    oneAdvertisement: {
+      title,
+      place,
+      expRequired,
+      workingTime,
+      date,
+      wages,
+      description,
+    },
     company: { logo, name },
-    place,
-    expRequired,
-    workingTime,
-    date,
-    wages,
-    description,
+    jobInformation,
   } = ad;
 
   return (
@@ -131,22 +169,12 @@ const AdDetail = () => {
               </button>
               <button
                 className="btn btn-outline btn-circle btn-sm hover:text-red-600"
-                onClick={() => {
-                  fetch(
-                    `http://localhost:3001/advert/${avertissementId}/like`,
-                    {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify({
-                        userId: user.id,
-                      }),
-                    },
-                  );
-                }}
+                onClick={toggleSavedStatus}
               >
-                <Icon icon="mdi:heart" />
+                <Icon
+                  icon="mdi:heart"
+                  className={isSaved ? "text-red-600" : ""}
+                />
               </button>
             </div>
             <div className="flex flex-col gap-3 mt-3">
