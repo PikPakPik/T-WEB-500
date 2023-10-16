@@ -42,7 +42,7 @@ model advertissements {
 
 model companies {
   companyId       Int               @id @default(autoincrement())
-  name            String
+  name            String            @unique
   logo            String?
   user            user              @relation(fields: [userId], references: [userId])
   userId          Int               @unique

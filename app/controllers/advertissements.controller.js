@@ -8,10 +8,32 @@ const controller = {
     res.json(advertissements);
   },
 
-  //! Show one advertisement
+  //! Show one advertisement (with job Information if exist)
   getOneAdvertisement: async (req, res) => {
     const advertId = parseInt(req.params.advertId);
     const oneAdvertisement = await datamapper.getOneAdvertisement(advertId);
+
+    // Recup the userId from the token
+    const token = req.headers.authorization?.replace("Bearer ", "");
+
+    // If we get the userId, we search the jobInformation and send it with the response
+    if (token) {
+      const user = loginService.getUser(token);
+      const userId = user.id;
+      const jobInformation = await datamapper.getJobInformation(
+        advertId,
+        userId
+      );
+
+      // Send the response
+      const responseData = {
+        oneAdvertisement,
+        jobInformation,
+      };
+      return res.json(responseData);
+    }
+
+    // Send the response
     res.json(oneAdvertisement);
   },
 
@@ -62,6 +84,7 @@ const controller = {
     //Recup the advertId from the params & the jobInformation from the body
     const advertId = parseInt(req.params.advertId);
     const { isSaved, isApplied } = req.body;
+    console.log(advertId, userId, isSaved, isApplied);
 
     //Create the jobInformation
     const newJobInformation = await datamapper.createJobInformation(
@@ -71,6 +94,31 @@ const controller = {
       isApplied
     );
     res.json(newJobInformation);
+  },
+
+  //! Update an Job Information
+
+  updateJobInformation: async (req, res) => {
+    //Recup the userId from the token
+    const token = req.headers.authorization?.replace("Bearer ", "");
+    const user = loginService.getUser(token);
+    const userId = user.id;
+
+    //Recup the advertId from the params & the jobInformation from the body
+    const advertId = parseInt(req.params.advertId);
+    const { isSaved, isApplied } = req.body;
+
+    console.log(advertId, userId, isSaved, isApplied);
+
+    //Update the jobInformation
+    const updatedJobInformation = await datamapper.updateJobInformation(
+      advertId,
+      userId,
+      isSaved,
+      isApplied
+    );
+
+    res.json(updatedJobInformation);
   },
 
   //! Show all saved advertisements

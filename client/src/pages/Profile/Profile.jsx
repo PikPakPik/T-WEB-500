@@ -9,7 +9,7 @@ const renderOverview = (user) => (
         {["email", "exp", "school", "skills"].map((field) => (
           <div key={field} className="my-2">
             <strong>{`${field.charAt(0).toUpperCase()}${field.slice(
-              1
+              1,
             )}:`}</strong>{" "}
             {user[field]}
           </div>
@@ -78,7 +78,7 @@ const renderSettings = (user) => (
 
 const renderPassword = () => <p>This is the password tab.</p>;
 
-const renderCompany = (user) =>
+const renderCompanyInfo = (user) =>
   user.company ? (
     <div className="flex justify-center items-center">
       <div className="max-w-md w-full bg-base-200 shadow-md rounded-lg overflow-hidden">
@@ -97,13 +97,6 @@ const renderCompany = (user) =>
             </div>
           </div>
         </div>
-        <div className="py-4 px-6">
-          <div className="flex justify-end mt-4">
-            <button className="font-semibold py-2 px-4 rounded bg-blue-600 text-white hover:bg-blue-500 transition duration-300">
-              Modifier les informations
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   ) : (
@@ -118,12 +111,91 @@ const renderCompany = (user) =>
       </button>
     </div>
   );
+const renderCompanySettings = (user) => (
+  <div>
+    <h1 className="text-3xl">Settings</h1>
+    <form action="">
+      <div className="flex flex-col">
+        <div className="my-2">
+          <label htmlFor="name" className="label">
+            Nom de l'entreprise
+          </label>
+          <input
+            name="name"
+            type="text"
+            defaultValue={user.company.name}
+            className="input input-bordered ml-2"
+          />
+        </div>
+        <div className="my-2">
+          <label htmlFor="logo" className="label">
+            Logo de l'entreprise
+          </label>
+          <input
+            name="logo"
+            type="text"
+            defaultValue={user.company.logo}
+            className="input input-bordered ml-2 w-1/2"
+          />
+        </div>
+        <div className="my-2">
+          <button
+            name="submit"
+            className="btn btn-primary ml-2"
+            onClick={() => {
+              fetch(`http://localhost:3001/company/${user.company.companyId}`, {
+                method: "PUT",
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  name: document.getElementsByName("name")[0].value,
+                  logo: document.getElementsByName("logo")[0].value,
+                }),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  window.location.reload();
+                })
+                .catch((error) => {
+                  console.error("Error:", error);
+                });
+            }}
+          >
+            Modifier
+          </button>
+          <button
+            name="delete"
+            className="btn btn-error ml-2"
+            onClick={() => {
+              fetch(`http://localhost:3001/company/${user.company.id}`, {
+                method: "DELETE",
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  "Content-Type": "application/json",
+                },
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  window.location.reload();
+                })
+                .catch((error) => {
+                  console.error("Error:", error);
+                });
+            }}
+          >
+            Supprimer
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+);
 
-const tabRenderers = {
-  overview: renderOverview,
-  settings: renderSettings,
-  password: renderPassword,
-  company: renderCompany,
+const companyTabRenderers = {
+  info: renderCompanyInfo,
+  settings: renderCompanySettings,
 };
 
 const Profile = () => {
@@ -134,6 +206,43 @@ const Profile = () => {
     logo: "",
   });
   const [error, setError] = useState("");
+  const [activeCompanyTab, setActiveCompanyTab] = useState("info");
+
+  const renderCompany = (user) => {
+    const renderCompanyTabContent = () => {
+      return (
+        companyTabRenderers[activeCompanyTab]?.(user) || (
+          <p>Pas d'onglet sélectionné.</p>
+        )
+      );
+    };
+
+    return (
+      <>
+        <div className="flex border-b">
+          {Object.keys(companyTabRenderers).map((tab) => (
+            <button
+              key={tab}
+              className={`py-2 px-4 ${
+                activeCompanyTab === tab ? "border-b-2 border-blue-500" : ""
+              }`}
+              onClick={() => setActiveCompanyTab(tab)}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
+        </div>
+        <div className="p-4">{renderCompanyTabContent()}</div>
+      </>
+    );
+  };
+
+  const tabRenderers = {
+    overview: renderOverview,
+    settings: renderSettings,
+    password: renderPassword,
+    company: renderCompany,
+  };
 
   const renderTabContent = () => {
     if (isLoading) {
@@ -149,8 +258,8 @@ const Profile = () => {
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value })
-  }
+    setFormData({ ...formData, [name]: value });
+  };
 
   const addCompany = () => {
     if (!formData.name || !formData.logo) {
@@ -163,16 +272,16 @@ const Profile = () => {
     img.src = formData.logo;
     img.onload = () => {
       setError("");
-    }
+    };
     img.onerror = () => {
       setError("L'url du logo n'est pas valide");
       return;
-    }
+    };
 
     fetch("http://localhost:3001/company", {
       method: "POST",
       headers: {
-        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(formData),
@@ -184,7 +293,7 @@ const Profile = () => {
       .catch((error) => {
         console.error("Error:", error);
       });
-  }
+  };
 
   return (
     <div className="container mx-auto p-4">
@@ -206,14 +315,18 @@ const Profile = () => {
         <div className="modal-box">
           <h3 className="font-bold text-lg">Ajouter mon entreprise</h3>
           <p className="py-4">
-            <label htmlFor="name" className="label">Nom de l'entreprise</label>
+            <label htmlFor="name" className="label">
+              Nom de l'entreprise
+            </label>
             <input
               name="name"
               type="text"
               onChange={handleInputChange}
               className="input input-bordered w-content ml-2 w-full"
             />
-            <label htmlFor="logo" className="label">Logo de l'entreprise (URL)</label>
+            <label htmlFor="logo" className="label">
+              Logo de l'entreprise (URL)
+            </label>
             <input
               name="logo"
               type="text"
@@ -223,7 +336,9 @@ const Profile = () => {
             <span className="text-red-500">{error}</span>
           </p>
           <div className="modal-action ">
-            <button className="btn btn-primary" onClick={addCompany}>Ajouter</button>
+            <button className="btn btn-primary" onClick={addCompany}>
+              Ajouter
+            </button>
             <form method="dialog">
               {/* if there is a button in form, it will close the modal */}
               <button className="btn">Annuler</button>

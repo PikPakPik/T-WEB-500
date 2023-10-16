@@ -68,7 +68,7 @@ const AdDetail = () => {
       console.error("Error sending application:", error);
     }
   };
-
+  
   // Affichage de l'état de chargement
   if (loading) {
     return <div>loading...</div>;
