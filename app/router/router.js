@@ -40,6 +40,10 @@ router.get(
   auth.isLogged,
   advertissementsController.getAppliedAdvert
 );
+// router.get(
+//   "/advert/:advertId",
+//   advertissementsController.getOneAdvertissements
+// );
 //TODO: finish this delete route
 router.delete(
   "/advert/:advertId",

@@ -8,10 +8,32 @@ const controller = {
     res.json(advertissements);
   },
 
-  //! Show one advertisement
+  //! Show one advertisement (with job Information if exist)
   getOneAdvertisement: async (req, res) => {
     const advertId = parseInt(req.params.advertId);
     const oneAdvertisement = await datamapper.getOneAdvertisement(advertId);
+
+    // Recup the userId from the token
+    const token = req.headers.authorization?.replace("Bearer ", "");
+
+    // If we get the userId, we search the jobInformation and send it with the response
+    if (token) {
+      const user = loginService.getUser(token);
+      const userId = user.id;
+      const jobInformation = await datamapper.getJobInformation(
+        advertId,
+        userId
+      );
+
+      // Send the response
+      const responseData = {
+        oneAdvertisement,
+        jobInformation,
+      };
+      return res.json(responseData);
+    }
+
+    // Send the response
     res.json(oneAdvertisement);
   },
 
