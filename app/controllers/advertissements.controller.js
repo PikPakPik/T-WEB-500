@@ -62,6 +62,7 @@ const controller = {
     //Recup the advertId from the params & the jobInformation from the body
     const advertId = parseInt(req.params.advertId);
     const { isSaved, isApplied } = req.body;
+    console.log(advertId, userId, isSaved, isApplied);
 
     //Create the jobInformation
     const newJobInformation = await datamapper.createJobInformation(
@@ -71,6 +72,31 @@ const controller = {
       isApplied
     );
     res.json(newJobInformation);
+  },
+
+  //! Update an Job Information
+
+  updateJobInformation: async (req, res) => {
+    //Recup the userId from the token
+    const token = req.headers.authorization?.replace("Bearer ", "");
+    const user = loginService.getUser(token);
+    const userId = user.id;
+
+    //Recup the advertId from the params & the jobInformation from the body
+    const advertId = parseInt(req.params.advertId);
+    const { isSaved, isApplied } = req.body;
+
+    console.log(advertId, userId, isSaved, isApplied);
+
+    //Update the jobInformation
+    const updatedJobInformation = await datamapper.updateJobInformation(
+      advertId,
+      userId,
+      isSaved,
+      isApplied
+    );
+
+    res.json(updatedJobInformation);
   },
 
   //! Show all saved advertisements

@@ -16,6 +16,19 @@ const controller = {
       const user = loginService.getUser(token);
       const userId = user.id;
 
+      //Check if the user already apply to the advertissement
+      const application = await datamapper.checkIfUserAlreadyApply(
+        advertissementId,
+        userId
+      );
+
+      //If the user already apply to the advertissement
+      if (application) {
+        return res.status(400).json({
+          error: "You already apply to this advertissement",
+        });
+      }
+
       //Create the application and the application information
       const newApplication = await datamapper.applyToAdvertUserLogged(
         advertissementId,
@@ -37,12 +50,43 @@ const controller = {
           applicationId
         );
 
-      //Return the response
-      const responseData = {
-        application: newApplication,
-        applicationInformation: newApplicationInformation,
-      };
-      return res.json(responseData);
+      // Check if the jobInformation is already exist
+      const jobInformation = await datamapper.getJobInformation(
+        advertissementId,
+        userId
+      );
+
+      //If the jobInformation is already exist, update it with applied to the advertissement
+      if (jobInformation) {
+        const updatedJobInformation = await datamapper.updateJobInformation(
+          advertissementId,
+          userId
+        );
+
+        //Return the response
+        const responseData = {
+          application: newApplication,
+          applicationInformation: newApplicationInformation,
+          jobInformation: updatedJobInformation,
+        };
+
+        return res.json(responseData);
+      } else {
+        //If the jobInformation is not exist, create it
+        const newJobInformation = await datamapper.createJobInformation(
+          advertissementId,
+          userId
+        );
+
+        //Return the response
+        const responseData = {
+          application: newApplication,
+          applicationInformation: newApplicationInformation,
+          jobInformation: newJobInformation,
+        };
+
+        return res.json(responseData);
+      }
     }
 
     //Create the application and the application information
