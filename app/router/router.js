@@ -56,7 +56,7 @@ router.put("/user", auth.isLogged, usersController.updateUser);
 
 // Define routes company
 router.get("/company/:companyId", compagnyController.getOneCompany);
-router.post("/company", compagnyController.createCompany);
+router.post("/company", auth.isLogged, compagnyController.createCompany);
 router.put(
   "/company/:companyId",
   auth.isLogged,
