@@ -76,7 +76,7 @@ const controller = {
 
   //! Update an Job Information
 
-  updateAdvertisement: async (req, res) => {
+  updateJobInformation: async (req, res) => {
     //Recup the userId from the token
     const token = req.headers.authorization?.replace("Bearer ", "");
     const user = loginService.getUser(token);
