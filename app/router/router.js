@@ -23,12 +23,12 @@ router.post(
 router.post(
   "/advert/:advertId/save",
   auth.isLogged,
-  advertissementsController.createJobInformation
+  advertissementsController.isJobInformationExist
 );
 router.put(
   "/jobInformation/:advertId",
   auth.isLogged,
-  advertissementsController.updateJobInformation
+  advertissementsController.isJobInformationExist
 );
 router.get(
   "/savedAdvert",
@@ -40,10 +40,6 @@ router.get(
   auth.isLogged,
   advertissementsController.getAppliedAdvert
 );
-// router.get(
-//   "/advert/:advertId",
-//   advertissementsController.getOneAdvertissements
-// );
 //TODO: finish this delete route
 router.delete(
   "/advert/:advertId",
