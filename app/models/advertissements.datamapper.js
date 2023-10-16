@@ -22,6 +22,17 @@ const datamapper = {
     return oneAdvertisement;
   },
 
+  //! Show job Information if exist
+  getJobInformation: async (advertId, userId) => {
+    const jobInformation = await prisma.jobinformation.findMany({
+      where: {
+        advertissementId: advertId,
+        userId: userId,
+      },
+    });
+    return jobInformation;
+  },
+
   //! Show all advertisements from one company
   getCompanyAdvertisements: async (companyId) => {
     const companyAdvertisements = await prisma.advertissements.findMany({
