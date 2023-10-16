@@ -93,15 +93,9 @@ const controller = {
 
     //Delete the company and his advertissements
     try {
-      const deletedAdvert = await datamapper.deleteAdvertFromCompany(companyId);
       const deletedCompany = await datamapper.deleteCompany(companyId);
 
-      //Send the response
-      const response = {
-        deletedAdvert,
-        deletedCompany,
-      };
-      res.json(response);
+      res.json(deletedCompany);
     } catch (error) {
       console.log(error);
       res.status(500).send(error.message);
