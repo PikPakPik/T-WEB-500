@@ -19,14 +19,7 @@ const AdDetail = () => {
   const { avertissementId } = useParams();
   const { user } = useAuth();
 
-  const [formData] = useState({
-    firstName: user.firstName || "",
-    lastName: user.lastName || "",
-    email: user.email || "",
-    exp: user.exp || "",
-    school: user.school || "",
-    skills: user.skills || "",
-  });
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
     // Fonction asynchrone pour récupérer les données
@@ -34,12 +27,23 @@ const AdDetail = () => {
       try {
         const fetchedAd = await fetchAdAndCompany(avertissementId);
         setAd(fetchedAd);
-        setLoading(false); // Fin du chargement
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching ad and company data:", error);
       }
     })();
-  }, [avertissementId]);
+
+    if (user && !loading) {
+      setFormData({
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        email: user.email || "",
+        exp: user.exp || "",
+        school: user.school || "",
+        skills: user.skills || "",
+      });
+    }
+  }, [avertissementId, user, loading]);
 
   // Affichage de l'état de chargement
   if (loading) {
