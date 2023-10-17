@@ -34,7 +34,7 @@ const controller = {
     }
 
     // Send the response
-    res.json(oneAdvertisement);
+    res.json({oneAdvertisement});
   },
 
   //! Show all advertisements from one company
