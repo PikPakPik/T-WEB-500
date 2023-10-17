@@ -5,8 +5,13 @@ const controller = {
   //! Get one compagny
   getOneCompany: async (req, res) => {
     const companyId = parseInt(req.params.companyId);
-    const oneCompany = await datamapper.getCompany(companyId);
-    res.json(oneCompany);
+
+    try {
+      const oneCompany = await datamapper.getCompany(companyId);
+      res.json(oneCompany);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
   },
 
   //! Create one company
@@ -17,14 +22,14 @@ const controller = {
     const user = loginService.getUser(token);
     const userId = user.id;
 
-    //To know if the user is an admin
-    const isAdmin = await datamapper.isAdmin(userId);
-    if (!isAdmin) {
-      return res.status(403).send("You are not an admin");
-    }
-
-    //Create the company
     try {
+      // Update user profile to admin
+      const updateUserAdmin = await datamapper.updateUserAdmin(userId);
+      if (!updateUserAdmin) {
+        return res.status(500).send("Error while updating user profile");
+      }
+
+      //Create the company
       const newCompany = await datamapper.createCompany(userId, name, logo);
       res.json(newCompany);
     } catch (error) {
@@ -44,20 +49,20 @@ const controller = {
     const user = loginService.getUser(token);
     const userId = user.id;
 
-    //To know if the user is an admin
-    const isAdmin = await datamapper.isAdmin(userId);
-    if (!isAdmin) {
-      return res.status(403).send("You are not an admin");
-    }
-
-    //Check if the user is the admin of the company
-    const company = await datamapper.getCompany(companyId);
-    if (company.userId !== userId) {
-      return res.status(403).send("You are not the admin of this company");
-    }
-
-    //Update the company
     try {
+      //To know if the user is an admin
+      const isAdmin = await datamapper.isAdmin(userId);
+      if (!isAdmin) {
+        return res.status(403).send("You are not an admin");
+      }
+
+      //Check if the user is the admin of the company
+      const company = await datamapper.getCompany(companyId);
+      if (company.userId !== userId) {
+        return res.status(403).send("You are not the admin of this company");
+      }
+
+      //Update the company
       const updatedCompany = await datamapper.updateCompany(
         companyId,
         name,
@@ -79,25 +84,31 @@ const controller = {
     const user = loginService.getUser(token);
     const userId = user.id;
 
-    //To know if the user is an admin
-    const isAdmin = await datamapper.isAdmin(userId);
-    if (!isAdmin) {
-      return res.status(403).send("You are not an admin");
-    }
-
-    //Check if the user is the admin of the company
-    const company = await datamapper.getCompany(companyId);
-    if (company.userId !== userId) {
-      return res.status(403).send("You are not the admin of this company");
-    }
-
-    //Delete the company and his advertissements
     try {
+      //To know if the user is an admin
+      const isAdmin = await datamapper.isAdmin(userId);
+      if (!isAdmin) {
+        return res.status(403).send("You are not an admin");
+      }
+
+      //Check if the user is the admin of the company
+      const company = await datamapper.getCompany(companyId);
+      if (company.userId !== userId) {
+        return res.status(403).send("You are not the admin of this company");
+      }
+
+      // Update user profile to no admin
+      const updateUser = await datamapper.updateUser(userId);
+      if (!updateUser) {
+        return res.status(500).send("Error while updating user profile");
+      }
+
+      //Delete the company and his advertissements
       const deletedCompany = await datamapper.deleteCompany(companyId);
 
+      //Send the response
       res.json(deletedCompany);
     } catch (error) {
-      console.log(error);
       res.status(500).send(error.message);
     }
   },

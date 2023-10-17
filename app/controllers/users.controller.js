@@ -81,7 +81,6 @@ const controller = {
         pseudo: user[0].firstName,
         token: token,
       };
-      // console.log(response);
       return res.json(response);
 
       //If there is an error
@@ -110,7 +109,6 @@ const controller = {
 
       //If there is an error
     } catch (error) {
-      console.log(error);
       res.status(500).send("Error while getting the user");
     }
   },
@@ -132,9 +130,10 @@ const controller = {
         if (!company) return res.json(user);
         user.company = company;
 
-        const advertissements = await avertissementdatamapper.getCompanyAdvertisements(
-          company.companyId
-        );
+        const advertissements =
+          await avertissementdatamapper.getCompanyAdvertisements(
+            company.companyId
+          );
         user.company.advertissements = advertissements;
       }
 
@@ -143,7 +142,6 @@ const controller = {
 
       //If there is an error
     } catch (error) {
-      console.log(error);
       res.status(500).send("Error while getting the user");
     }
   },
@@ -158,14 +156,14 @@ const controller = {
     const { firstName, lastName, email, userPassword, exp, school, skills } =
       req.body;
 
-    //Hash the password if the user give one
-    let hashedPassword = null;
-    if (userPassword) {
-      hashedPassword = await bcrypt.hash(userPassword, saltRounds);
-    }
-
-    //Update the user
     try {
+      //Hash the password if the user give one
+      const hashedPassword = null;
+      if (userPassword) {
+        hashedPassword = await bcrypt.hash(userPassword, saltRounds);
+      }
+
+      //Update the user
       const updatedUser = await datamapper.updateUser(
         userId,
         firstName,
@@ -184,10 +182,7 @@ const controller = {
 
       //If the user exist
       return res.json(updatedUser);
-
-      //If there is an error
     } catch (error) {
-      console.log(error);
       res.status(500).send("Error while updating the user");
     }
   },

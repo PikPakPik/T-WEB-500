@@ -110,8 +110,8 @@ const datamapper = {
       where: {
         advertissementId_userId: {
           advertissementId: advertId, // la variable que vous avez passée en argument
-          userId: userId  // la variable que vous avez passée en argument
-        }
+          userId: userId, // la variable que vous avez passée en argument
+        },
       },
       data: {
         isSaved: isSaved,
@@ -144,8 +144,41 @@ const datamapper = {
   },
 
   //!Delete a advertisement
-  //TODO: finish this delete route
   deleteAdvertisement: async (advertId) => {
+    //Get the applicationId from the several application of the advert
+    const application = await prisma.applications.findMany({
+      where: {
+        advertissementId: advertId,
+      },
+    });
+
+    // Boucle pour supprimer les associations de applicationId dans applicationInformation
+    for (let j = 0; j < application.length; j++) {
+      const applicationId = application[j].applicationId;
+
+      //Delete the applicationInformation of the application
+      const deleteApplicationInformation =
+        await prisma.applicationinformation.deleteMany({
+          where: {
+            applicationId: applicationId,
+          },
+        });
+    }
+    //Delete the application of the advert
+    const deleteApplication = await prisma.applications.deleteMany({
+      where: {
+        advertissementId: advertId,
+      },
+    });
+
+    //Delete the Job Information of the advert
+    const deletedJobInformation = await prisma.jobinformation.deleteMany({
+      where: {
+        advertissementId: advertId,
+      },
+    });
+
+    // Finally, delete the advert
     const deletedAdvertisement = await prisma.advertissements.delete({
       where: {
         advertissementId: advertId,
