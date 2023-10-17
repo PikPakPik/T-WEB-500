@@ -198,7 +198,7 @@ const CompanyAds = ({ user }) => {
           </select>
 
           <div className="modal-action ">
-            <button className="btn btn-primary" onClick={modalAction === "Ajouter" ? handleAddAd : handleUpdateAd}>
+            <button className="btn btn-primary" onClick={modalAction === "Ajouter" ? handleAddAd : handleUpdateAd}></button>
               {modalAction}
             </button>
           </div>
