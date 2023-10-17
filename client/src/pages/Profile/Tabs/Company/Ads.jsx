@@ -13,6 +13,25 @@ const CompanyAds = ({ user }) => {
     workingTime: "",
     expRequired: "",
   });
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    let formErrors = {};
+
+    Object.keys(formData).forEach((key) => {
+      if (!formData[key].trim()) {
+        formErrors[key] = "Ce champ est obligatoire";
+      }
+    });
+
+    if (isNaN(formData.wages)) {
+      formErrors.wages = "Le salaire doit être un nombre";
+    }
+
+    setErrors(formErrors);
+
+    return Object.keys(formErrors).length === 0;
+  };
 
   const onInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,46 +44,66 @@ const CompanyAds = ({ user }) => {
   };
   const handleAddAd = async (e) => {
     e.preventDefault();
-    fetch(`http://localhost:3001/advert`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        toast.success("Votre annonce a bien été ajoutée");
-        window.location.reload();
+    if (validateForm()) {
+      fetch(`http://localhost:3001/advert`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
       })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          toast.success("Votre annonce a bien été ajoutée");
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
   };
   const handleUpdateAd = async (e) => {
     e.preventDefault();
+    if (validateForm()) {
+      fetch(`http://localhost:3001/advert/${currentAd.id}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          toast.success("Votre annonce a bien été modifiée");
+          window.location.reload();
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  };
+
+  const handleDeleteAd = async () => {
     fetch(`http://localhost:3001/advert/${currentAd.id}`, {
-      method: "PUT",
+      method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData),
     })
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        toast.success("Votre annonce a bien été modifiée");
+        toast.success("Votre annonce a bien été supprimée");
         window.location.reload();
       })
       .catch((error) => {
         console.error("Error:", error);
       });
   };
-
-  const handleDeleteAd = async () => {};
   return (
     <div>
       <h1 className="text-3xl">Mes annonces</h1>
@@ -136,18 +175,26 @@ const CompanyAds = ({ user }) => {
             type="text"
             name="title"
             onChange={onInputChange}
-            className="input input-bordered w-content ml-2 w-full"
+            className={`input input-bordered w-content ml-2 w-full ${
+              errors.title ? "input-error" : ""
+            }`}
             defaultValue={currentAd?.title || ""}
           />
+          {errors.title && <span className="text-error">{errors.title}</span>}
           <label htmlFor="description" className="label">
             Description de l'annonce
           </label>
           <textarea
             name="description"
             onChange={onInputChange}
-            className="textarea h-24 textarea-bordered ml-2 w-full"
+            className={`textarea textarea-bordered w-content ml-2 w-full ${
+              errors.description ? "input-error" : ""
+            }`}
             defaultValue={currentAd?.description || ""}
           />
+          {errors.description && (
+            <span className="text-error">{errors.description}</span>
+          )}
           <label htmlFor="wages" className="label">
             Salaire
           </label>
@@ -155,9 +202,12 @@ const CompanyAds = ({ user }) => {
             type="text"
             name="wages"
             onChange={onInputChange}
-            className="input input-bordered w-content ml-2 w-full"
+            className={`input input-bordered w-content ml-2 w-full ${
+              errors.wages ? "input-error" : ""
+            }`}
             defaultValue={currentAd?.wages || ""}
           />
+          {errors.wages && <span className="text-error">{errors.wages}</span>}
           <label htmlFor="place" className="label">
             Lieu
           </label>
@@ -165,9 +215,12 @@ const CompanyAds = ({ user }) => {
             type="text"
             name="place"
             onChange={onInputChange}
-            className="input input-bordered w-content ml-2 w-full"
+            className={`input input-bordered w-content ml-2 w-full ${
+              errors.place ? "input-error" : ""
+            }`}
             defaultValue={currentAd?.place || ""}
           />
+          {errors.place && <span className="text-error">{errors.place}</span>}
           <label htmlFor="workingTime" className="label">
             Temps de travail
           </label>
@@ -175,15 +228,22 @@ const CompanyAds = ({ user }) => {
             type="text"
             name="workingTime"
             onChange={onInputChange}
-            className="input input-bordered w-content ml-2 w-full"
+            className={`input input-bordered w-content ml-2 w-full ${
+              errors.workingTime ? "input-error" : ""
+            }`}
             defaultValue={currentAd?.workingTime || ""}
           />
+          {errors.workingTime && (
+            <span className="text-error">{errors.workingTime}</span>
+          )}
           <label htmlFor="exp" className="label">
             Expérience requise
           </label>
           <select
             name="expRequired"
-            className="select select-bordered w-full ml-2"
+            className={`select select-bordered w-content ml-2 w-full ${
+              errors.expRequired ? "input-error" : ""
+            }`}
             onChange={onInputChange}
             required
             value={currentAd?.expRequired || undefined}
@@ -196,10 +256,22 @@ const CompanyAds = ({ user }) => {
             <option value="confirme">Confirmé</option>
             <option value="senior">Senior</option>
           </select>
+          {errors.expRequired && (
+            <span className="text-error">{errors.expRequired}</span>
+          )}
 
           <div className="modal-action ">
-            <button className="btn btn-primary" onClick={modalAction === "Ajouter" ? handleAddAd : handleUpdateAd}></button>
+            <button
+              className="btn btn-primary"
+              onClick={modalAction === "Ajouter" ? handleAddAd : handleUpdateAd}
+            >
               {modalAction}
+            </button>
+            <button
+              className="btn"
+              onClick={() => document.getElementById("my_modal_2").close()}
+            >
+              Annuler
             </button>
           </div>
         </div>
