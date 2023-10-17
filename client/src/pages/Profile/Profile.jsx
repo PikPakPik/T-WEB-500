@@ -111,6 +111,48 @@ const renderCompanyInfo = (user) =>
       </button>
     </div>
   );
+
+const renderCompanyAds = (user) => (
+    <div>
+        <h1 className="text-3xl">Mes annonces</h1>
+      <div className="overflow-x-auto">
+        <table className="table">
+          {/* head */}
+          <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Job</th>
+            <th>Favorite Color</th>
+          </tr>
+          </thead>
+          <tbody>
+          {/* row 1 */}
+          <tr>
+            <th>1</th>
+            <td>Cy Ganderton</td>
+            <td>Quality Control Specialist</td>
+            <td>Blue</td>
+          </tr>
+          {/* row 2 */}
+          <tr>
+            <th>2</th>
+            <td>Hart Hagerty</td>
+            <td>Desktop Support Technician</td>
+            <td>Purple</td>
+          </tr>
+          {/* row 3 */}
+          <tr>
+            <th>3</th>
+            <td>Brice Swyre</td>
+            <td>Tax Accountant</td>
+            <td>Red</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+);
 const renderCompanySettings = (user) => (
   <div>
     <h1 className="text-3xl">Settings</h1>
@@ -193,10 +235,6 @@ const renderCompanySettings = (user) => (
   </div>
 );
 
-const companyTabRenderers = {
-  info: renderCompanyInfo,
-  settings: renderCompanySettings,
-};
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -207,6 +245,15 @@ const Profile = () => {
   });
   const [error, setError] = useState("");
   const [activeCompanyTab, setActiveCompanyTab] = useState("info");
+
+  const companyTabRenderers = {
+    info: renderCompanyInfo,
+  };
+
+  if (user?.company) {
+    companyTabRenderers.settings = renderCompanySettings;
+    companyTabRenderers.ads = renderCompanyAds;
+  }
 
   const renderCompany = (user) => {
     const renderCompanyTabContent = () => {
