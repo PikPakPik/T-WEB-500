@@ -171,6 +171,51 @@ const controller = {
     }
   },
 
+  //! Update an advertisement
+  updateAdvertisement: async (req, res) => {
+    // Recup the advertId
+    const advertId = parseInt(req.params.advertId);
+
+    //Recup the data from the body
+    const { title, description, place, workingTime, expRequired } = req.body;
+    const wages = parseInt(req.body.wages);
+
+    //Recup the userId from the token
+    const token = req.headers.authorization?.replace("Bearer ", "");
+
+    try {
+      const user = loginService.getUser(token);
+      const userId = user.id;
+
+      //To know if the user is an admin
+      const isAdmin = await datamapper.isAdmin(userId);
+      if (!isAdmin) {
+        return res.status(403).send("You are not an admin");
+      }
+
+      //Check if the user is the admin of the company of the advertisement
+      const company = await datamapper.getCompanyByAdvertId(advertId);
+      if (company.userId !== userId) {
+        return res.status(403).send("You are not the admin of this company");
+      }
+
+      //Update the advertisement
+      const updatedAdvertisement = await datamapper.updateAdvertisement(
+        advertId,
+        title,
+        description,
+        wages,
+        place,
+        workingTime,
+        expRequired
+      );
+      //Send the response
+      res.json(updatedAdvertisement);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  },
+
   //! Delete an advertisement
   deleteAdvertisement: async (req, res) => {
     //Recup the advertId
@@ -178,10 +223,10 @@ const controller = {
 
     //Recup the userId from the token
     const token = req.headers.authorization?.replace("Bearer ", "");
-    const user = loginService.getUser(token);
-    const userId = user.id;
-
     try {
+      const user = loginService.getUser(token);
+      const userId = user.id;
+
       //To know if the user is an admin
       const isAdmin = await datamapper.isAdmin(userId);
       if (!isAdmin) {
@@ -195,16 +240,6 @@ const controller = {
       }
 
       //Delete the advertisement
-      try {
-        const deletedAdvertisement =
-          await datamapper.deleteAdvertisement(advertId);
-
-        res.json(deletedAdvertisement);
-      } catch (error) {
-        console.log(error);
-        res.status(500).send(error.message);
-      }
-
       const deletedAdvertisement =
         await datamapper.deleteAdvertisement(advertId);
       res.json(deletedAdvertisement);

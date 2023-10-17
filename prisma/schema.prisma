@@ -17,6 +17,7 @@ model user {
   email          String           @unique
   userPassword   String
   isAdmin        Boolean          @default(false)
+  isSuperman     Boolean          @default(false)
   exp            String
   school         String
   skills         String
@@ -26,11 +27,11 @@ model user {
 }
 
 model advertissements {
-  advertissementId Int             @id @default(autoincrement())
+  advertissementId Int              @id @default(autoincrement())
   title            String
   description      String
-  date             DateTime        @default(now())
-  company          companies       @relation(fields: [companyId], references: [companyId])
+  date             DateTime         @default(now())
+  company          companies        @relation(fields: [companyId], references: [companyId])
   companyId        Int
   wages            Int
   place            String
