@@ -143,6 +143,32 @@ const datamapper = {
     return appliedAdvert;
   },
 
+  //! Update an advertisement
+  updateAdvertisement: async (
+    advertId,
+    title,
+    description,
+    wages,
+    place,
+    workingTime,
+    expRequired
+  ) => {
+    const updateAdvertisement = await prisma.advertissements.update({
+      where: {
+        advertissementId: advertId,
+      },
+      data: {
+        title: title,
+        description: description,
+        wages: wages,
+        place: place,
+        workingTime: workingTime,
+        expRequired: expRequired,
+      },
+    });
+    return updateAdvertisement;
+  },
+
   //!Delete a advertisement
   deleteAdvertisement: async (advertId) => {
     //Get the applicationId from the several application of the advert

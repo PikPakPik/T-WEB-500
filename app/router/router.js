@@ -131,6 +131,22 @@ router.get(
 
 /**
  * @swagger
+ * /advert/{advertId}:
+ *   put:
+ *     summary: Update an advertissement
+ *     description: As a company, I want to update an advert
+ *     responses:
+ *       200:
+ *         description: As a company, I want to update an advert.
+ */
+router.put(
+  "/advert/:advertId",
+  auth.isLogged,
+  advertissementsController.updateAdvertisement
+);
+
+/**
+ * @swagger
  * /savedAdvert:
  *   delete:
  *     summary: Delete one advertissement
