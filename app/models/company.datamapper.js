@@ -28,6 +28,30 @@ const datamapper = {
     return newCompany;
   },
 
+  //! Update user profile to admin
+  updateUserAdmin: async (userId) => {
+    const updateUserAdmin = await prisma.user.update({
+      where: {
+        userId: userId,
+      },
+      data: {
+        isAdmin: true,
+      },
+    });
+  },
+
+  //! Update user profile to no admin
+  updateUser: async (userId) => {
+    const updateUser = await prisma.user.updtae({
+      where: {
+        userId: userId,
+      },
+      data: {
+        isAdmin: false,
+      },
+    });
+  },
+
   //! Check if the user is an admin
   isAdmin: async (userId) => {
     const isAdmin = await prisma.user.findUnique({
