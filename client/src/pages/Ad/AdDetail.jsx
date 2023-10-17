@@ -66,7 +66,6 @@ const AdDetail = () => {
         const fetchedAd = await fetchAdAndCompany(avertissementId);
         setAd(fetchedAd);
 
-        console.log("fetchedAd", fetchedAd);
         setFormData({
           firstName: user ? user.firstName : "",
           lastName: user ? user.lastName : "",
@@ -265,7 +264,7 @@ const AdDetail = () => {
                   defaultValue={formData.exp}
                   onChange={onInputChange}
               >
-                <option selected disabled>
+                <option disabled>
                   --Choisir une option--
                 </option>
                 <option value="jeune">Jeune diplômé</option>
