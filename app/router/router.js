@@ -7,6 +7,7 @@ const usersController = require("../controllers/users.controller");
 const compagnyController = require("../controllers/company.controller");
 const auth = require("../middleware/auth.middleware");
 const applicationController = require("../controllers/applications.controller");
+const supermanController = require("../controllers/superman.controller");
 
 //! Define routes advertissements
 /**
@@ -276,6 +277,10 @@ router.delete(
  *         description: As a user (logged or not), I want to apply to an advert
  */
 router.post("/application/:advertId", applicationController.applyToAdvert);
+
+//! Define route superman
+
+router.get("/superman", supermanController.isSuperman);
 
 //! Export router
 module.exports = router;
