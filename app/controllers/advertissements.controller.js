@@ -45,6 +45,9 @@ const controller = {
     } catch (error) {
       res.status(500).send(error.message);
     }
+
+    // Send the response
+    res.json({oneAdvertisement});
   },
 
   //! Show all advertisements from one company
