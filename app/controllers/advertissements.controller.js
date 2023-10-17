@@ -136,7 +136,6 @@ const controller = {
     res.json(appliedAdvert);
   },
 
-  //TODO: finish this delete route
   //! Delete an advertisement
   deleteAdvertisement: async (req, res) => {
     //Recup the advertId
