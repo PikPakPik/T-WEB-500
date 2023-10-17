@@ -77,7 +77,8 @@ const AdDetail = () => {
         });
 
         if (window.localStorage.token) {
-          setIsSaved(fetchedAd.jobInformation[0].isSaved);
+          if (fetchedAd.jobInformation.length > 0)
+            setIsSaved(fetchedAd.jobInformation[0].isSaved);
         }
         setLoading(false); // Fin du chargement
       } catch (error) {
