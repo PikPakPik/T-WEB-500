@@ -10,13 +10,11 @@ const controller = {
     const { advertId } = req.params;
     const advertissementId = parseInt(advertId);
 
-    //Recup the userId from the token if exist
-    const token = req.headers.authorization?.replace("Bearer ", "");
     try {
-      if (token) {
-        const user = loginService.getUser(token);
-        const userId = user.id;
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
 
+      if (userId) {
         //Check if the user already apply to the advertissement
         const application = await datamapper.checkIfUserAlreadyApply(
           advertissementId,

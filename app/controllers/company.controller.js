@@ -17,12 +17,10 @@ const controller = {
   //! Create one company
   createCompany: async (req, res) => {
     const { name, logo } = req.body;
-    //Recup the userId from the token
-    const token = req.headers.authorization?.replace("Bearer ", "");
-    const user = loginService.getUser(token);
-    const userId = user.id;
 
     try {
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
       // Update user profile to admin
       const updateUserAdmin = await datamapper.updateUserAdmin(userId);
       if (!updateUserAdmin) {
@@ -44,12 +42,9 @@ const controller = {
     // Recup the data from the body
     const { name, logo } = req.body;
 
-    //Recup the userId from the token
-    const token = req.headers.authorization?.replace("Bearer ", "");
-    const user = loginService.getUser(token);
-    const userId = user.id;
-
     try {
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
       //To know if the user is an admin
       const isAdmin = await datamapper.isAdmin(userId);
       if (!isAdmin) {
@@ -80,9 +75,7 @@ const controller = {
     const companyId = parseInt(req.params.companyId);
 
     //Recup the userId from the token
-    const token = req.headers.authorization?.replace("Bearer ", "");
-    const user = loginService.getUser(token);
-    const userId = user.id;
+    const userId = await loginService.getUserId(req);
 
     try {
       //To know if the user is an admin
