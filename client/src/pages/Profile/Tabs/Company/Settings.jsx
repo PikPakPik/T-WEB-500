@@ -1,3 +1,5 @@
+import { toast } from "react-toastify";
+
 const InputField = ({ name, label, defaultValue }) => (
   <div className="my-2">
     <label htmlFor={name} className="label">
@@ -13,7 +15,8 @@ const InputField = ({ name, label, defaultValue }) => (
 );
 
 const CompanySettings = ({ company }) => {
-  const handleUpdate = async () => {
+  const handleUpdate = async (e) => {
+    e.preventDefault();
     fetch(`http://localhost:3001/company/${company.companyId}`, {
       method: "PUT",
       headers: {
@@ -34,7 +37,8 @@ const CompanySettings = ({ company }) => {
       });
   };
 
-  const handleDelete = async () => {
+  const handleDelete = async (e) => {
+    e.preventDefault();
     fetch(`http://localhost:3001/company/${company.companyId}`, {
       method: "DELETE",
       headers: {
@@ -44,6 +48,7 @@ const CompanySettings = ({ company }) => {
     })
       .then((response) => response.json())
       .then((data) => {
+        toast.success("Votre entreprise a bien été supprimée");
         window.location.reload();
       })
       .catch((error) => {

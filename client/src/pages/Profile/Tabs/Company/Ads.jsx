@@ -150,7 +150,7 @@ const CompanyAds = ({ user }) => {
                   >
                     Modifier
                   </button>
-                  <button className="btn btn-error" onClick={() => {}}>
+                  <button className="btn btn-error" onClick={() => handleDeleteAd()}>
                     Supprimer
                   </button>
                 </td>
