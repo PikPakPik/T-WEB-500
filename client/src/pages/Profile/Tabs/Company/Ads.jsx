@@ -6,6 +6,7 @@ const CompanyAds = ({ user }) => {
   const [currentAd, setCurrentAd] = useState(null);
   const [modalAction, setModalAction] = useState("Ajouter");
   const [formData, setFormData] = useState({
+    id: "",
     title: "",
     description: "",
     wages: "",
@@ -19,7 +20,7 @@ const CompanyAds = ({ user }) => {
     let formErrors = {};
 
     Object.keys(formData).forEach((key) => {
-      if (!formData[key].trim()) {
+      if (!formData[key]) {
         formErrors[key] = "Ce champ est obligatoire";
       }
     });
@@ -40,6 +41,26 @@ const CompanyAds = ({ user }) => {
   const openModal = (action, ad) => {
     setModalAction(action);
     setCurrentAd(ad);
+    if (ad) {
+      setFormData({
+        id: ad.advertissementId,
+        title: ad.title,
+        description: ad.description,
+        wages: ad.wages,
+        place: ad.place,
+        workingTime: ad.workingTime,
+        expRequired: ad.expRequired,
+      });
+    } else {
+      setFormData({
+        title: "",
+        description: "",
+        wages: "",
+        place: "",
+        workingTime: "",
+        expRequired: "",
+      });
+    }
     document.getElementById("my_modal_2").showModal();
   };
   const handleAddAd = async (e) => {
@@ -67,7 +88,7 @@ const CompanyAds = ({ user }) => {
   const handleUpdateAd = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      fetch(`http://localhost:3001/advert/${currentAd.id}`, {
+      fetch(`http://localhost:3001/advert/${formData.id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -87,8 +108,8 @@ const CompanyAds = ({ user }) => {
     }
   };
 
-  const handleDeleteAd = async () => {
-    fetch(`http://localhost:3001/advert/${currentAd.id}`, {
+  const handleDeleteAd = async (id) => {
+    fetch(`http://localhost:3001/advert/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -150,7 +171,10 @@ const CompanyAds = ({ user }) => {
                   >
                     Modifier
                   </button>
-                  <button className="btn btn-error" onClick={() => handleDeleteAd()}>
+                  <button
+                    className="btn btn-error"
+                    onClick={() => handleDeleteAd(ad.advertissementId)}
+                  >
                     Supprimer
                   </button>
                 </td>
@@ -178,7 +202,7 @@ const CompanyAds = ({ user }) => {
             className={`input input-bordered w-content ml-2 w-full ${
               errors.title ? "input-error" : ""
             }`}
-            defaultValue={currentAd?.title || ""}
+            value={formData?.title}
           />
           {errors.title && <span className="text-error">{errors.title}</span>}
           <label htmlFor="description" className="label">
@@ -190,7 +214,7 @@ const CompanyAds = ({ user }) => {
             className={`textarea textarea-bordered w-content ml-2 w-full ${
               errors.description ? "input-error" : ""
             }`}
-            defaultValue={currentAd?.description || ""}
+            value={formData?.description}
           />
           {errors.description && (
             <span className="text-error">{errors.description}</span>
@@ -205,7 +229,7 @@ const CompanyAds = ({ user }) => {
             className={`input input-bordered w-content ml-2 w-full ${
               errors.wages ? "input-error" : ""
             }`}
-            defaultValue={currentAd?.wages || ""}
+            value={formData?.wages}
           />
           {errors.wages && <span className="text-error">{errors.wages}</span>}
           <label htmlFor="place" className="label">
@@ -218,7 +242,7 @@ const CompanyAds = ({ user }) => {
             className={`input input-bordered w-content ml-2 w-full ${
               errors.place ? "input-error" : ""
             }`}
-            defaultValue={currentAd?.place || ""}
+            value={formData?.place}
           />
           {errors.place && <span className="text-error">{errors.place}</span>}
           <label htmlFor="workingTime" className="label">
@@ -231,7 +255,7 @@ const CompanyAds = ({ user }) => {
             className={`input input-bordered w-content ml-2 w-full ${
               errors.workingTime ? "input-error" : ""
             }`}
-            defaultValue={currentAd?.workingTime || ""}
+            value={formData?.workingTime}
           />
           {errors.workingTime && (
             <span className="text-error">{errors.workingTime}</span>
@@ -246,7 +270,7 @@ const CompanyAds = ({ user }) => {
             }`}
             onChange={onInputChange}
             required
-            value={currentAd?.expRequired || undefined}
+            value={formData?.expRequired}
           >
             <option selected disabled>
               --Choisir une option--

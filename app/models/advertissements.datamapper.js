@@ -169,6 +169,30 @@ const datamapper = {
     return updateAdvertisement;
   },
 
+  //! Check if user isAdmin
+  isAdmin: async (userId) => {
+    const isAdmin = await prisma.user.findUnique({
+      where: {
+        userId: userId,
+        isAdmin: true,
+      },
+    });
+    return isAdmin;
+  },
+
+  //! Get one company by advertId
+  getCompanyByAdvertId: async (advertId) => {
+    const company = await prisma.advertissements.findUnique({
+      where: {
+        advertissementId: advertId,
+      },
+      select: {
+        company: true,
+      },
+    });
+    return company.company;
+  },
+
   //!Delete a advertisement
   deleteAdvertisement: async (advertId) => {
     //Get the applicationId from the several application of the advert
