@@ -5,12 +5,25 @@ async function main() {
   // Création d'un utilisateur
   const user = await prisma.user.create({
     data: {
-      firstName: "patrick",
-      lastName: "dupont",
-      email: "patrick@gmail.com",
-      userPassword: "123456",
+      firstName: "John",
+      lastName: "Doe",
+      email: "johndeo@exemple.com",
+      userPassword: "$2b$10$7iuW81raBtrERJueRogHV.VRmyamXCBZqPujfNrLjOotXERGBbi1y",
+      isAdmin: true,
+      isSuperman: true,
+      exp: "Junior",
+      school: "Harvard University",
+      skills: "Business, Management",
+    },
+  });
+  const user1 = await prisma.user.create({
+    data: {
+      firstName: "Marie",
+      lastName: "Doe",
+      email: "mariedeo@exemple.com",
+      userPassword: "$2b$10$7iuW81raBtrERJueRogHV.VRmyamXCBZqPujfNrLjOotXERGBbi1y",
       isAdmin: false,
-      exp: "2 years",
+      exp: "Early Career",
       school: "Harvard University",
       skills: "Business, Management",
     },
@@ -22,15 +35,8 @@ async function main() {
       name: "Prisma",
       logo: "testting",
       user: {
-        create: {
-          firstName: "John",
-          lastName: "Doe",
-          email: "bob@gmail.com",
-          userPassword: "azerty",
-          isAdmin: true,
-          exp: "8 years",
-          school: "Epitech",
-          skills: "Programming, Design, Management",
+        connect: {
+          userId: user.userId,
         },
       },
       advertissements: {
