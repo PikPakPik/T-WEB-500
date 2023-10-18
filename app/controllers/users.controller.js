@@ -115,14 +115,12 @@ const controller = {
 
   //! Get the current user with the token
   getMe: async (req, res) => {
-    const token = req.headers.authorization?.replace("Bearer ", "");
-
     try {
-      //We traduce the token into a JS object
-      const verifiedToken = loginService.getUser(token);
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
 
       //Get the user from the database
-      const user = await datamapper.getOneUser(verifiedToken.id);
+      const user = await datamapper.getOneUser(userId);
 
       // If isAdmin is true, we send the user and his company
       if (user.isAdmin) {
@@ -148,15 +146,13 @@ const controller = {
 
   //! Update the current user
   updateUser: async (req, res) => {
-    //Recup the userId from the token
-    const token = req.headers.authorization?.replace("Bearer ", "");
-    const userId = loginService.getUser(token).id;
-
     //Get the data from the request body
     const { firstName, lastName, email, userPassword, exp, school, skills } =
       req.body;
 
     try {
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
       //Hash the password if the user give one
       const hashedPassword = null;
       if (userPassword) {

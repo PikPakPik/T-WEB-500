@@ -3,11 +3,9 @@ const loginService = require("../services/login.service");
 
 const controller = {
   isSuperman: async (req, res) => {
-    // Recup the userId from the token
-    const token = req.headers.authorization?.replace("Bearer ", "");
-    const user = loginService.getUser(token);
     try {
-      const userId = user.id;
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
 
       // Get the user from the database
       const superman = await datamapper.getOneSuperman(userId);

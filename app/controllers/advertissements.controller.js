@@ -15,18 +15,14 @@ const controller = {
   //! Show one advertisement (with job Information if exist)
   getOneAdvertisement: async (req, res) => {
     const advertId = parseInt(req.params.advertId);
-
-    // Recup the userId from the token
-    const token = req.headers.authorization?.replace("Bearer ", "");
-
     try {
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
       //Get one advertissement
       const oneAdvertisement = await datamapper.getOneAdvertisement(advertId);
 
       // If we get the userId, we search the jobInformation and send it with the response
-      if (token) {
-        const user = loginService.getUser(token);
-        const userId = user.id;
+      if (userId) {
         const jobInformation = await datamapper.getJobInformation(
           advertId,
           userId
@@ -68,12 +64,10 @@ const controller = {
     const { title, description, place, workingTime, expRequired } = req.body;
     const wages = parseInt(req.body.wages);
 
-    //Recup the userId from the token
-    const token = req.headers.authorization?.replace("Bearer ", "");
-    const user = loginService.getUser(token);
-    const userId = user.id;
-
     try {
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
+
       //Search the company with the userId
       const company = await datamapper.getOneCompany(userId);
       const companyId = parseInt(company[0].companyId);
@@ -98,16 +92,15 @@ const controller = {
 
   //! To know if the job information exist or not
   isJobInformationExist: async (req, res) => {
-    //Recup the userId from the token
-    const token = req.headers.authorization?.replace("Bearer ", "");
-    const user = loginService.getUser(token);
-    const userId = user.id;
     const { isSaved, isApplied } = req.body;
 
     //Recup the advertId from the params
     const advertId = parseInt(req.params.advertId);
 
     try {
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
+
       //Check if the job information exist
       const jobInformation = await datamapper.getJobInformation(
         advertId,
@@ -141,12 +134,9 @@ const controller = {
 
   //! Show all saved advertisements
   getSavedAdvert: async (req, res) => {
-    //Recup the userId from the token
-    const token = req.headers.authorization?.replace("Bearer ", "");
-    const user = loginService.getUser(token);
-    const userId = user.id;
-
     try {
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
       //Get all saved advertisements
       const savedAdvert = await datamapper.getSavedAdvert(userId);
       res.json(savedAdvert);
@@ -157,12 +147,9 @@ const controller = {
 
   //! Show all applied advertisements
   getAppliedAdvert: async (req, res) => {
-    //Recup the userId from the token
-    const token = req.headers.authorization?.replace("Bearer ", "");
-    const user = loginService.getUser(token);
-    const userId = user.id;
-
     try {
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
       //Get all applied advertisements
       const appliedAdvert = await datamapper.getAppliedAdvert(userId);
       res.json(appliedAdvert);
@@ -180,12 +167,9 @@ const controller = {
     const { title, description, place, workingTime, expRequired } = req.body;
     const wages = parseInt(req.body.wages);
 
-    //Recup the userId from the token
-    const token = req.headers.authorization?.replace("Bearer ", "");
-
     try {
-      const user = loginService.getUser(token);
-      const userId = user.id;
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
 
       //To know if the user is an admin
       const isAdmin = await datamapper.isAdmin(userId);
@@ -221,11 +205,9 @@ const controller = {
     //Recup the advertId
     const advertId = parseInt(req.params.advertId);
 
-    //Recup the userId from the token
-    const token = req.headers.authorization?.replace("Bearer ", "");
     try {
-      const user = loginService.getUser(token);
-      const userId = user.id;
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
 
       //To know if the user is an admin
       const isAdmin = await datamapper.isAdmin(userId);
