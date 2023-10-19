@@ -197,6 +197,11 @@ const controller = {
         deletedUser,
       };
 
+      //If the user doesn't exist
+      if (!deletedUser) {
+        return res.status(404).send("User not found");
+      }
+
       //If the user is an admin, we delete his company
       const company = await getUserCompany(userId);
 

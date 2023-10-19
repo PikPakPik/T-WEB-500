@@ -12,6 +12,8 @@
  *     responses:
  *       200:
  *         description: A list of advertisements.
+ *       500:
+ *          description: Internal Server Error
  *
  *
  */
@@ -33,6 +35,8 @@
  *     responses:
  *       200:
  *         description: One advertisement.
+ *       500:
+ *          description: Internal Server Error
  */
 
 /**
@@ -55,8 +59,12 @@
  *     responses:
  *       200:
  *         description: Retrieve a list of all adverts from one company.
+ *       500:
+ *         description: Internal Server Error
  *
- *
+ */
+/**
+ *@swagger
  *
  * /savedAdvert:
  *   get:
@@ -68,36 +76,74 @@
  *     responses:
  *       200:
  *         description: Retrieve a list of all saved adverts from one user.
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
  *     securityDefinitions:
  *          bearerAuth:
  *              type: apiKey
  *              name: Authorization
  *              in: header
- *     examples:
- *          'application/json':
- *             Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNjk3NjQxMzMwLCJleHAiOjE2OTc2NDQ5MzB9.cSwpCtnxhIhEKoFVwYc755QU9TvGi7FLxIxkOweVtlQ'
  *
+ */
+/**
+ * @swagger
  *
  * /appliedAdvert:
  *   get:
  *     summary: Get all applied advertisements from one user
  *     description: Retrieve a list of all applied adverts from one user
  *     tags: [Advertissements]
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: Retrieve a list of all applied adverts from one user.
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
  *
+ *
+ */
+/**
+ * @swagger
  *
  * /advert:
  *   post:
  *     summary: Create an advertissement
  *     description: As a company, I want to create an advert
  *     tags: [Advertissements]
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: As a company, I want to create an advert.
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
  *
- *
+ */
+/**
+ * @swagger
  *
  *
  * /advert/{advertId}/save:
@@ -105,22 +151,50 @@
  *     summary: Update or Create an Job Information
  *     description: Check if the Job Information already exist, if exist, update it else create it
  *     tags: [Advertissements]
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: Check if the Job Information already exist, if exist, update it else create it.
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
  *
- *
+ */
+/**
+ * @swagger
  *
  * /jobInformation/{advertId}:
  *   put:
  *     summary: Update or Create an Job Information
  *     description: Check if the Job Information already exist, if exist, update it else create it
  *     tags: [Advertissements]
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: Check if the Job Information already exist, if exist, update it else create it.
- *
- *
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
  *
  */
 
@@ -132,21 +206,52 @@
  *     summary: Update an advertissement
  *     description: As a company, I want to update an advert
  *     tags: [Advertissements]
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: As a company, I want to update an advert.
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
  *
  *
+ */
+/**
+ *  @swagger
  *
  *
- * /savedAdvert:
+ * /advert/{advertId}:
  *   delete:
  *     summary: Delete one advertissement
  *     description: As a company, I want to delete one advertissement
  *     tags: [Advertissements]
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: As a company, I want to delete one advertissement.
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
  *
  */
 
@@ -164,7 +269,15 @@
  *     responses:
  *       200:
  *         description: As a user, I want to create an account.
+ *       409:
+ *         description: Email already exist
+ *       500:
+ *         description: Error while creating the user
  *
+ *
+ */
+/**
+ * @swagger
  *
  * /login:
  *   post:
@@ -176,7 +289,9 @@
  *         description: As a user, I want to access to my account.
  *
  *
- *
+ */
+/**
+ * @swagger
  *
  * /user/{userId}:
  *   get:
@@ -187,26 +302,91 @@
  *       200:
  *         description: Get the user's data.
  *
+ */
+/**
+ * @swagger
  *
  * /me:
  *   get:
  *     summary: Get my user's data
  *     description: As a logged user, I want to get my data
  *     tags: [Users]
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: As a logged user, I want to get my data
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
  *
- *
+ */
+/**
+ * @swagger
  *
  * /user:
  *   put:
  *     summary: Update user's data
  *     description: As a logged user, I want to update my data
  *     tags: [Users]
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: As a logged user, I want to update my data
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
+ *
+ */
+
+/**
+ * @swagger
+ *
+ * /user:
+ *   delete:
+ *     summary: Delete the current user's data
+ *     description: As a logged user, I want to delete my data
+ *     tags: [Users]
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: As a logged user, I want to delete my data
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
  *
  */
 
@@ -226,15 +406,32 @@
  *       200:
  *         description: Retrieve one company.
  *
- *
+ */
+/**
+ * @swagger
  * /company:
  *   post:
  *     summary: Create a company
  *     description: As a logged user, I want to create a company
  *     tags: [Company]
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: As a logged user, I want to create a company.
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
+ *
  */
 
 /**
@@ -246,9 +443,23 @@
  *     summary: Update company's data
  *     description: As a logged admin user of the current company, I want to udpate the company's data
  *     tags: [Company]
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: As a logged admin user of the current company, I want to udpate the company's data.
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
  *
  */
 
@@ -259,11 +470,23 @@
  *     summary: Delete company
  *     description: As a logged admin user of the current company, I want to delete my company
  *     tags: [Company]
+ *     security:
+ *      - bearerAuth: []
  *     responses:
  *       200:
  *         description: As a logged admin user of the current company, I want to delete my company.
- *
- *
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
  *
  */
 
