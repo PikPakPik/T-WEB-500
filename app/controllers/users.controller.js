@@ -4,6 +4,8 @@ const loginService = require("../services/login.service");
 const bcrypt = require("bcrypt");
 const { getUserCompany } = require("../models/users.datamapper");
 const saltRounds = 10;
+const companyDatamapper = require("../models/company.datamapper");
+const advertDatamapper = require("../models/advertissements.datamapper");
 
 const controller = {
   //! Create a new user
@@ -180,6 +182,40 @@ const controller = {
       return res.json(updatedUser);
     } catch (error) {
       res.status(500).send("Error while updating the user");
+    }
+  },
+
+  //! Delete the current user
+  deleteUser: async (req, res) => {
+    try {
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
+
+      const deletedUser = await datamapper.deleteUser(userId);
+
+      let responseData = {
+        deletedUser,
+      };
+
+      //If the user is an admin, we delete his company
+      const company = await getUserCompany(userId);
+
+      if (company) {
+        await companyDatamapper.deleteCompany(company.companyId);
+        responseData.company = company;
+      }
+
+      //If the user have already applied to an advert, we delete his application
+      const applications = await datamapper.getApplicationsByUserId(userId);
+
+      if (applications) {
+        await advertDatamapper.deleteAdvertisement;
+        responseData.applications = applications;
+      }
+
+      return res.json(responseData);
+    } catch (error) {
+      res.status(500).send("Error while deleting the user");
     }
   },
 };

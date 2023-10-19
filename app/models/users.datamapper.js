@@ -1,4 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient, Prisma } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const datamapper = {
@@ -40,6 +40,7 @@ const datamapper = {
     return user;
   },
 
+  //! Get the company of the user
   getUserCompany: async (userId) => {
     const company = await prisma.companies.findUnique({
       where: {
@@ -85,6 +86,26 @@ const datamapper = {
       },
     });
     return updatedUser;
+  },
+
+  //! Delete one user
+  deletedUser: async (userId) => {
+    const deleteUser = await Prisma.user.delete({
+      where: {
+        userId: userId,
+      },
+    });
+    return deleteUser;
+  },
+
+  //! Get the applied advert of the user
+  getApplicationsByUserId: async (userId) => {
+    const applications = await prisma.applications.findMany({
+      where: {
+        userId: userId,
+      },
+    });
+    return applications;
   },
 };
 
