@@ -15,7 +15,14 @@ const options = {
       },
     ],
   },
-  apis: ["./app/router/*"], // Path to the API docs
+  tags: [
+    { name: "Advertissements" },
+    { name: "Users" },
+    { name: "Company" },
+    { name: "Applications" },
+    { name: "Superman" },
+  ],
+  apis: ["./app/router/swaggerdoc.js"], // Path to the API docs
 };
 
 const specs = swaggerJsdoc(options);
