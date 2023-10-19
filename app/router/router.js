@@ -84,7 +84,20 @@ router.post("/application/:advertId", applicationController.applyToAdvert);
 
 //! Define route superman
 
-router.get("/superman", supermanController.isSuperman);
+router.get("/superman", auth.isLogged, supermanController.isSuperman);
+router.get(
+  "/superman/advertissements",
+  auth.isLogged,
+  supermanController.getAdvertissements
+); // TODO: Do swagger
+router.get("/superman/users", auth.isLogged, supermanController.getUsers); // TODO: Do swagger
+router.get(
+  "/superman/applications",
+  auth.isLogged,
+  supermanController.getApplications
+); // TODO: Do swagger
+router.get("/superman/company", auth.isLogged, supermanController.getCompanies); // TODO: Do swagger
+router;
 
 //! Export router
 module.exports = router;
