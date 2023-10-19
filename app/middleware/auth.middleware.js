@@ -1,4 +1,5 @@
 const loginService = require("../services/login.service");
+const datamapper = require("../models/superman.datamapper");
 
 const authMiddleware = {
   // isLogged can verify if the user is logged in
@@ -22,6 +23,23 @@ const authMiddleware = {
       return res
         .status(401)
         .send("Veuillez vous connecter afin d'accéder a ces informations.");
+
+    next();
+  },
+
+  // isSuperman can verify if the user is a superman
+  isSuperman: async (req, res, next) => {
+    //Recup the userId from the token
+    const userId = await loginService.getUserId(req);
+
+    // Get the user from the database
+    const superman = await datamapper.getOneSuperman(userId);
+
+    // If the user is not a superman we send an error
+    if (!superman)
+      return res
+        .status(401)
+        .send("Vous n'avez pas les droits pour accéder à cette page.");
 
     next();
   },

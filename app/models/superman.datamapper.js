@@ -39,6 +39,32 @@ const datamapper = {
     });
     return applications;
   },
+
+  //! Update a user
+  updateUser: async (
+    userId,
+    firstName,
+    lastName,
+    email,
+    exp,
+    school,
+    skills,
+    hashedPassword
+  ) => {
+    const updatedUser = await prisma.user.update({
+      where: {
+        userId: userId,
+      },
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      exp: exp,
+      school: school,
+      skills: skills,
+      userPassword: hashedPassword,
+    });
+    return updatedUser;
+  },
 };
 
 module.exports = datamapper;
