@@ -66,7 +66,6 @@ const datamapper = {
     firstName,
     lastName,
     email,
-    hashedPassword,
     exp,
     school,
     skills
@@ -79,13 +78,25 @@ const datamapper = {
         firstName: firstName,
         lastName: lastName,
         email: email,
-        userPassword: hashedPassword,
         exp: exp,
         school: school,
         skills: skills,
       },
     });
     return updatedUser;
+  },
+
+  //! Update the password of the current user
+  updatePassword: async (userId, hashedPassword) => {
+    const updatedPassword = await prisma.user.update({
+      where: {
+        userId: userId,
+      },
+      data: {
+        userPassword: hashedPassword,
+      },
+    });
+    return updatedPassword;
   },
 
   //! Delete one user

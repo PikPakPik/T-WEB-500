@@ -60,6 +60,7 @@ router.post("/login", usersController.login);
 router.get("/user/:userId", usersController.getOneUser);
 router.get("/me", auth.isLogged, usersController.getMe);
 router.put("/user", auth.isLogged, usersController.updateUser);
+router.put("/user/password", auth.isLogged, usersController.updatePassword);
 router.delete("/user", auth.isLogged, usersController.deleteUser);
 
 //! Define routes company

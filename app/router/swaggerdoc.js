@@ -359,7 +359,35 @@
  *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
  *
  */
-
+/**
+ * @swagger
+ *
+ * /user/password:
+ *   put:
+ *     summary: Update the current user's password
+ *     description: As a logged user, I want to update my password
+ *     tags: [Users]
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: As a logged user, I want to update my password
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
+ *
+ */
 /**
  * @swagger
  *
