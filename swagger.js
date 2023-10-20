@@ -2,7 +2,7 @@ const swaggerUi = require("swagger-ui-express");
 const swaggerJsdoc = require("swagger-jsdoc");
 
 const options = {
-  definition: {
+  swaggerDefinition: {
     openapi: "3.0.0",
     info: {
       title: "Job Board API",
@@ -14,22 +14,23 @@ const options = {
         url: "http://localhost:3001",
       },
     ],
-    securityDefinitions: {
-      bearerAuth: {
-        type: "apiKey",
-        name: "Authorization",
-        scheme: "bearer",
-        in: "header",
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
       },
     },
+    tags: [
+      { name: "Advertissements" },
+      { name: "Users" },
+      { name: "Company" },
+      { name: "Applications" },
+      { name: "Superman" },
+    ],
   },
-  tags: [
-    { name: "Advertissements" },
-    { name: "Users" },
-    { name: "Company" },
-    { name: "Applications" },
-    { name: "Superman" },
-  ],
   apis: ["./app/router/swaggerdoc.js"], // Path to the API docs
 };
 

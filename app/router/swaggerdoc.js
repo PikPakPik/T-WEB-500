@@ -42,8 +42,6 @@
 /**
  * @swagger
  *
- *
- *
  * /advertCompany/{companyId}:
  *   get:
  *     summary: Get all advertissements from one company
@@ -104,15 +102,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
  *
  */
 /**
@@ -125,33 +114,36 @@
  *     tags: [Advertissements]
  *     security:
  *      - bearerAuth: []
- *     parameters:
- *        - name: title
- *          in: body
- *          description: Title of the advertissement
- *          required: true
- *        - name: description
- *          in: body
- *          description: Description of the advertissement
- *          required: true
- *        - name: place
- *          in: body
- *          description: Place of the job
- *          required: true
- *        - name: workingTime
- *          in: body
- *          description: The working time of the job
- *          required: true
- *        - name: expRequired
- *          in: body
- *          description: Experience required for the job
- *          required: true
- *        - name: wages
- *          in: body
- *          description: Wages for the job
- *          required: true
- *          schema:
- *              type: integer
+ *     requestBody:
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      title:
+ *                          type: string
+ *                          description: Title of the advert
+ *                          example: "Développeur web"
+ *                      description:
+ *                          type: string
+ *                          description: Description of the advert
+ *                          example: "Développeur web JS"
+ *                      place:
+ *                          type: string
+ *                          description: Place of the advert
+ *                          example: "Nantes"
+ *                      workingTime:
+ *                          type: string
+ *                          description: Working time of the advert
+ *                          example: "Full-time"
+ *                      expRequired:
+ *                          type: string
+ *                          description: Experience required for the advert
+ *                          example: "Confirmé"
+ *                      wages:
+ *                          type: integer
+ *                          description: Annual wages of the advert
+ *                          example: 30000
  *     responses:
  *       200:
  *         description: As a company, I want to create an advert.
@@ -168,12 +160,9 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth
  */
 /**
  * @swagger
- *
  *
  * /advert/{advertId}/save:
  *   post:
@@ -182,6 +171,27 @@
  *     tags: [Advertissements]
  *     security:
  *      - bearerAuth: []
+ *     parameters:
+ *        - name: advertId
+ *          in: path
+ *          description: Id of the advertissement
+ *          required: true
+ *          schema:
+ *              type: integer
+ *     requestBody:
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      isSaved:
+ *                          type: boolean
+ *                          description: If the advertissement is saved or not
+ *                          example: true
+ *                      isApplied:
+ *                          type: boolean
+ *                          description: If the advertissement is applied or not
+ *                          example: false
  *     responses:
  *       200:
  *         description: Check if the Job Information already exist, if exist, update it else create it.
@@ -189,15 +199,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
  */
 /**
  * @swagger
@@ -209,6 +210,27 @@
  *     tags: [Advertissements]
  *     security:
  *      - bearerAuth: []
+ *     parameters:
+ *        - name: advertId
+ *          in: path
+ *          description: Id of the advertissement
+ *          required: true
+ *          schema:
+ *              type: integer
+ *     requestBody:
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      isSaved:
+ *                          type: boolean
+ *                          description: If the advertissement is saved or not
+ *                          example: true
+ *                      isApplied:
+ *                          type: boolean
+ *                          description: If the advertissement is applied or not
+ *                          example: false
  *     responses:
  *       200:
  *         description: Check if the Job Information already exist, if exist, update it else create it.
@@ -216,15 +238,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
  */
 
 /**
@@ -237,6 +250,43 @@
  *     tags: [Advertissements]
  *     security:
  *      - bearerAuth: []
+ *     parameters:
+ *        - name: advertId
+ *          in: path
+ *          description: Id of the advertissement
+ *          required: true
+ *          schema:
+ *              type: integer
+ *     requestBody:
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      title:
+ *                          type: string
+ *                          description: Title of the advert
+ *                          example: "Développeur web"
+ *                      description:
+ *                          type: string
+ *                          description: Description of the advert
+ *                          example: "Développeur web JS"
+ *                      place:
+ *                          type: string
+ *                          description: Place of the advert
+ *                          example: "Nantes"
+ *                      workingTime:
+ *                          type: string
+ *                          description: Working time of the advert
+ *                          example: "Full-time"
+ *                      expRequired:
+ *                          type: string
+ *                          description: Experience required for the advert
+ *                          example: "Confirmé"
+ *                      wages:
+ *                          type: integer
+ *                          description: Annual wages of the advert
+ *                          example: 30000
  *     responses:
  *       200:
  *         description: As a company, I want to update an advert.
@@ -244,21 +294,10 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
  *
  */
 /**
  *  @swagger
- *
- *
  * /advert/{advertId}:
  *   delete:
  *     summary: Delete one advertissement
@@ -266,6 +305,13 @@
  *     tags: [Advertissements]
  *     security:
  *      - bearerAuth: []
+ *     parameters:
+ *        - name: advertId
+ *          in: path
+ *          description: Id of the advertissement
+ *          required: true
+ *          schema:
+ *              type: integer
  *     responses:
  *       200:
  *         description: As a company, I want to delete one advertissement.
@@ -273,15 +319,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
  */
 
 /**
@@ -295,6 +332,40 @@
  *     summary: Create one user
  *     description: As a user, I want to create an account
  *     tags: [Users]
+ *     requestBody:
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      firstName:
+ *                          type: string
+ *                          description: First name of the user
+ *                          example: "John"
+ *                      lastName:
+ *                          type: string
+ *                          description: Last name of the user
+ *                          example: "Doe"
+ *                      email:
+ *                          type: string
+ *                          description: Email of the user
+ *                          example: "john@gmail.com"
+ *                      userPassword:
+ *                          type: string
+ *                          description: The password of the user
+ *                          example: "azerty"
+ *                      exp:
+ *                          type: string
+ *                          description: Experience of the user
+ *                          example: "Confirmé"
+ *                      school:
+ *                          type: string
+ *                          description: School of the user
+ *                          example: "Epitech"
+ *                      skills:
+ *                          type: string
+ *                          description: Skills of the user
+ *                          example: "Developpment, Design"
  *     responses:
  *       200:
  *         description: As a user, I want to create an account.
@@ -313,10 +384,25 @@
  *     summary: Login
  *     description: As a user, I want to access to my account
  *     tags: [Users]
+ *     requestBody:
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      email:
+ *                          type: string
+ *                          description: Email of the user
+ *                          example: "bob@gmail.com"
+ *                      userPassword:
+ *                          type: string
+ *                          description: Password of the user
+ *                          example: "azerty"
  *     responses:
  *       200:
  *         description: As a user, I want to access to my account.
- *
+ *       500:
+ *         description: Error while logging in
  *
  */
 /**
@@ -327,10 +413,14 @@
  *     summary: Get one user
  *     description: Get the user's data
  *     tags: [Users]
+ *     parameters:
+ *          - name: userId
+ *            in: path
+ *            description: Id of the user
+ *            required: true
  *     responses:
  *       200:
  *         description: Get the user's data.
- *
  */
 /**
  * @swagger
@@ -349,14 +439,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
  *
  */
 /**
@@ -369,6 +451,36 @@
  *     tags: [Users]
  *     security:
  *      - bearerAuth: []
+ *     requestBody:
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      firstName:
+ *                          type: string
+ *                          description: First name of the user
+ *                          example: "John"
+ *                      lastName:
+ *                          type: string
+ *                          description: Last name of the user
+ *                          example: "Doe"
+ *                      email:
+ *                          type: string
+ *                          description: Email of the user
+ *                          example: "john@gmail.com"
+ *                      exp:
+ *                          type: string
+ *                          description: Experience of the user
+ *                          example: "Confirmé"
+ *                      school:
+ *                          type: string
+ *                          description: School of the user
+ *                          example: "Epitech"
+ *                      skills:
+ *                          type: string
+ *                          description: Skills of the user
+ *                          example: "Developpment, Design"
  *     responses:
  *       200:
  *         description: As a logged user, I want to update my data
@@ -378,15 +490,6 @@
  *         description: User not found
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
  */
 /**
  * @swagger
@@ -398,6 +501,16 @@
  *     tags: [Users]
  *     security:
  *      - bearerAuth: []
+ *     requestBody:
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      userPassword:
+ *                          type: string
+ *                          description: The password of the user
+ *                          example: "azerty"
  *     responses:
  *       200:
  *         description: As a logged user, I want to update my password
@@ -407,15 +520,6 @@
  *         description: User not found
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
  */
 /**
  * @swagger
@@ -436,15 +540,6 @@
  *         description: User not found
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
  */
 
 /**
@@ -459,6 +554,11 @@
  *     summary: Get one company
  *     description: Retrieve one company
  *     tags: [Company]
+ *     parameters:
+ *          - name: companyId
+ *            in: path
+ *            description: Id of the company
+ *            required: true
  *     responses:
  *       200:
  *         description: Retrieve one company.
@@ -473,6 +573,25 @@
  *     tags: [Company]
  *     security:
  *      - bearerAuth: []
+ *     parameters:
+ *          - name: companyId
+ *            in: path
+ *            description: Id of the company
+ *            required: true
+ *     requestBody:
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      name:
+ *                          type: string
+ *                          description: Name of the company
+ *                          example: "Swagger"
+ *                      logo:
+ *                          type: string
+ *                          description: Logo of the company
+ *                          example: "https://upload.wikimedia.org/wikipedia/commons/a/ab/Swagger-logo.png"
  *     responses:
  *       200:
  *         description: As a logged user, I want to create a company.
@@ -480,15 +599,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
  */
 
 /**
@@ -502,6 +612,25 @@
  *     tags: [Company]
  *     security:
  *      - bearerAuth: []
+ *     parameters:
+ *          - name: companyId
+ *            in: path
+ *            description: Id of the company
+ *            required: true
+ *     requestBody:
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      name:
+ *                          type: string
+ *                          description: Name of the company
+ *                          example: "Prisma"
+ *                      logo:
+ *                          type: string
+ *                          description: Logo of the company
+ *                          example: "https://res.cloudinary.com/practicaldev/image/fetch/s--6LfYwHeK--/c_fill,f_auto,fl_progressive,h_320,q_auto,w_320/https://dev-to-uploads.s3.amazonaws.com/uploads/organization/profile_image/1608/0f93b179-76bf-4ee7-a838-e8222fbef062.png"
  *     responses:
  *       200:
  *         description: As a logged admin user of the current company, I want to udpate the company's data.
@@ -509,15 +638,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
  */
 
 /**
@@ -529,6 +649,11 @@
  *     tags: [Company]
  *     security:
  *      - bearerAuth: []
+ *     parameters:
+ *          - name: companyId
+ *            in: path
+ *            description: Id of the company
+ *            required: true
  *     responses:
  *       200:
  *         description: As a logged admin user of the current company, I want to delete my company.
@@ -536,15 +661,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
  */
 
 /**
@@ -559,6 +675,41 @@
  *     summary: Apply to an advert
  *     description: As a user (logged or not), I want to apply to an advert
  *     tags: [Applications]
+ *     parameters:
+ *          - name: companyId
+ *            in: path
+ *            description: Id of the company
+ *            required: true
+ *     requestBody:
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      firstName:
+ *                          type: string
+ *                          description: First name of the user
+ *                          example: "John"
+ *                      lastName:
+ *                          type: string
+ *                          description: Last name of the user
+ *                          example: "Doe"
+ *                      email:
+ *                          type: string
+ *                          description: Email of the user
+ *                          example: "john@gmail.com"
+ *                      exp:
+ *                          type: string
+ *                          description: Experience of the user
+ *                          example: "Confirmé"
+ *                      school:
+ *                          type: string
+ *                          description: School of the user
+ *                          example: "Epitech"
+ *                      skills:
+ *                          type: string
+ *                          description: Skills of the user
+ *                          example: "Developpment, Design"
  *     responses:
  *       200:
  *         description: As a user (logged or not), I want to apply to an advert
@@ -588,15 +739,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
  *
  */
 
@@ -618,15 +760,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
  */
 
 /**
@@ -647,15 +780,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
  */
 
 /**
@@ -676,15 +800,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
  */
 
 /**
@@ -705,15 +820,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
  */
 
 /**
@@ -734,15 +840,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
  */
 /**
  * @swagger
@@ -762,15 +859,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
  */
 /**
  * @swagger
@@ -790,15 +878,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
  */
 /**
  * @swagger
@@ -817,14 +896,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
  */
 /**
  * @swagger
@@ -843,14 +914,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
  */
 /**
  * @swagger
@@ -869,14 +932,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
  */
 /**
  * @swagger
@@ -895,14 +950,6 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
  */
 /**
  * @swagger
@@ -921,12 +968,4 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
- *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
  */
