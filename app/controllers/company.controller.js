@@ -22,10 +22,7 @@ const controller = {
       //Recup the userId from the token
       const userId = await loginService.getUserId(req);
       // Update user profile to admin
-      const updateUserAdmin = await datamapper.updateUserAdmin(userId);
-      if (!updateUserAdmin) {
-        return res.status(500).send("Error while updating user profile");
-      }
+      await datamapper.updateUserAdmin(userId);
 
       //Create the company
       const newCompany = await datamapper.createCompany(userId, name, logo);

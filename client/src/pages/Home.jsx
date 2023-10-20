@@ -42,40 +42,76 @@ const fetchSavedAdsAndCompanies = async (ads) => {
   const adsData = await adsRes.json();
 
   // Récupération des identifiants des annonces sauvegardées
-  const savedAdsIds = adsData.filter(adData => adData.isSaved).map(adData => adData.advertissementId);
+  const savedAdsIds = adsData
+    .filter((adData) => adData.isSaved)
+    .map((adData) => adData.advertissementId);
 
   // Filtrage des annonces pour n'afficher que celles qui sont sauvegardées
-  const savedAds = ads.filter(ad => savedAdsIds.includes(ad.advertissementId));
+  const savedAds = ads.filter((ad) =>
+    savedAdsIds.includes(ad.advertissementId)
+  );
 
   return savedAds;
-}
+};
+
+const fetchAppliedAdsAndCompanies = async (ads) => {
+  const headers = {
+    "Content-Type": "application/json",
+  };
+
+  if (window.localStorage.token) {
+    headers["Authorization"] = "Bearer " + window.localStorage.token;
+  }
+
+  const adsRes = await fetch(`${FETCH_URL}/appliedAdvert`, { headers });
+  const adsData = await adsRes.json();
+
+  // Récupération des identifiants des annonces sauvegardées
+  const appliedAdsIds = adsData
+    .filter((adData) => adData.isApplied)
+    .map((adData) => adData.advertissementId);
+
+  // Filtrage des annonces pour n'afficher que celles qui sont sauvegardées
+  const appliedAds = ads.filter((ad) =>
+    appliedAdsIds.includes(ad.advertissementId)
+  );
+
+  return appliedAds;
+};
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState("Découvrir");
   const [displayCount, setDisplayCount] = useState(INITIAL_DISPLAY_COUNT);
   const [ads, setAds] = useState([]);
-  const { user} = useAuth();
+  const { user } = useAuth();
+  const [loading, setLoading] = useState(false);
 
   const filteredAds = useMemo(() => {
     return ads;
   }, [ads]);
 
   useEffect(() => {
+    setLoading(true); // Définir l'état de chargement avant le début de l'opération asynchrone
     (async () => {
       try {
         const fetchedAds = await fetchAdsAndCompanies();
-        setAds(fetchedAds);
+        
+        let updatedAds = fetchedAds;
 
         if (activeTab === "Sauvegardées") {
-          const savedAds = await fetchSavedAdsAndCompanies(fetchedAds);
-          setAds(savedAds);
+          updatedAds = await fetchSavedAdsAndCompanies(fetchedAds);
+        } else if (activeTab === "Candidatées") {
+          updatedAds = await fetchAppliedAdsAndCompanies(fetchedAds);
         }
+        
+        setAds(updatedAds);
+        setLoading(false); // Réinitialiser l'état de chargement une fois terminé
       } catch (error) {
         console.error("Error fetching ads and companies:", error);
+        setLoading(false); // Réinitialiser l'état de chargement en cas d'erreur
       }
     })();
-  }, [activeTab]);
-
+  }, [activeTab])
 
   return (
     <div className="container mx-auto px-4 mt-5">
@@ -84,23 +120,25 @@ const Home = () => {
         <div className="absolute left-6 w-[600px] md:w-[700px] lg:w-[900px] xl:w-[1200px] h-3 bg-base-300 z-10"></div>
         {/* Barre de navigation des onglets */}
         {tabs.map((tab, index) => (
-            <div
-                key={index}
-                onClick={user || index === 0 ? () => setActiveTab(tab) : null}
-                className={`flex items-center md:w-1/6 rounded-full p-3 py-2 justify-center z-30 transition-colors duration-300 ${
-                    user || index === 0 ? "hover:bg-violet-700 hover:text-white hover:cursor-pointer active:text-white active:bg-violet-700" : ""
-                } ease-in-out ${
-                    activeTab === tab ? "bg-violet-600 text-white" : "bg-base-300"
-                } ${!user && index !== 0 ? "cursor-not-allowed " : ""}`}
-            >
-              <span>{tab}</span>
-            </div>
+          <div
+            key={index}
+            onClick={user || index === 0 ? () => setActiveTab(tab) : null}
+            className={`flex items-center md:w-1/6 rounded-full p-3 py-2 justify-center z-30 transition-colors duration-300 ${
+              user || index === 0
+                ? "hover:bg-violet-700 hover:text-white hover:cursor-pointer active:text-white active:bg-violet-700"
+                : ""
+            } ease-in-out ${
+              activeTab === tab ? "bg-violet-600 text-white" : "bg-base-300"
+            } ${!user && index !== 0 ? "cursor-not-allowed " : ""}`}
+          >
+            <span>{tab}</span>
+          </div>
         ))}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
-        {/* Affichage des annonces en fonction du nombre sélectionné */}
-        {filteredAds.slice(0, displayCount).map((ad, index) => (
-            <AdsCard ad={ad} index={index} key={index} />
+        {/* Affiche les annonces uniquement si elles ne sont pas en cours de chargement */}
+        {!loading && filteredAds.slice(0, displayCount).map((ad, index) => (
+          <AdsCard ad={ad} index={index} key={index} />
         ))}
       </div>
       {ads.length > displayCount && (
