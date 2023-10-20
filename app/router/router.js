@@ -77,6 +77,7 @@ router.delete(
   auth.isLogged,
   compagnyController.deleteCompany
 );
+router.get("/search/:companyName", compagnyController.searchCompany);
 
 //! Define routes applications
 
