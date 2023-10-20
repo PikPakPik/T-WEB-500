@@ -4,6 +4,9 @@ const loginService = require("../services/login.service");
 const bcrypt = require("bcrypt");
 const { getUserCompany } = require("../models/users.datamapper");
 const saltRounds = 10;
+const companyDatamapper = require("../models/company.datamapper");
+const advertDatamapper = require("../models/advertissements.datamapper");
+const res = require("express/lib/response");
 
 const controller = {
   //! Create a new user
@@ -147,17 +150,11 @@ const controller = {
   //! Update the current user
   updateUser: async (req, res) => {
     //Get the data from the request body
-    const { firstName, lastName, email, userPassword, exp, school, skills } =
-      req.body;
+    const { firstName, lastName, email, exp, school, skills } = req.body;
 
     try {
       //Recup the userId from the token
       const userId = await loginService.getUserId(req);
-      //Hash the password if the user give one
-      const hashedPassword = null;
-      if (userPassword) {
-        hashedPassword = await bcrypt.hash(userPassword, saltRounds);
-      }
 
       //Update the user
       const updatedUser = await datamapper.updateUser(
@@ -165,7 +162,6 @@ const controller = {
         firstName,
         lastName,
         email,
-        hashedPassword,
         exp,
         school,
         skills
@@ -180,6 +176,75 @@ const controller = {
       return res.json(updatedUser);
     } catch (error) {
       res.status(500).send("Error while updating the user");
+    }
+  },
+
+  //! Update the password of the current user
+  updatePassword: async (req, res) => {
+    try {
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
+
+      // Get the new password from the request body
+      const { newPassword } = req.body;
+
+      //Hash the password
+      const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+      //Update the user
+      const updatedPassword = await datamapper.updatePassword(
+        userId,
+        hashedPassword
+      );
+
+      //If the user doesn't exist
+      if (!updatedPassword) {
+        return res.status(404).send("User not found");
+      }
+
+      //If the user exist
+      return res.json(updatedPassword);
+    } catch (error) {
+      res.status(500).send("Error while updating the password");
+    }
+  },
+
+  //! Delete the current user
+  deleteUser: async (req, res) => {
+    try {
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
+
+      const deletedUser = await datamapper.deleteUser(userId);
+
+      let responseData = {
+        deletedUser,
+      };
+
+      //If the user doesn't exist
+      if (!deletedUser) {
+        return res.status(404).send("User not found");
+      }
+
+      //If the user is an admin, we delete his company
+      const company = await getUserCompany(userId);
+
+      if (company) {
+        await companyDatamapper.deleteCompany(company.companyId);
+        responseData.company = company;
+      }
+
+      //If the user have already applied to an advert, we delete his application
+      const applications = await datamapper.getApplicationsByUserId(userId);
+
+      if (applications) {
+        await advertDatamapper.deleteAdvertisement;
+        responseData.applications = applications;
+      }
+
+      return res.json(responseData);
+    } catch (error) {
+      res.status(500).send("Error while deleting the user");
     }
   },
 };

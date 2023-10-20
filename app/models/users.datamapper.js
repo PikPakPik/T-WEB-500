@@ -1,4 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient, Prisma } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 const datamapper = {
@@ -40,6 +40,7 @@ const datamapper = {
     return user;
   },
 
+  //! Get the company of the user
   getUserCompany: async (userId) => {
     const company = await prisma.companies.findUnique({
       where: {
@@ -65,7 +66,6 @@ const datamapper = {
     firstName,
     lastName,
     email,
-    hashedPassword,
     exp,
     school,
     skills
@@ -78,13 +78,45 @@ const datamapper = {
         firstName: firstName,
         lastName: lastName,
         email: email,
-        userPassword: hashedPassword,
         exp: exp,
         school: school,
         skills: skills,
       },
     });
     return updatedUser;
+  },
+
+  //! Update the password of the current user
+  updatePassword: async (userId, hashedPassword) => {
+    const updatedPassword = await prisma.user.update({
+      where: {
+        userId: userId,
+      },
+      data: {
+        userPassword: hashedPassword,
+      },
+    });
+    return updatedPassword;
+  },
+
+  //! Delete one user
+  deletedUser: async (userId) => {
+    const deleteUser = await Prisma.user.delete({
+      where: {
+        userId: userId,
+      },
+    });
+    return deleteUser;
+  },
+
+  //! Get the applied advert of the user
+  getApplicationsByUserId: async (userId) => {
+    const applications = await prisma.applications.findMany({
+      where: {
+        userId: userId,
+      },
+    });
+    return applications;
   },
 };
 

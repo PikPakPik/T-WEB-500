@@ -16,13 +16,19 @@ const controller = {
   getOneAdvertisement: async (req, res) => {
     const advertId = parseInt(req.params.advertId);
     try {
-      //Recup the userId from the token
-      const userId = await loginService.getUserId(req);
+      //Recup the token from the headers if exist
+      const token = req.headers.authorization?.replace("Bearer ", "");
+
       //Get one advertissement
       const oneAdvertisement = await datamapper.getOneAdvertisement(advertId);
 
       // If we get the userId, we search the jobInformation and send it with the response
-      if (userId) {
+      if (token) {
+        //Recup the userId from the token
+        const user = await loginService.getUser(token);
+        const userId = user.id;
+
+        //Get the jobInformation
         const jobInformation = await datamapper.getJobInformation(
           advertId,
           userId
