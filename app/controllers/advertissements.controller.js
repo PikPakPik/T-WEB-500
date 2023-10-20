@@ -235,6 +235,20 @@ const controller = {
       res.status(500).send(error.message);
     }
   },
+
+  //! Search an advertisement by title
+  searchAdvert: async (req, res) => {
+    //Recup the advertName from the params
+    const advertName = req.params.advertName;
+
+    try {
+      //Search the advertisement
+      const searchAdvert = await datamapper.searchAdvert(advertName);
+      res.json(searchAdvert);
+    } catch (error) {
+      return null;
+    }
+  },
 };
 
 module.exports = controller;

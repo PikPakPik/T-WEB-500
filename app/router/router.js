@@ -52,6 +52,7 @@ router.delete(
   auth.isLogged,
   advertissementsController.deleteAdvertisement
 );
+router.get("/search/:advertName", advertissementsController.searchAdvert); //TODO: Swagger doc
 
 //! Define routes users
 
@@ -77,7 +78,7 @@ router.delete(
   auth.isLogged,
   compagnyController.deleteCompany
 );
-router.get("/search/:companyName", compagnyController.searchCompany);
+router.get("/search/:companyName", compagnyController.searchCompany); //TODO: Swagger doc
 
 //! Define routes applications
 
