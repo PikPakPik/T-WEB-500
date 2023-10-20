@@ -14,6 +14,14 @@ const options = {
         url: "http://localhost:3001",
       },
     ],
+    securityDefinitions: {
+      bearerAuth: {
+        type: "apiKey",
+        name: "Authorization",
+        scheme: "bearer",
+        in: "header",
+      },
+    },
   },
   tags: [
     { name: "Advertissements" },

@@ -126,9 +126,9 @@ const controller = {
       const { name, logo, userId } = req.body;
 
       const newUser = await companyDatamapper.createCompany(name, logo, userId);
-
+      const upadteIsAdmin = await userDatamapper.updateUserAdmin(userId);
       //Send the response
-      res.json(newUser);
+      res.json(newUser, upadteIsAdmin);
     } catch (error) {
       res.status(500).json(error.message);
     }

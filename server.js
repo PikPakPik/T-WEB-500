@@ -4,16 +4,6 @@ const app = express();
 const cors = require("cors");
 app.use(express.json());
 
-// Configurer les options CORS
-// const corsOptions = {
-//   origin: "*", // Autorise toutes les origines (à ajuster en fonction de votre besoin)
-//   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-//   credentials: true,
-//   optionsSuccessStatus: 204,
-//   allowedHeaders: "Content-Type,Authorization", // Inclure l'en-tête d'autorisation
-// };
-// app.use(cors(corsOptions));
-
 app.use(cors());
 
 // Import the swagger.js file

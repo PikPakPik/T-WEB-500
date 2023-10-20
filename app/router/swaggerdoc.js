@@ -125,22 +125,51 @@
  *     tags: [Advertissements]
  *     security:
  *      - bearerAuth: []
+ *     parameters:
+ *        - name: title
+ *          in: body
+ *          description: Title of the advertissement
+ *          required: true
+ *        - name: description
+ *          in: body
+ *          description: Description of the advertissement
+ *          required: true
+ *        - name: place
+ *          in: body
+ *          description: Place of the job
+ *          required: true
+ *        - name: workingTime
+ *          in: body
+ *          description: The working time of the job
+ *          required: true
+ *        - name: expRequired
+ *          in: body
+ *          description: Experience required for the job
+ *          required: true
+ *        - name: wages
+ *          in: body
+ *          description: Wages for the job
+ *          required: true
+ *          schema:
+ *              type: integer
  *     responses:
  *       200:
  *         description: As a company, I want to create an advert.
+ *         content:
+ *              application/json:
+ *                  example:
+ *                      title: "Développeur web"
+ *                      description: "Développeur web JS"
+ *                      place: "Nantes"
+ *                      workingTime: "Full-time"
+ *                      expRequired: "Confirmé"
+ *                      wages: 30000
  *       401:
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
  *     securitySchemes:
- *          bearerAuth:
- *              type: http
- *              scheme: bearer
- *              bearerFormat: JWT
- *              in: header
- *              name: Authorization
- *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
- *
+ *          bearerAuth
  */
 /**
  * @swagger
@@ -544,44 +573,360 @@
  *   description: Endpoints related to superman
  *
  *
+ *
  * /superman:
- *  get:
- *   summary: Get all superman's users
- *   description: Return if the current's user is a superman
- *   tags: [Superman]
- *   responses:
- *      200:
- *      description: Return if the current's user is a superman
+ *   get:
+ *     summary: Get all superman's users
+ *     description: Return if the current's user is a superman
+ *     tags: [Superman]
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Return if the current's user is a superman
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
  *
  *
  */
 
-/**==========================================
- * Login a user
+/**
+ * @swagger
  *
- * @OA\Post(
- *     path="/api/login",
- *     tags={"Advertissements"},
- *     @OA\Response(
- *       response=404,
- *       description="These credentials do not match our records."
- *     ),
- *     @OA\Response(
- *       response=200,
- *       description="successful operation"
- *     ),
- *     @OA\Parameter(
- *         name="email",
- *         in="query",
- *         required=true,
- *         description="Write your email"
- *     ),
- *     @OA\Parameter(
- *         name="password",
- *         in="query",
- *         required=true,
- *         description="Write your password"
- *     ),
  *
- * )
+ * /superman/advertissements:
+ *   get:
+ *     summary: Get all advertissement
+ *     description: Get all advertisement with a pagination's system depending on the page and the limit
+ *     tags: [Superman]
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Get all advertisement with a pagination's system depending on the page and the limit
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
+ *
+ */
+
+/**
+ * @swagger
+ *
+ *
+ * /superman/users:
+ *   get:
+ *     summary: Get all users
+ *     description: Get all users with a pagination's system depending on the page and the limit
+ *     tags: [Superman]
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Get all users with a pagination's system depending on the page and the limit
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
+ *
+ */
+
+/**
+ * @swagger
+ *
+ *
+ * /superman/applications:
+ *   get:
+ *     summary: Get all applications
+ *     description: Get all applications with a pagination's system depending on the page and the limit
+ *     tags: [Superman]
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Get all applications with a pagination's system depending on the page and the limit
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
+ *
+ */
+
+/**
+ * @swagger
+ *
+ *
+ * /superman/company:
+ *   get:
+ *     summary: Get all companies
+ *     description: Get all companies with a pagination's system depending on the page and the limit
+ *     tags: [Superman]
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Get all companies with a pagination's system depending on the page and the limit
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
+ *
+ */
+
+/**
+ * @swagger
+ *
+ *
+ * /superman/advertissements/:companyId:
+ *   post:
+ *     summary: Create an advertisement
+ *     description: Create an advertissement for a company
+ *     tags: [Superman]
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Create an advertissement for a company
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
+ *
+ */
+/**
+ * @swagger
+ *
+ *
+ * /superman/user:
+ *   post:
+ *     summary: Create an user
+ *     description: Create an user
+ *     tags: [Superman]
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Create an user
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
+ *
+ */
+/**
+ * @swagger
+ *
+ *
+ * /superman/company:
+ *   post:
+ *     summary: Create a company
+ *     description: Create a company for a user
+ *     tags: [Superman]
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Create a company for a user
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
+ *
+ */
+/**
+ * @swagger
+ *
+ * /superman/advertissement/:advertId/update:
+ *   put:
+ *     summary: Update an advertissement
+ *     description: Update an advertissement for a company
+ *     tags: [Superman]
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Update an advertissement for a company
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
+ */
+/**
+ * @swagger
+ *
+ * /superman/user/:userId:
+ *   put:
+ *     summary: Update an user
+ *     description: Update an user
+ *     tags: [Superman]
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Update an user
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
+ */
+/**
+ * @swagger
+ *
+ * /superman/advertissement/:advertId:
+ *   delete:
+ *     summary: Delete an advertissement
+ *     description: Delete an advertissement for a company
+ *     tags: [Superman]
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Delete an advertissement for a company
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
+ */
+/**
+ * @swagger
+ *
+ * /superman/user/:userId:
+ *   delete:
+ *     summary: Delete an user
+ *     description: Delete an user
+ *     tags: [Superman]
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Delete an user
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
+ */
+/**
+ * @swagger
+ *
+ * /superman/company/:companyId:
+ *   delete:
+ *     summary: Delete a company
+ *     description: Delete a company and his associated advertissements
+ *     tags: [Superman]
+ *     security:
+ *      - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Delete a company and his associated advertissements
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ *     securitySchemes:
+ *          bearerAuth:
+ *              type: http
+ *              scheme: bearer
+ *              bearerFormat: JWT
+ *              in: header
+ *              name: Authorization
+ *              example: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjk3NzA1MDk2LCJleHAiOjE2OTc3MDg2OTZ9.H2R1uOleYzo_hoHy9WSN2vUqXSfjCFrU-VC0JjUJKA4'
  */
