@@ -44,8 +44,7 @@ const loginService = {
       const user = await this.getUser(token);
       return user.id;
     } catch (error) {
-      console.error(error);
-      res.status(500).send(error.message);
+      return null;
     }
   },
 };
