@@ -3,7 +3,6 @@ import { formatDateToDateTime } from "../../../../utils/formatDateToDateTime";
 import { toast } from "react-toastify";
 
 const CompanyAds = ({ user }) => {
-  const [currentAd, setCurrentAd] = useState(null);
   const [modalAction, setModalAction] = useState("Ajouter");
   const [formData, setFormData] = useState({
     id: "",
@@ -40,7 +39,6 @@ const CompanyAds = ({ user }) => {
 
   const openModal = (action, ad) => {
     setModalAction(action);
-    setCurrentAd(ad);
     if (ad) {
       setFormData({
         id: ad.advertissementId,

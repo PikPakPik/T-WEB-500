@@ -15,6 +15,13 @@ const DropdownContent = ({ user, logout }) => (
         <li>
           <p>{user.firstName}</p>
         </li>
+        {user.isSuperman && (
+          <li>
+            <Link to="/admin" className="flex items-center gap-2">
+              Panel
+            </Link>
+          </li>
+        )}
         <li>
           <Link to="/profile" className="flex items-center gap-2">
             Mon profil
