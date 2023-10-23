@@ -76,6 +76,31 @@ const controller = {
     }
   },
 
+  //! Get all applications by advert
+  getApplicationsByAdvert: async (req, res) => {
+    try {
+      // Get the page number from the query parameters
+      const pageNumber = req.query.pageNumber;
+
+      //Get the advertId from the params
+      const advertId = parseInt(req.params.advertId);
+      // Define the number of items per page
+      const itemsPerPage = 10;
+      // Calculate the number of items to skip
+      const skip = (pageNumber - 1) * itemsPerPage;
+
+      // Get all applications by advert skip and take
+      const applications = await datamapper.getApplicationsByAdvert(
+        advertId,
+        itemsPerPage,
+        skip
+      );
+      res.json(applications);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  },
+
   //! Get all company
   getCompanies: async (req, res) => {
     try {

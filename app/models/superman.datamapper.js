@@ -40,6 +40,27 @@ const datamapper = {
     return applications;
   },
 
+  //! Get all applications by advert
+  getApplicationsByAdvertissement: async (advertId) => {
+    const applications = await prisma.applications.findMany({
+      take: itemsPerPage,
+      skip: skip,
+      where: {
+        advertId: advertId,
+      },
+    });
+    return applications;
+  },
+
+  //! Get all companies
+  getCompanies: async (itemsPerPage, skip) => {
+    const companies = await prisma.company.findMany({
+      take: itemsPerPage,
+      skip: skip,
+    });
+    return companies;
+  },
+
   //! Update a user
   updateUser: async (
     userId,

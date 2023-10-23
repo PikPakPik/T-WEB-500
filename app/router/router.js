@@ -111,6 +111,12 @@ router.get(
   supermanController.getApplications
 );
 router.get(
+  "/superman/aplications/:advertId",
+  auth.isLogged,
+  auth.isSuperman,
+  supermanController.getApplicationsByAdvert
+); //TODO: Swagger doc
+router.get(
   "/superman/company",
   auth.isLogged,
   auth.isSuperman,
