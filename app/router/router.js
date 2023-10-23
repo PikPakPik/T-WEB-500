@@ -52,6 +52,7 @@ router.delete(
   auth.isLogged,
   advertissementsController.deleteAdvertisement
 );
+router.get("/search/:advertName", advertissementsController.searchAdvert); //TODO: Swagger doc
 
 //! Define routes users
 
@@ -77,6 +78,7 @@ router.delete(
   auth.isLogged,
   compagnyController.deleteCompany
 );
+router.get("/search/:companyName", compagnyController.searchCompany); //TODO: Swagger doc
 
 //! Define routes applications
 
@@ -95,38 +97,44 @@ router.get(
   auth.isLogged,
   auth.isSuperman,
   supermanController.getAdvertissements
-); // TODO: Do swagger
+);
 router.get(
   "/superman/users",
   auth.isLogged,
   auth.isSuperman,
   supermanController.getUsers
-); // TODO: Do swagger
+);
 router.get(
   "/superman/applications",
   auth.isLogged,
   auth.isSuperman,
   supermanController.getApplications
-); // TODO: Do swagger
+);
+router.get(
+  "/superman/aplications/:advertId",
+  auth.isLogged,
+  auth.isSuperman,
+  supermanController.getApplicationsByAdvert
+); //TODO: Swagger doc
 router.get(
   "/superman/company",
   auth.isLogged,
   auth.isSuperman,
   supermanController.getCompanies
-); // TODO: Do swagger
+);
 
 router.post(
   "/superman/advertissements/:companyId",
   auth.isLogged,
   auth.isSuperman,
   supermanController.createAdvertissement
-); // TODO: Do swagger
+);
 router.post(
   "/superman/user",
   auth.isLogged,
   auth.isSuperman,
   usersController.createUser
-); // TODO: Do swagger
+);
 router.post(
   "/superman/company",
   auth.isLogged,
@@ -139,32 +147,32 @@ router.put(
   auth.isLogged,
   auth.isSuperman,
   supermanController.updateAdvertissement
-); // TODO: Do swagger
+);
 router.put(
   "/superman/user/:userId",
   auth.isLogged,
   auth.isSuperman,
   supermanController.updateUser
-); // TODO: Do swagger
+);
 
 router.delete(
   "/superman/advertissement/:advertId",
   auth.isLogged,
   auth.isSuperman,
   supermanController.deleteAdvertissement
-); // TODO: Do swagger
+);
 router.delete(
   "/superman/user/:userId",
   auth.isLogged,
   auth.isSuperman,
   supermanController.deleteUser
-); // TODO: Do swagger
+);
 router.delete(
   "/superman/company/:companyId",
   auth.isLogged,
   auth.isSuperman,
   supermanController.deleteCompany
-); // TODO: Do swagger
+);
 
 //! Export router
 module.exports = router;

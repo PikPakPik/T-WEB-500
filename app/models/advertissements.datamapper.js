@@ -236,6 +236,18 @@ const datamapper = {
     });
     return deletedAdvertisement;
   },
+
+  //! Search an advertissement by his name
+  searchAdvert: async (advertName) => {
+    const searchAdvert = await prisma.advertissements.findMany({
+      where: {
+        title: {
+          contains: advertName,
+        },
+      },
+    });
+    return searchAdvert;
+  },
 };
 
 module.exports = datamapper;

@@ -139,6 +139,18 @@ const datamapper = {
 
     return deletedCompany;
   },
+
+  //! Get one company by his name
+  searchCompany: async (companyName) => {
+    const searchCompany = await prisma.companies.findMany({
+      where: {
+        name: {
+          contains: companyName,
+        },
+      },
+    });
+    return searchCompany;
+  },
 };
 
 module.exports = datamapper;

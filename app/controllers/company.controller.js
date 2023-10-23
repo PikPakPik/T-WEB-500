@@ -102,6 +102,18 @@ const controller = {
       res.status(500).send(error.message);
     }
   },
+
+  //! Get one company by his name
+  searchCompany: async (req, res) => {
+    const companyName = req.params.companyName;
+
+    try {
+      const company = await datamapper.searchCompany(companyName);
+      res.json(company);
+    } catch (error) {
+      return null;
+    }
+  },
 };
 
 module.exports = controller;
