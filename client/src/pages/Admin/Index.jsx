@@ -2,12 +2,15 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import DashboardStats from "../../components/admin/DashboarsStats";
 import { useEffect, useState } from "react";
 import TableData from "../../components/admin/TableData";
+import { toast } from "react-toastify";
 
 const AdminIndex = () => {
   const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userDatas, setUserDatas] = useState([]);
   const [applicationsDatas, setApplicationsDatas] = useState([]);
+  const [companyDatas, setCompanyDatas] = useState([]);
+  const [advertDatas, setAdvertDatas] = useState([]);
 
   useEffect(() => {
     const fetchData = async (url) => {
@@ -24,14 +27,17 @@ const AdminIndex = () => {
 
     const getStats = async () => {
       try {
-        const [dataUser, dataCandidature, dataAdvert, dataCompany] =
+        const [dataUser, dataCandidature, dataCompany, dataAdvert] =
           await Promise.all([
             fetchData("http://localhost:3001/superman/users"),
             fetchData("http://localhost:3001/superman/applications"),
+            fetchData("http://localhost:3001/superman/company"),
+            fetchData("http://localhost:3001/superman/advertissements"),
           ]);
-        console.log(dataCandidature);
         setUserDatas(dataUser);
         setApplicationsDatas(dataCandidature);
+        setCompanyDatas(dataCompany);
+        setAdvertDatas(dataAdvert);
         setStats([
           {
             title: "Utilisateurs",
@@ -79,12 +85,125 @@ const AdminIndex = () => {
           <TableData
             title="Liste des utilisateurs"
             data={userDatas}
-            handleDelete={() => {}}
+            type={"user"}
+            handleDelete={(id) => {
+              fetch(`http://localhost:3001/superman/user/${id}`, {
+                method: "DELETE",
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              })
+                .then((res) => res.json())
+                .then((res) => {
+                  if (res.error) {
+                    console.error(res.error);
+                  } else {
+                    setUserDatas(
+                      userDatas.filter((user) => user.userId !== id)
+                    );
+                    toast.success("Utilisateur supprimé");
+                  }
+                })
+                .catch((err) => console.error(err));
+            }}
+            handleUpdate={(id, data) => {
+              fetch(`http://localhost:3001/superman/user/${id}`, {
+                method: "PUT",
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+              })
+                .then((res) => res.json())
+                .then((res) => {
+                  if (res.error) {
+                    console.error(res.error);
+                  } else {
+                    setUserDatas(
+                      userDatas.map((user) => {
+                        if (user.userId === id) {
+                          Object.keys(data).forEach((key) => {
+                            user[key] = data[key];
+                          });
+                        }
+                        return user;
+                      })
+                    );
+                  }
+                })
+                .catch((err) => console.error(err));
+            }}
           />
           <TableData
-            title="Liste des candidatures"
-            data={applicationsDatas}
-            handleDelete={() => {}}
+            title="Liste des entreprises"
+            type={"company"}
+            data={companyDatas}
+            handleUpdate={
+              (id, data) => {
+                fetch(`http://localhost:3001/superman/company/${id}/update`, {
+                  method: "PUT",
+                  headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(data),
+                })
+                  .then((res) => res.json())
+                  .then((res) => {
+                    if (res.error) {
+                      console.error(res.error);
+                    } else {
+                      setCompanyDatas(
+                        companyDatas.map((company) => {
+                          if (company.companyId === id) {
+                            Object.keys(data).forEach((key) => {
+                              company[key] = data[key];
+                            });
+                          }
+                          return company;
+                        })
+                      );
+                    }
+                  })
+                  .catch((err) => console.error(err));
+              }
+            }
+          />
+          <TableData
+            title="Liste des annonces"
+            type={"advert"}
+            data={advertDatas}
+            handleUpdate={
+              (id, data) => {
+                fetch(`http://localhost:3001/superman/advertissement/${id}/update`, {
+                  method: "PUT",
+                  headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(data),
+                })
+                  .then((res) => res.json())
+                  .then((res) => {
+                    if (res.error) {
+                      console.error(res.error);
+                    } else {
+                      setAdvertDatas(
+                        advertDatas.map((advert) => {
+                          if (advert.advertId === id) {
+                            Object.keys(data).forEach((key) => {
+                              advert[key] = data[key];
+                            });
+                          }
+                          return advert;
+                        })
+                      );
+                    }
+                  })
+                  .catch((err) => console.error(err));
+              }
+            }
           />
         </>
       )}
