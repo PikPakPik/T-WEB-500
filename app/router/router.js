@@ -52,7 +52,7 @@ router.delete(
   auth.isLogged,
   advertissementsController.deleteAdvertisement
 );
-router.get("/search/:advertName", advertissementsController.searchAdvert); //TODO: Swagger doc
+router.get("/search/:advertName", advertissementsController.searchAdvert);
 
 //! Define routes users
 
@@ -78,7 +78,7 @@ router.delete(
   auth.isLogged,
   compagnyController.deleteCompany
 );
-router.get("/search/:companyName", compagnyController.searchCompany); //TODO: Swagger doc
+router.get("/search/:companyName", compagnyController.searchCompany);
 
 //! Define routes applications
 
@@ -115,7 +115,7 @@ router.get(
   auth.isLogged,
   auth.isSuperman,
   supermanController.getApplicationsByAdvert
-); //TODO: Swagger doc
+);
 router.get(
   "/superman/company",
   auth.isLogged,
@@ -153,6 +153,13 @@ router.put(
   auth.isLogged,
   auth.isSuperman,
   supermanController.updateUser
+);
+
+router.put(
+  "/superman/company/:companyId/update",
+  auth.isLogged,
+  auth.isSuperman,
+  supermanController.updateCompany
 );
 
 router.delete(

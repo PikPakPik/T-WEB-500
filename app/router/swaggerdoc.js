@@ -85,6 +85,28 @@
  *              in: header
  *
  */
+
+/**
+ * @swagger
+ * /search/{advertName}:
+ *   get:
+ *     summary: Search an advertissement by his name
+ *     description: I want to search an advertissement by his name
+ *     tags: [Advertissements]
+ *     security:
+ *      - bearerAuth: []
+ *     parameters:
+ *          - name: advertName
+ *            in: path
+ *            description: Name of the advertissement
+ *            required: true
+ *     responses:
+ *       200:
+ *         description: I want to search an advertissement by his name
+ *       500:
+ *          description: Internal Server Error
+ */
+
 /**
  * @swagger
  *
@@ -665,6 +687,27 @@
 
 /**
  * @swagger
+ * /search/{companyId}:
+ *   get:
+ *     summary: Search a company by his name
+ *     description: I want to search a company by his name
+ *     tags: [Company]
+ *     security:
+ *      - bearerAuth: []
+ *     parameters:
+ *          - name: companyName
+ *            in: path
+ *            description: Name of the company
+ *            required: true
+ *     responses:
+ *       200:
+ *         description: I want to search a company by his name
+ *       500:
+ *          description: Internal Server Error
+ */
+
+/**
+ * @swagger
  *
  * tags:
  *   name: Applications
@@ -806,6 +849,33 @@
  * @swagger
  *
  *
+ * /superman/applications/{advertId}:
+ *   get:
+ *     summary: Get all applications from one advetissement
+ *     description: Get all applications with a pagination's system depending on the page and the limit from one advertissement
+ *     tags: [Superman]
+ *     security:
+ *      - bearerAuth: []
+ *     parameters:
+ *        - name: advertId
+ *          in: path
+ *          description: Id of the advertissement
+ *          required: true
+ *          schema:
+ *              type: integer
+ *     responses:
+ *       200:
+ *         description: Get all applications with a pagination's system depending on the page and the limit from one advertissement
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *          description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ *
+ *
  * /superman/company:
  *   get:
  *     summary: Get all companies
@@ -833,6 +903,41 @@
  *     tags: [Superman]
  *     security:
  *      - bearerAuth: []
+ *     parameters:
+ *      - name: companyId
+ *        in: path
+ *        description: Id of the company
+ *        required: true
+ *     requestBody:
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      title:
+ *                          type: string
+ *                          description: Title of the advert
+ *                          example: "Développeur web"
+ *                      description:
+ *                          type: string
+ *                          description: Description of the advert
+ *                          example: "Développeur web JS"
+ *                      place:
+ *                          type: string
+ *                          description: Place of the advert
+ *                          example: "Nantes"
+ *                      workingTime:
+ *                          type: string
+ *                          description: Working time of the advert
+ *                          example: "Full-time"
+ *                      expRequired:
+ *                          type: string
+ *                          description: Experience required for the advert
+ *                          example: "Confirmé"
+ *                      wages:
+ *                          type: integer
+ *                          description: Annual wages of the advert
+ *                          example: 30000
  *     responses:
  *       200:
  *         description: Create an advertissement for a company
@@ -844,7 +949,6 @@
 /**
  * @swagger
  *
- *
  * /superman/user:
  *   post:
  *     summary: Create an user
@@ -852,6 +956,40 @@
  *     tags: [Superman]
  *     security:
  *      - bearerAuth: []
+ *     requestBody:
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      firstName:
+ *                          type: string
+ *                          description: First name of the user
+ *                          example: "John"
+ *                      lastName:
+ *                          type: string
+ *                          description: Last name of the user
+ *                          example: "Doe"
+ *                      email:
+ *                          type: string
+ *                          description: Email of the user
+ *                          example: "john@gmail.com"
+ *                      userPassword:
+ *                          type: string
+ *                          description: The password of the user
+ *                          example: "azerty"
+ *                      exp:
+ *                          type: string
+ *                          description: Experience of the user
+ *                          example: "Confirmé"
+ *                      school:
+ *                          type: string
+ *                          description: School of the user
+ *                          example: "Epitech"
+ *                      skills:
+ *                          type: string
+ *                          description: Skills of the user
+ *                          example: "Developpment, Design"
  *     responses:
  *       200:
  *         description: Create an user
@@ -871,6 +1009,24 @@
  *     tags: [Superman]
  *     security:
  *      - bearerAuth: []
+ *     requestBody:
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      userId:
+ *                          type: integer
+ *                          description: Id of the user who is the admin of the company
+ *                          example: 1
+ *                      name:
+ *                          type: string
+ *                          description: Name of the company
+ *                          example: "Swagger"
+ *                      logo:
+ *                          type: string
+ *                          description: Logo of the company
+ *                          example: "https://upload.wikimedia.org/wikipedia/commons/a/ab/Swagger-logo.png"
  *     responses:
  *       200:
  *         description: Create a company for a user
@@ -889,6 +1045,43 @@
  *     tags: [Superman]
  *     security:
  *      - bearerAuth: []
+ *     parameters:
+ *        - name: advertId
+ *          in: path
+ *          description: Id of the advertissement
+ *          required: true
+ *          schema:
+ *              type: integer
+ *     requestBody:
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      title:
+ *                          type: string
+ *                          description: Title of the advert
+ *                          example: "Développeur web"
+ *                      description:
+ *                          type: string
+ *                          description: Description of the advert
+ *                          example: "Développeur web JS"
+ *                      place:
+ *                          type: string
+ *                          description: Place of the advert
+ *                          example: "Nantes"
+ *                      workingTime:
+ *                          type: string
+ *                          description: Working time of the advert
+ *                          example: "Full-time"
+ *                      expRequired:
+ *                          type: string
+ *                          description: Experience required for the advert
+ *                          example: "Confirmé"
+ *                      wages:
+ *                          type: integer
+ *                          description: Annual wages of the advert
+ *                          example: 30000
  *     responses:
  *       200:
  *         description: Update an advertissement for a company
@@ -907,6 +1100,41 @@
  *     tags: [Superman]
  *     security:
  *      - bearerAuth: []
+ *     parameters:
+ *       - name: userId
+ *         in: path
+ *         description: Id of the user
+ *         required: true
+ *     requestBody:
+ *      content:
+ *          application/json:
+ *              schema:
+ *                  type: object
+ *                  properties:
+ *                      firstName:
+ *                          type: string
+ *                          description: First name of the user
+ *                          example: "John"
+ *                      lastName:
+ *                          type: string
+ *                          description: Last name of the user
+ *                          example: "Doe"
+ *                      email:
+ *                          type: string
+ *                          description: Email of the user
+ *                          example: "john@gmail.com"
+ *                      exp:
+ *                          type: string
+ *                          description: Experience of the user
+ *                          example: "Confirmé"
+ *                      school:
+ *                          type: string
+ *                          description: School of the user
+ *                          example: "Epitech"
+ *                      skills:
+ *                          type: string
+ *                          description: Skills of the user
+ *                          example: "Developpment, Design"
  *     responses:
  *       200:
  *         description: Update an user
@@ -925,6 +1153,11 @@
  *     tags: [Superman]
  *     security:
  *      - bearerAuth: []
+ *     parameters:
+ *       - name: advertId
+ *         in: path
+ *         description: Id of the advertissement
+ *         required: true
  *     responses:
  *       200:
  *         description: Delete an advertissement for a company
@@ -943,6 +1176,11 @@
  *     tags: [Superman]
  *     security:
  *      - bearerAuth: []
+ *     parameters:
+ *       - name: userId
+ *         in: path
+ *         description: Id of the user
+ *         required: true
  *     responses:
  *       200:
  *         description: Delete an user
@@ -961,6 +1199,11 @@
  *     tags: [Superman]
  *     security:
  *      - bearerAuth: []
+ *     parameters:
+ *       - name: companyId
+ *         in: path
+ *         description: Id of the company
+ *         required: true
  *     responses:
  *       200:
  *         description: Delete a company and his associated advertissements
@@ -968,4 +1211,50 @@
  *         description: Unauthorized
  *       500:
  *          description: Internal Server Error
+ */
+
+//! Models swagger
+/**
+ * @swagger
+ *
+ * definitions:
+ *   User:
+ *      type: object
+ *      properties:
+ *       userId:
+ *         type: integer
+ *         description: Id of the user
+ *         example: 1
+ *       firstName:
+ *         type: string
+ *         description: First name of the user
+ *         example: "John"
+ *       lastName:
+ *         type: string
+ *         description: Last name of the user
+ *         example: "Doe"
+ *       email:
+ *         type: string
+ *         description: Email of the user
+ *         example: "John@example.com"
+ *       userPassword:
+ *         type: string
+ *         description: Password of the user
+ *         example: "azerty"
+ *       exp:
+ *         type: string
+ *         description: Experience of the user
+ *         example: "Confirmé"
+ *       school:
+ *         type: string
+ *         description: School of the user
+ *         example: "Epitech"
+ *       skills:
+ *         type: string
+ *         description: Skills of the user
+ *         example: "Developpment, Design"
+ *      isSuperman:
+ *         type: boolean
+ *         description: If the user is a superman or not
+ *         example: false
  */
