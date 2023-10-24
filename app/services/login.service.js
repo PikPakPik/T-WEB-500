@@ -1,6 +1,4 @@
 require("dotenv").config();
-const { header } = require("express/lib/request");
-const res = require("express/lib/response");
 const jwt = require("jsonwebtoken");
 
 const loginService = {

@@ -6,7 +6,6 @@ const { getUserCompany } = require("../models/users.datamapper");
 const saltRounds = 10;
 const companyDatamapper = require("../models/company.datamapper");
 const advertDatamapper = require("../models/advertissements.datamapper");
-const res = require("express/lib/response");
 
 const controller = {
   //! Create a new user

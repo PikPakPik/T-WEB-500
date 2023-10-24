@@ -3,6 +3,8 @@ const loginService = require("../services/login.service");
 const advertDatamapper = require("../models/advertissements.datamapper");
 const companyDatamapper = require("../models/company.datamapper");
 const userDatamapper = require("../models/users.datamapper");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 const controller = {
   isSuperman: async (req, res) => {
@@ -190,13 +192,23 @@ const controller = {
   updateUser: async (req, res) => {
     //Recup the userId
     const userId = parseInt(req.params.userId);
+    let hashedPassword = null;
 
     // Get the new data from the request body
-    const { firstName, lastName, email, exp, school, skills, newPassword } =
+    const { firstName, lastName, email, exp, school, skills, newPassword, isAdmin, isSuperman } =
       req.body;
 
-    //Hash the password
-    const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    const user = await userDatamapper.getOneUser(userId);
+
+    if (!user) {
+      return res.status(404).send("User not found");
+    }
+
+    if (newPassword === user.userPassword) {
+      hashedPassword = newPassword;
+    } else {
+      hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+    }
 
     try {
       //Update the user
@@ -208,11 +220,14 @@ const controller = {
         exp,
         school,
         skills,
-        hashedPassword
+        hashedPassword,
+        isSuperman,
+        isAdmin
       );
       //Send the response
       res.json(updatedUser);
     } catch (error) {
+      console.log(error);
       res.status(500).send(error.message);
     }
   },

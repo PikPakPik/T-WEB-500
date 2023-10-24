@@ -1,4 +1,3 @@
-const { parse } = require("dotenv");
 const datamapper = require("../models/applications.datamapper");
 const loginService = require("../services/login.service");
 
