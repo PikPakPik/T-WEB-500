@@ -1216,45 +1216,169 @@
 //! Models swagger
 /**
  * @swagger
- *
- * definitions:
- *   User:
- *      type: object
- *      properties:
- *       userId:
- *         type: integer
- *         description: Id of the user
- *         example: 1
- *       firstName:
- *         type: string
- *         description: First name of the user
- *         example: "John"
- *       lastName:
- *         type: string
- *         description: Last name of the user
- *         example: "Doe"
- *       email:
- *         type: string
- *         description: Email of the user
- *         example: "John@example.com"
- *       userPassword:
- *         type: string
- *         description: Password of the user
- *         example: "azerty"
- *       exp:
- *         type: string
- *         description: Experience of the user
- *         example: "Confirmé"
- *       school:
- *         type: string
- *         description: School of the user
- *         example: "Epitech"
- *       skills:
- *         type: string
- *         description: Skills of the user
- *         example: "Developpment, Design"
- *      isSuperman:
- *         type: boolean
- *         description: If the user is a superman or not
- *         example: false
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         userId:
+ *           type: integer
+ *           description: ID de l'utilisateur
+ *         LastName:
+ *           type: string
+ *           description: Nom de l'utilisateur
+ *         firstName:
+ *           type: string
+ *           description: Prénom de l'utilisateur
+ *         email:
+ *           type: string
+ *           description: Email de l'utilisateur
+ *         userPassword:
+ *           type: string
+ *           description: Mot de passe de l'utilisateur
+ *         isAdmin:
+ *           type: boolean
+ *           description: Si l'utilisateur est admin ou non d'une entreprise
+ *         exp:
+ *           type: string
+ *           description: Expérience de l'utilisateur
+ *         school:
+ *           type: string
+ *           description: Formations de l'utilisateur
+ *         skills:
+ *           type: string
+ *           description: Compétences de l'utilisateur
+ *         isSuperman:
+ *           type: boolean
+ *           description: Si l'utilisateur est un superadmin ou non
+ */
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Companies:
+ *       type: object
+ *       properties:
+ *         companyId:
+ *           type: integer
+ *           description: ID de l'entreprise
+ *         name:
+ *           type: string
+ *           description: Nom de l'entreprise
+ *         userId:
+ *           type: integer
+ *           description: ID de l'utilisateur qui est admin de l'entreprise
+ *         logo:
+ *           type: string
+ *           description: Logo de l'entreprise
+ */
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Advertissements:
+ *       type: object
+ *       properties:
+ *         advertissementId:
+ *           type: integer
+ *           description: ID de l'annonce
+ *         title:
+ *           type: string
+ *           description: Titre de l'annonce
+ *         description:
+ *           type: string
+ *           description: Description de l'annonce
+ *         date:
+ *           type: dateTime
+ *           description: Date de mise en ligne de l'annonce
+ *         companyId:
+ *           type: integer
+ *           description: ID de l'entreprise qui est propriétaire de l'annonce
+ *         wages:
+ *           type: integer
+ *           description: Salaire annuel de l'annonce
+ *         place:
+ *           type: string
+ *           description: Lieu de l'annonce
+ *         WorkingTime:
+ *           type: string
+ *           description: Temps de travail de l'annonce
+ *         expRequired:
+ *           type: string
+ *           description: Expérience requise pour l'annonce
+ */
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     JobInformation:
+ *       type: object
+ *       properties:
+ *         isSaved:
+ *           type: boolean
+ *           description: Si l'annonce est sauvegardée ou non
+ *         isApplied:
+ *           type: boolean
+ *           description: Si l'annonce est appliquée ou non
+ *         advertissementId:
+ *           type: integer
+ *           description: ID de l'annonce concernée
+ *         userId:
+ *           type: integer
+ *           description: ID de l'utilisateur concerné
+ */
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     ApplicationInformation:
+ *       type: object
+ *       properties:
+ *         LastName:
+ *           type: string
+ *           description: Nom de l'utilisateur
+ *         firstName:
+ *           type: string
+ *           description: Prénom de l'utilisateur
+ *         email:
+ *           type: string
+ *           description: Email de l'utilisateur
+ *         userPassword:
+ *           type: string
+ *           description: Mot de passe de l'utilisateur
+ *         exp:
+ *           type: string
+ *           description: Expérience de l'utilisateur
+ *         school:
+ *           type: string
+ *           description: Formations de l'utilisateur
+ *         skills:
+ *           type: string
+ *           description: Compétences de l'utilisateur
+ *         applicationId:
+ *           type: integer
+ *           description: ID de la candidature
+ */
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Applications:
+ *       type: object
+ *       properties:
+ *         applicationId:
+ *           type: integer
+ *           description: ID de la candidature
+ *         userId:
+ *           type: integer
+ *           description: ID de l'utilisateur qui a postulé
+ *         advertissementId:
+ *           type: integer
+ *           description: ID de l'annonce concernée
+ *         date:
+ *           type: dateTime
+ *           description: Date de la candidature
+ *         status:
+ *           type: string
+ *           description: Statut de la candidature
  */

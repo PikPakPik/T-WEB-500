@@ -1,5 +1,9 @@
+require("dotenv").config();
+
 const datamapper = require("../models/applications.datamapper");
 const loginService = require("../services/login.service");
+const advertDatamapper = require("../models/advertissements.datamapper");
+const nodemailer = require("nodemailer");
 
 const controller = {
   //!Apply to an advertissement
@@ -104,6 +108,32 @@ const controller = {
           skills,
           applicationId
         );
+
+      //Send a mail with the title of the advertissement and the name of the company
+      const advertissement =
+        await advertDatamapper.getOneAdvertisement(advertissementId);
+
+      const advertTitle = advertissement.title;
+      const companyName = advertissement.company.name;
+      const userEmail = process.env.EMAIL_USER;
+      const userPassword = process.env.EMAIL_PASS;
+
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: userEmail,
+          pass: userPassword,
+        },
+      });
+
+      const mailOptions = {
+        from: userEmail,
+        to: email,
+        subject: "You apply to an advertissement",
+        text: `Hello ${firstName},You apply to the advertissement ${advertTitle} from ${companyName}`,
+      };
+
+      transporter.sendMail(mailOptions, function (error, info) {});
 
       //Return the response
       const responseData = {
