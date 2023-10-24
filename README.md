@@ -44,8 +44,8 @@ La documentation complète des endpoints de l'API est disponible à l'adresse `h
 
 - **Frontend**: React.js, Tailwind CSS
 - **Backend**: Node.js, Express.js
-- **Base de données**: Prisma ORM
-- **Gestion des dépendances**: npm
+- **Base de données**: MariaDB (ORM : Prisma)
+- **Gestion des dépendances**: NPM
 - **Authentification**: JSON Web Tokens (JWT)
 - **Autres Outils**: Git, GitHub
 
