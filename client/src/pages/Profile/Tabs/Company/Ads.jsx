@@ -74,7 +74,6 @@ const CompanyAds = ({ user }) => {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           toast.success("Votre annonce a bien été ajoutée");
           window.location.reload();
         })
@@ -96,7 +95,6 @@ const CompanyAds = ({ user }) => {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data);
           toast.success("Votre annonce a bien été modifiée");
           window.location.reload();
         })
@@ -115,7 +113,6 @@ const CompanyAds = ({ user }) => {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         toast.success("Votre annonce a bien été supprimée");
         window.location.reload();
       })
