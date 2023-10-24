@@ -8,7 +8,6 @@ const AdminIndex = () => {
   const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userDatas, setUserDatas] = useState([]);
-  const [applicationsDatas, setApplicationsDatas] = useState([]);
   const [companyDatas, setCompanyDatas] = useState([]);
   const [advertDatas, setAdvertDatas] = useState([]);
 
@@ -27,15 +26,13 @@ const AdminIndex = () => {
 
     const getStats = async () => {
       try {
-        const [dataUser, dataCandidature, dataCompany, dataAdvert] =
+        const [dataUser, dataCompany, dataAdvert] =
           await Promise.all([
             fetchData("http://localhost:3001/superman/users"),
-            fetchData("http://localhost:3001/superman/applications"),
             fetchData("http://localhost:3001/superman/company"),
             fetchData("http://localhost:3001/superman/advertissements"),
           ]);
         setUserDatas(dataUser);
-        setApplicationsDatas(dataCandidature);
         setCompanyDatas(dataCompany);
         setAdvertDatas(dataAdvert);
         setStats([
@@ -53,12 +50,7 @@ const AdminIndex = () => {
             title: "Annonces",
             value: dataAdvert?.length,
             icon: <Icon icon="iconamoon:search-duotone" className="text-4xl" />,
-          },
-          {
-            title: "Candidatures",
-            value: dataCandidature?.length,
-            icon: <Icon icon="map:post-box" className="text-4xl" />,
-          },
+          }
         ]);
         setLoading(false);
       } catch (error) {
@@ -71,7 +63,7 @@ const AdminIndex = () => {
 
   return (
     <div className="container mx-auto">
-      <div className="grid lg:grid-cols-4 mt-2 md:grid-cols-2 grid-cols-1 gap-6">
+      <div className="grid lg:grid-cols-3 mt-2 md:grid-cols-2 grid-cols-1 gap-6">
         {stats.map((d, k) => {
           return <DashboardStats key={k} {...d} colorIndex={k} />;
         })}
