@@ -15,7 +15,7 @@ const datamapper = {
 
   //! Get all advertissements
   getAdvertissements: async (itemsPerPage, skip) => {
-    const advertissements = await prisma.advertisements.findMany({
+    const advertissements = await prisma.advertissements.findMany({
       take: itemsPerPage,
       skip: skip,
     });
@@ -54,7 +54,7 @@ const datamapper = {
 
   //! Get all companies
   getCompanies: async (itemsPerPage, skip) => {
-    const companies = await prisma.company.findMany({
+    const companies = await prisma.companies.findMany({
       take: itemsPerPage,
       skip: skip,
     });
@@ -70,19 +70,25 @@ const datamapper = {
     exp,
     school,
     skills,
-    hashedPassword
+    hashedPassword,
+    isSuperman,
+    isAdmin
   ) => {
     const updatedUser = await prisma.user.update({
       where: {
         userId: userId,
       },
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      exp: exp,
-      school: school,
-      skills: skills,
-      userPassword: hashedPassword,
+      data: {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        exp: exp,
+        school: school,
+        skills: skills,
+        userPassword: hashedPassword,
+        isSuperman: isSuperman,
+        isAdmin: isAdmin,
+      }
     });
     return updatedUser;
   },

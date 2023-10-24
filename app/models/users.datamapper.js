@@ -101,7 +101,7 @@ const datamapper = {
 
   //! Delete one user
   deletedUser: async (userId) => {
-    const deleteUser = await Prisma.user.delete({
+    const deleteUser = await prisma.user.delete({
       where: {
         userId: userId,
       },
