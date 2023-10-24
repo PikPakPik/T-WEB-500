@@ -3,6 +3,7 @@ require("dotenv").config();
 const datamapper = require("../models/applications.datamapper");
 const loginService = require("../services/login.service");
 const advertDatamapper = require("../models/advertissements.datamapper");
+const companyDatamapper = require("../models/company.datamapper");
 const nodemailer = require("nodemailer");
 
 const controller = {
@@ -113,8 +114,10 @@ const controller = {
       const advertissement =
         await advertDatamapper.getOneAdvertisement(advertissementId);
 
+      const company = await companyDatamapper.getCompany(advertissement.companyId);
+
       const advertTitle = advertissement.title;
-      const companyName = advertissement.company.name;
+      const companyName = company.name;
       const userEmail = process.env.EMAIL_USER;
       const userPassword = process.env.EMAIL_PASS;
 
@@ -126,6 +129,7 @@ const controller = {
         },
       });
 
+
       const mailOptions = {
         from: userEmail,
         to: email,
@@ -133,7 +137,7 @@ const controller = {
         text: `Hello ${firstName},You apply to the advertissement ${advertTitle} from ${companyName}`,
       };
 
-      transporter.sendMail(mailOptions, function (error, info) {});
+      transporter.sendMail(mailOptions, function (error, info) { });
 
       //Return the response
       const responseData = {
@@ -142,6 +146,7 @@ const controller = {
       };
       return res.json(responseData);
     } catch (error) {
+      console.log(error);
       res.status(500).send(error.message);
     }
   },
