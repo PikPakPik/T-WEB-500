@@ -23,7 +23,7 @@ const controller = {
   getAdvertissements: async (req, res) => {
     try {
       // Get the page number from the query parameters
-      const pageNumber = req.query.pageNumber || 1;
+      const pageNumber = req.query.page || 1;
       // Define the number of items per page
       const itemsPerPage = 10;
       // Calculate the number of items to skip
@@ -44,7 +44,7 @@ const controller = {
   getUsers: async (req, res) => {
     try {
       // Get the page number from the query parameters
-      const pageNumber = req.query.pageNumber || 1;
+      const pageNumber = req.query.page || 1;
       // Define the number of items per page
       const itemsPerPage = 10;
       // Calculate the number of items to skip
@@ -62,7 +62,7 @@ const controller = {
   getApplications: async (req, res) => {
     try {
       // Get the page number from the query parameters
-      const pageNumber = req.query.pageNumber || 1;
+      const pageNumber = req.query.page || 1;
       // Define the number of items per page
       const itemsPerPage = 10;
       // Calculate the number of items to skip
@@ -80,7 +80,7 @@ const controller = {
   getApplicationsByAdvert: async (req, res) => {
     try {
       // Get the page number from the query parameters
-      const pageNumber = req.query.pageNumber;
+      const pageNumber = req.query.page || 1;
 
       //Get the advertId from the params
       const advertId = parseInt(req.params.advertId);
@@ -105,7 +105,7 @@ const controller = {
   getCompanies: async (req, res) => {
     try {
       // Get the page number from the query parameters
-      const pageNumber = req.query.pageNumber || 1;
+      const pageNumber = req.query.page || 1;
       // Define the number of items per page
       const itemsPerPage = 10;
       // Calculate the number of items to skip
@@ -212,6 +212,27 @@ const controller = {
       );
       //Send the response
       res.json(updatedUser);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  },
+
+  //! Update a company
+  updateCompany: async (req, res) => {
+    const companyId = parseInt(req.params.companyId);
+
+    // Get the new data from the request body
+    const { name, logo } = req.body;
+
+    try {
+      //Update the company
+      const updatedCompany = await companyDatamapper.updateCompany(
+        companyId,
+        name,
+        logo
+      );
+      //Send the response
+      res.json(updatedCompany);
     } catch (error) {
       res.status(500).send(error.message);
     }
