@@ -48,7 +48,7 @@ L'application sera accessible à l'adresse `http://localhost:3000`.
 - **Authentification**: JSON Web Tokens (JWT)
 - **Autres Outils**: Git, GitHub
 
-La documentation complète des endpoints de l'API est disponible [ici](http://localhost:3001/api-docs/).
+La documentation complète des endpoints de l'API est disponible à l'adresse `http://localhost:3001/api-docs/`.
 
 ## Contributeurs
 
