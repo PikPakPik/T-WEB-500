@@ -26,6 +26,7 @@ npm install
 3. **Configuration de la base de données**:
 ```bash
 cd ..
+npx prisma migrate dev --name init
 touch .env
 ```
 Copiez le contenu du fichier `.env.example` dans le fichier `.env` et remplacez les valeurs par défaut par les vôtres.
@@ -37,6 +38,7 @@ npm run dev
 ```
 
 L'application sera accessible à l'adresse `http://localhost:3000`.
+La documentation complète des endpoints de l'API est disponible à l'adresse `http://localhost:3001/api-docs/`.
 
 ## Technologies Utilisées
 
@@ -47,7 +49,6 @@ L'application sera accessible à l'adresse `http://localhost:3000`.
 - **Authentification**: JSON Web Tokens (JWT)
 - **Autres Outils**: Git, GitHub
 
-La documentation complète des endpoints de l'API est disponible à l'adresse `http://localhost:3001/api-docs/`.
 
 ## Contributeurs
 
