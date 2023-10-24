@@ -95,7 +95,7 @@ const Home = () => {
     (async () => {
       try {
         const fetchedAds = await fetchAdsAndCompanies();
-        
+
         let updatedAds = fetchedAds;
 
         if (activeTab === "Sauvegardées") {
@@ -103,7 +103,7 @@ const Home = () => {
         } else if (activeTab === "Candidatées") {
           updatedAds = await fetchAppliedAdsAndCompanies(fetchedAds);
         }
-        
+
         setAds(updatedAds);
         setLoading(false); // Réinitialiser l'état de chargement une fois terminé
       } catch (error) {
@@ -111,7 +111,7 @@ const Home = () => {
         setLoading(false); // Réinitialiser l'état de chargement en cas d'erreur
       }
     })();
-  }, [activeTab])
+  }, [activeTab]);
 
   return (
     <div className="container mx-auto px-4 mt-5">
@@ -122,14 +122,17 @@ const Home = () => {
         {tabs.map((tab, index) => (
           <div
             key={index}
-            onClick={user || index === 0 ? () => setActiveTab(tab) : null}
+            onClick={(user || index === 0) && index < tabs.length -3 ? () => setActiveTab(tab) : null}
             className={`flex items-center md:w-1/6 rounded-full p-3 py-2 justify-center z-30 transition-colors duration-300 ${
-              user || index === 0
+              (user || index === 0) && index < tabs.length - 3
                 ? "hover:bg-violet-700 hover:text-white hover:cursor-pointer active:text-white active:bg-violet-700"
-                : ""
+                : "cursor-not-allowed"
             } ease-in-out ${
               activeTab === tab ? "bg-violet-600 text-white" : "bg-base-300"
-            } ${!user && index !== 0 ? "cursor-not-allowed " : ""}`}
+            } ${
+              (!user && index !== 0) ? "cursor-not-allowed " : ""
+            }
+            `}
           >
             <span>{tab}</span>
           </div>
@@ -137,9 +140,10 @@ const Home = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-5">
         {/* Affiche les annonces uniquement si elles ne sont pas en cours de chargement */}
-        {!loading && filteredAds.slice(0, displayCount).map((ad, index) => (
-          <AdsCard ad={ad} index={index} key={index} />
-        ))}
+        {!loading &&
+          filteredAds
+            .slice(0, displayCount)
+            .map((ad, index) => <AdsCard ad={ad} index={index} key={index} />)}
       </div>
       {ads.length > displayCount && (
         <div className="flex justify-center">
