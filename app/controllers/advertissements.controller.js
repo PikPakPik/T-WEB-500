@@ -143,9 +143,9 @@ const controller = {
     try {
       //Recup the userId from the token
       const userId = await loginService.getUserId(req);
-      console.log(userId);
       //Get all saved advertisements
       const savedAdvert = await datamapper.getSavedAdvert(userId);
+      res.json(savedAdvert);
     } catch (error) {
       res.status(500).send(error.message);
     }
