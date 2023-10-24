@@ -124,6 +124,10 @@ const AdminIndex = () => {
                       userDatas.map((user) => {
                         if (user.userId === id) {
                           Object.keys(data).forEach((key) => {
+                            if(key === "newPassword") {
+                              user.userPassword = data[key];
+                              return;
+                            }
                             user[key] = data[key];
                           });
                         }
