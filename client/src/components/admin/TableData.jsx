@@ -91,7 +91,16 @@ const TableData = ({ title, type, data, handleDelete, handleUpdate }) => {
   };
 
   if (data.length === 0)
-    return <div className="text-center">Aucune donnée</div>;
+    return (
+      <div className="mt-6 border border-slate-600 rounded-md shadow-md p-4">
+        <h2 className="text-2xl font-bold">{title}</h2>
+        <div className="overflow-x-auto">
+          <table className="table table-zebra w-full">
+            <span className="text-gray-500">Aucune donnée</span>
+          </table>
+        </div>
+      </div>
+    );
 
   return (
     <>
