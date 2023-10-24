@@ -1,5 +1,6 @@
 import { useState } from "react";
 import UpdateModal from "./modals/UpdateModal";
+import { toast } from "react-toastify";
 
 const ConfirmModal = ({ isOpen, data, onConfirm, onCancel }) => {
   if (!isOpen) return null;
@@ -44,11 +45,20 @@ const ConfirmModal = ({ isOpen, data, onConfirm, onCancel }) => {
   );
 };
 
-const TableData = ({ title, type, data, handleDelete, handleUpdate }) => {
+const TableData = ({
+  title,
+  type,
+  data,
+  handleDelete,
+  handleUpdate,
+  handleAdd,
+}) => {
   const [isModalDeleteOpen, setModalDeleteOpen] = useState(false);
   const [isModalUpdateOpen, setModalUpdateOpen] = useState(false);
+  const [isModalAddOpen, setModalAddOpen] = useState(false);
   const [modalDeleteData, setModalDeleteData] = useState(null);
   const [modalUpdateData, setModalUpdateData] = useState(null);
+  const [modalAddData, setModalAddData] = useState(null);
 
   const openModalDelete = (data) => {
     setModalDeleteData(data);
@@ -58,6 +68,15 @@ const TableData = ({ title, type, data, handleDelete, handleUpdate }) => {
   const openModalUpdate = (data) => {
     setModalUpdateData(data);
     setModalUpdateOpen(true);
+  };
+
+  const openModalAdd = (type) => {
+    toast.warning("Cette fonctionnalité n'est pas encore disponible");
+    setModalAddOpen(true);
+  };
+
+  const closeModalAdd = () => {
+    setModalAddOpen(false);
   };
 
   const closeDeleteModal = () => {
@@ -90,6 +109,11 @@ const TableData = ({ title, type, data, handleDelete, handleUpdate }) => {
     closeUpdateModal();
   };
 
+  const handleConfirmAdd = (data) => {
+    handleAdd(data);
+    closeModalAdd();
+  };
+
   if (data.length === 0)
     return (
       <div className="mt-6 border border-slate-600 rounded-md shadow-md p-4">
@@ -118,7 +142,15 @@ const TableData = ({ title, type, data, handleDelete, handleUpdate }) => {
         onCancel={closeUpdateModal}
       />
       <div className="mt-6 border border-slate-600 rounded-md shadow-md p-4">
-        <h2 className="text-2xl font-bold">{title}</h2>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-2xl font-bold">{title}</h2>
+          <button
+            onClick={() => openModalAdd(type)}
+            className="bg-green-500 text-white px-4 py-2 rounded-md"
+          >
+            Ajouter
+          </button>
+        </div>
         <div className="overflow-x-auto">
           <table className="table table-zebra w-full">
             <thead>

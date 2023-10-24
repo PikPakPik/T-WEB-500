@@ -29,7 +29,7 @@ model user {
 model advertissements {
   advertissementId Int              @id @default(autoincrement())
   title            String
-  description      String
+  description      String           @db.VarChar(10000)
   date             DateTime         @default(now())
   company          companies        @relation(fields: [companyId], references: [companyId])
   companyId        Int
