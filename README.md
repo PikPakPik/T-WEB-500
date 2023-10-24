@@ -26,7 +26,6 @@ npm install
 3. **Configuration de la base de données**:
 ```bash
 cd ..
-cd server
 touch .env
 ```
 Copiez le contenu du fichier `.env.example` dans le fichier `.env` et remplacez les valeurs par défaut par les vôtres.
