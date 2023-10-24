@@ -139,6 +139,28 @@ const AdminIndex = () => {
             title="Liste des entreprises"
             type={"company"}
             data={companyDatas}
+            handleDelete={
+              (id) => {
+                fetch(`http://localhost:3001/superman/company/${id}`, {
+                  method: "DELETE",
+                  headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  },
+                })
+                  .then((res) => res.json())
+                  .then((res) => {
+                    if (res.error) {
+                      console.error(res.error);
+                    } else {
+                      setCompanyDatas(
+                        companyDatas.filter((company) => company.companyId !== id)
+                      );
+                      toast.success("Entreprise supprimée");
+                    }
+                  })
+                  .catch((err) => console.error(err));
+              }
+            }
             handleUpdate={
               (id, data) => {
                 fetch(`http://localhost:3001/superman/company/${id}/update`, {
@@ -174,6 +196,28 @@ const AdminIndex = () => {
             title="Liste des annonces"
             type={"advert"}
             data={advertDatas}
+            handleDelete={
+              (id) => {
+                fetch(`http://localhost:3001/superman/advertissement/${id}`, {
+                  method: "DELETE",
+                  headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  },
+                })
+                  .then((res) => res.json())
+                  .then((res) => {
+                    if (res.error) {
+                      console.error(res.error);
+                    } else {
+                      setAdvertDatas(
+                        advertDatas.filter((advert) => advert.advertId !== id)
+                      );
+                      toast.success("Annonce supprimée");
+                    }
+                  })
+                  .catch((err) => console.error(err));
+              }
+            }
             handleUpdate={
               (id, data) => {
                 fetch(`http://localhost:3001/superman/advertissement/${id}/update`, {

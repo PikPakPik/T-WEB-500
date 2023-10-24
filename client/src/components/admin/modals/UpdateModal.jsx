@@ -85,7 +85,6 @@ const UpdateModal = ({ isOpen, data, type, onConfirm, onCancel }) => {
         companyId: data.companyId,
         logo: data.logo,
         name: data.name,
-        userId: data.userId,
       });
     } else if (type === "advert") {
       console.log(data);
@@ -351,23 +350,6 @@ const UpdateModal = ({ isOpen, data, type, onConfirm, onCancel }) => {
               onChange={handleChange}
               defaultValue={data.logo}
             />
-            <label className="label" htmlFor="userId">
-              Utilisateur Owner
-            </label>
-            <select
-              name="userId"
-              className="select select-bordered w-full"
-              onSelect={handleChange}
-              defaultValue={data.userId || ""}
-              required
-            >
-              <option disabled>--Choisir une option--</option>
-              {users.map((user) => (
-                <option key={user.userId} value={user.userId}>
-                  ({user.userId}) {user.firstName} {user.lastName}
-                </option>
-              ))}
-            </select>
             <div className="flex-row flex items-center justify-center gap-4 mt-2">
               <button onClick={() => onConfirm(formData)}>Modifier</button>
               <button onClick={onCancel}>Annuler</button>
