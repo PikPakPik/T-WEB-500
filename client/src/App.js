@@ -10,6 +10,7 @@ import { themeChange } from "theme-change";
 import NoFound from "./pages/NoFound";
 import Profile from "./pages/Profile/Profile";
 import { useAuth } from "./hooks/useAuth";
+import AdminIndex from "./pages/Admin/Index";
 
 const App = () => {
   const ProtectedRoute = ({ element, fallback }) => {
@@ -20,6 +21,11 @@ const App = () => {
   const GuestRoute = ({ element, fallback }) => {
     const { user } = useAuth();
     return !user ? element : fallback;
+  };
+
+  const UltraProtectedRoute = ({ element, fallback }) => {
+    const { user } = useAuth();
+    return user && user.isSuperman ? element : fallback;
   };
 
   useEffect(() => {
@@ -36,6 +42,9 @@ const App = () => {
           <Route path="/register" element={<GuestRoute element={<Register />} redirectTo={<Home />} />} />
           <Route path="/profile" element={<ProtectedRoute element={<Profile />} redirectTo={<Home />} />} />
           <Route path="/ad/:avertissementId" element={<AdDetail />} />
+          <Route path="/admin" element={<UltraProtectedRoute element={<AdminIndex />} redirectTo={<Home />} />}>
+            
+          </Route>
           <Route path="*" element={<NoFound />} />
         </Routes>
       </Layout>

@@ -110,8 +110,8 @@ const datamapper = {
       where: {
         advertissementId_userId: {
           advertissementId: advertId, // la variable que vous avez passée en argument
-          userId: userId  // la variable que vous avez passée en argument
-        }
+          userId: userId, // la variable que vous avez passée en argument
+        },
       },
       data: {
         isSaved: isSaved,
@@ -143,15 +143,110 @@ const datamapper = {
     return appliedAdvert;
   },
 
+  //! Update an advertisement
+  updateAdvertisement: async (
+    advertId,
+    title,
+    description,
+    wages,
+    place,
+    workingTime,
+    expRequired
+  ) => {
+    const updateAdvertisement = await prisma.advertissements.update({
+      where: {
+        advertissementId: advertId,
+      },
+      data: {
+        title: title,
+        description: description,
+        wages: wages,
+        place: place,
+        workingTime: workingTime,
+        expRequired: expRequired,
+      },
+    });
+    return updateAdvertisement;
+  },
+
+  //! Check if user isAdmin
+  isAdmin: async (userId) => {
+    const isAdmin = await prisma.user.findUnique({
+      where: {
+        userId: userId,
+        isAdmin: true,
+      },
+    });
+    return isAdmin;
+  },
+
+  //! Get one company by advertId
+  getCompanyByAdvertId: async (advertId) => {
+    const company = await prisma.advertissements.findUnique({
+      where: {
+        advertissementId: advertId,
+      },
+      select: {
+        company: true,
+      },
+    });
+    return company.company;
+  },
+
   //!Delete a advertisement
-  //TODO: finish this delete route
   deleteAdvertisement: async (advertId) => {
+    //Get the applicationId from the several application of the advert
+    const application = await prisma.applications.findMany({
+      where: {
+        advertissementId: advertId,
+      },
+    });
+
+    // Boucle pour supprimer les associations de applicationId dans applicationInformation
+    for (let j = 0; j < application.length; j++) {
+      const applicationId = application[j].applicationId;
+
+      //Delete the applicationInformation of the application
+      const deleteApplicationInformation =
+        await prisma.applicationinformation.deleteMany({
+          where: {
+            applicationId: applicationId,
+          },
+        });
+    }
+    //Delete the application of the advert
+    const deleteApplication = await prisma.applications.deleteMany({
+      where: {
+        advertissementId: advertId,
+      },
+    });
+
+    //Delete the Job Information of the advert
+    const deletedJobInformation = await prisma.jobinformation.deleteMany({
+      where: {
+        advertissementId: advertId,
+      },
+    });
+
+    // Finally, delete the advert
     const deletedAdvertisement = await prisma.advertissements.delete({
       where: {
         advertissementId: advertId,
       },
     });
     return deletedAdvertisement;
+  },
+
+  //! Search an advertissement by his name
+  searchAdvert: async (advertName) => {
+    const searchAdvert = await prisma.advertissements.findMany({
+      where: {
+        title: {
+          contains: advertName,
+        },
+      },
+    });
+    return searchAdvert;
   },
 };
 

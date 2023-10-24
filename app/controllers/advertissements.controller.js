@@ -4,46 +4,65 @@ const loginService = require("../services/login.service");
 const controller = {
   //! Show all advertissements
   getAdvertissements: async (req, res) => {
-    const advertissements = await datamapper.getAdvertissements();
-    res.json(advertissements);
+    try {
+      const advertissements = await datamapper.getAdvertissements();
+      res.json(advertissements);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
   },
 
   //! Show one advertisement (with job Information if exist)
   getOneAdvertisement: async (req, res) => {
     const advertId = parseInt(req.params.advertId);
-    const oneAdvertisement = await datamapper.getOneAdvertisement(advertId);
+    try {
+      //Recup the token from the headers if exist
+      const token = req.headers.authorization?.replace("Bearer ", "");
 
-    // Recup the userId from the token
-    const token = req.headers.authorization?.replace("Bearer ", "");
+      //Get one advertissement
+      const oneAdvertisement = await datamapper.getOneAdvertisement(advertId);
 
-    // If we get the userId, we search the jobInformation and send it with the response
-    if (token) {
-      const user = loginService.getUser(token);
-      const userId = user.id;
-      const jobInformation = await datamapper.getJobInformation(
-        advertId,
-        userId
-      );
+      // If we get the userId, we search the jobInformation and send it with the response
+      if (token) {
+        //Recup the userId from the token
+        const user = await loginService.getUser(token);
+        const userId = user.id;
 
-      // Send the response
-      const responseData = {
-        oneAdvertisement,
-        jobInformation,
-      };
-      return res.json(responseData);
+        //Get the jobInformation
+        const jobInformation = await datamapper.getJobInformation(
+          advertId,
+          userId
+        );
+
+        // Send the response
+        const responseData = {
+          oneAdvertisement,
+          jobInformation,
+        };
+        return res.json(responseData);
+      }
+
+      // Send the response without jobInformation
+      res.json({ oneAdvertisement });
+    } catch (error) {
+      res.status(500).send(error.message);
     }
-
-    // Send the response
-    res.json({oneAdvertisement});
   },
 
   //! Show all advertisements from one company
   getCompanyAdvertisements: async (req, res) => {
     const companyId = parseInt(req.params.companyId);
-    const companyAdvertisements = await datamapper.getCompanyAdvertisements(
-      companyId
-    );
-    res.json(companyAdvertisements);
+
+    try {
+      // Get all advertisements from one company
+      const companyAdvertisements =
+        await datamapper.getCompanyAdvertisements(companyId);
+
+      //Send the response
+      res.json(companyAdvertisements);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
   },
 
   //! Create an advertisement
@@ -51,128 +70,184 @@ const controller = {
     const { title, description, place, workingTime, expRequired } = req.body;
     const wages = parseInt(req.body.wages);
 
-    //Recup the userId from the token
-    const token = req.headers.authorization?.replace("Bearer ", "");
-    const user = loginService.getUser(token);
-    const userId = user.id;
+    try {
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
 
-    //Search the company with the userId
-    const company = await datamapper.getOneCompany(userId);
-    const companyId = parseInt(company[0].companyId);
+      //Search the company with the userId
+      const company = await datamapper.getOneCompany(userId);
+      const companyId = parseInt(company[0].companyId);
 
-    //Create the advertisement
-    const newAdvertisement = await datamapper.createAdvertisement(
-      companyId,
-      title,
-      description,
-      wages,
-      place,
-      workingTime,
-      expRequired
-    );
+      //Create the advertisement
+      const newAdvertisement = await datamapper.createAdvertisement(
+        companyId,
+        title,
+        description,
+        wages,
+        place,
+        workingTime,
+        expRequired
+      );
 
-    res.json(newAdvertisement);
+      //Send the response
+      res.json(newAdvertisement);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
   },
 
   //! To know if the job information exist or not
   isJobInformationExist: async (req, res) => {
-    //Recup the userId from the token
-    const token = req.headers.authorization?.replace("Bearer ", "");
-    const user = loginService.getUser(token);
-    const userId = user.id;
     const { isSaved, isApplied } = req.body;
 
     //Recup the advertId from the params
     const advertId = parseInt(req.params.advertId);
 
-    //Check if the job information exist
-    const jobInformation = await datamapper.getJobInformation(advertId, userId);
+    try {
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
 
-    if (jobInformation.length !== 0) {
-      console.log("jobInformation exist");
-      //*Update the jobInformation
-      const updatedJobInformation = await datamapper.updateJobInformation(
+      //Check if the job information exist
+      const jobInformation = await datamapper.getJobInformation(
         advertId,
-        userId,
-        isSaved,
-        isApplied
+        userId
       );
 
-      res.json(updatedJobInformation);
-    } else {
-        console.log("jobInformation not exist");
-      //*Create the jobInformation
-      const newJobInformation = await datamapper.createJobInformation(
-        advertId,
-        userId,
-        isSaved,
-        isApplied
-      );
-      res.json(newJobInformation);
+      if (jobInformation.length !== 0) {
+        //* If job Information exist, update the jobInformation
+        const updatedJobInformation = await datamapper.updateJobInformation(
+          advertId,
+          userId,
+          isSaved,
+          isApplied
+        );
+
+        res.json(updatedJobInformation);
+      } else {
+        //*Else, create the jobInformation
+        const newJobInformation = await datamapper.createJobInformation(
+          advertId,
+          userId,
+          isSaved,
+          isApplied
+        );
+        res.json(newJobInformation);
+      }
+    } catch (error) {
+      res.status(500).send(error.message);
     }
   },
 
   //! Show all saved advertisements
   getSavedAdvert: async (req, res) => {
-    //Recup the userId from the token
-    const token = req.headers.authorization?.replace("Bearer ", "");
-    const user = loginService.getUser(token);
-    const userId = user.id;
-
-    //Get all saved advertisements
-    const savedAdvert = await datamapper.getSavedAdvert(userId);
-    res.json(savedAdvert);
+    try {
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
+      console.log(userId);
+      //Get all saved advertisements
+      const savedAdvert = await datamapper.getSavedAdvert(userId);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
   },
 
   //! Show all applied advertisements
   getAppliedAdvert: async (req, res) => {
-    //Recup the userId from the token
-    const token = req.headers.authorization?.replace("Bearer ", "");
-    const user = loginService.getUser(token);
-    const userId = user.id;
-
-    //Get all applied advertisements
-    const appliedAdvert = await datamapper.getAppliedAdvert(userId);
-    res.json(appliedAdvert);
+    try {
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
+      //Get all applied advertisements
+      const appliedAdvert = await datamapper.getAppliedAdvert(userId);
+      res.json(appliedAdvert);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
   },
 
-  //TODO: finish this delete route
+  //! Update an advertisement
+  updateAdvertisement: async (req, res) => {
+    // Recup the advertId
+    const advertId = parseInt(req.params.advertId);
+
+    //Recup the data from the body
+    const { title, description, place, workingTime, expRequired } = req.body;
+    const wages = parseInt(req.body.wages);
+
+    try {
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
+
+      //To know if the user is an admin
+      const isAdmin = await datamapper.isAdmin(userId);
+      if (!isAdmin) {
+        return res.status(403).send("You are not an admin");
+      }
+
+      //Check if the user is the admin of the company of the advertisement
+      const company = await datamapper.getCompanyByAdvertId(advertId);
+      if (company.userId !== userId) {
+        return res.status(403).send("You are not the admin of this company");
+      }
+
+      //Update the advertisement
+      const updatedAdvertisement = await datamapper.updateAdvertisement(
+        advertId,
+        title,
+        description,
+        wages,
+        place,
+        workingTime,
+        expRequired
+      );
+      //Send the response
+      res.json(updatedAdvertisement);
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  },
+
   //! Delete an advertisement
   deleteAdvertisement: async (req, res) => {
     //Recup the advertId
     const advertId = parseInt(req.params.advertId);
 
-    //Recup the userId from the token
-    const token = req.headers.authorization?.replace("Bearer ", "");
-    const user = loginService.getUser(token);
-    const userId = user.id;
-
-    //To know if the user is an admin
-    const isAdmin = await datamapper.isAdmin(userId);
-    if (!isAdmin) {
-      return res.status(403).send("You are not an admin");
-    }
-
-    //Check if the user is the admin of the company of the advertisement
-    const company = await datamapper.getCompanyByAdvertId(advertId);
-    if (company.userId !== userId) {
-      return res.status(403).send("You are not the admin of this company");
-    }
-
-    //Delete the advertisement
     try {
-      const deletedAdvertisement = await datamapper.deleteAdvertisement(
-        advertId
-      );
+      //Recup the userId from the token
+      const userId = await loginService.getUserId(req);
 
+      //To know if the user is an admin
+      const isAdmin = await datamapper.isAdmin(userId);
+      if (!isAdmin) {
+        return res.status(403).send("You are not an admin");
+      }
+
+      //Check if the user is the admin of the company of the advertisement
+      const company = await datamapper.getCompanyByAdvertId(advertId);
+      if (company.userId !== userId) {
+        return res.status(403).send("You are not the admin of this company");
+      }
+
+      //Delete the advertisement
+      const deletedAdvertisement =
+        await datamapper.deleteAdvertisement(advertId);
       res.json(deletedAdvertisement);
     } catch (error) {
-      console.log(error);
       res.status(500).send(error.message);
     }
+  },
 
-    const deletedAdvertisement = await datamapper.deleteAdvertisement(advertId);
-    res.json(deletedAdvertisement);
+  //! Search an advertisement by title
+  searchAdvert: async (req, res) => {
+    //Recup the advertName from the params
+    const advertName = req.params.advertName;
+
+    try {
+      //Search the advertisement
+      const searchAdvert = await datamapper.searchAdvert(advertName);
+      res.json(searchAdvert);
+    } catch (error) {
+      return null;
+    }
   },
 };
 

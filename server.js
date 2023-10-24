@@ -3,7 +3,12 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 app.use(express.json());
+
 app.use(cors());
+
+// Import the swagger.js file
+const swagger = require("./swagger");
+swagger(app);
 
 //Use the router
 app.use("/", require("./app/router/router"));

@@ -38,6 +38,8 @@ const AuthProvider = ({ children }) => {
                         console.error(`Server responded with status: ${response.status}`);
                     }
                 } catch (err) {
+                    window.localStorage.removeItem(TOKEN_KEY);
+                    window.location.href = '/login';
                     console.error(err);
                 }
             }
@@ -66,11 +68,22 @@ const AuthProvider = ({ children }) => {
             }
         })
         .then(data => {
-            setUser(data);
             // Utilisation de la constante pour le TOKEN_KEY et la méthode setItem pour stocker le token
             window.localStorage.setItem(TOKEN_KEY, data.token);
-            navigate('/');
-            window.location.reload();
+            fetch(`${API_URL}/me`, {
+                headers: {
+                    Authorization: `Bearer ${data.token}`
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                setUser(data);
+                if(data.isSuperman === true) {
+                    navigate('/admin');
+                } else {
+                    navigate('/');
+                }
+            })
         })
         .catch(err => {
             if (errorCallback) errorCallback(err);
