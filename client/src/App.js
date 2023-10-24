@@ -38,11 +38,11 @@ const App = () => {
       <Layout>
         <Routes>
         <Route path="/" element={<Home />} />
-          <Route path="/login" element={<GuestRoute element={<Login />} redirectTo={<Home />} />} />
-          <Route path="/register" element={<GuestRoute element={<Register />} redirectTo={<Home />} />} />
-          <Route path="/profile" element={<ProtectedRoute element={<Profile />} redirectTo={<Home />} />} />
+          <Route path="/login" element={<GuestRoute element={<Login />} redirectTo={<NoFound />} />} />
+          <Route path="/register" element={<GuestRoute element={<Register />} redirectTo={<NoFound />} />} />
+          <Route path="/profile" element={<ProtectedRoute element={<Profile />} redirectTo={<NoFound />} />} />
           <Route path="/ad/:avertissementId" element={<AdDetail />} />
-          <Route path="/admin" element={<UltraProtectedRoute element={<AdminIndex />} redirectTo={<Home />} />}>
+          <Route path="/admin" element={<UltraProtectedRoute element={<AdminIndex />} redirectTo={<NoFound />} />}>
             
           </Route>
           <Route path="*" element={<NoFound />} />

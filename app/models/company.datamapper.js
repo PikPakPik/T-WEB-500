@@ -42,7 +42,7 @@ const datamapper = {
 
   //! Update user profile to no admin
   updateUser: async (userId) => {
-    const updateUser = await prisma.user.updtae({
+    const updateUser = await prisma.user.update({
       where: {
         userId: userId,
       },
@@ -50,6 +50,7 @@ const datamapper = {
         isAdmin: false,
       },
     });
+    return updateUser;
   },
 
   //! Check if the user is an admin

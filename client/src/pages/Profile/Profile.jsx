@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import CompanyTab from "./Tabs/CompanyTab";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const renderOverview = (user) => (
   <div className="grid grid-cols-3 gap-4">
@@ -20,11 +22,11 @@ const renderOverview = (user) => (
   </div>
 );
 
-const renderSettings = (user) => (
+const renderSettings = (user, handleFormSubmit) => (
   <div className="grid grid-cols-3 gap-4">
     <div className="col-span-3">
       <h1 className="text-3xl">Settings</h1>
-      <form action="">
+      <form onSubmit={handleFormSubmit}>
         <div className="flex flex-col">
           <div className="my-2">
             <label htmlFor="firstName">Prénom</label>
@@ -71,32 +73,133 @@ const renderSettings = (user) => (
               className="input input-bordered w-content ml-2"
             />
           </div>
+          <div className="my-2">
+            <label htmlFor="exp">Expérience</label>
+            <select
+              name="exp"
+              className="select select-bordered w-content ml-2"
+              defaultValue={user.exp.toLowerCase() || ""}
+              required
+            >
+              <option disabled>--Choisir une option--</option>
+              <option value="jeune">Jeune diplômé</option>
+              <option value="junior">Junior</option>
+              <option value="confirme">Confirmé</option>
+              <option value="senior">Senior</option>
+            </select>
+          </div>
         </div>
+        <button type="submit" className="btn btn-primary mt-4">
+          Sauvegarder
+        </button>
+      </form>
+    </div>
+  </div>
+);
+
+const renderPassword = (handleFormSubmitPassword) => (
+  <div className="grid grid-cols-3 gap-4">
+    <div className="col-span-3">
+      <h1 className="text-3xl">Changer de mot de passe</h1>
+      <form onSubmit={handleFormSubmitPassword}>
+        <div className="flex flex-col">
+          <div className="my-2">
+            <label htmlFor="oldPassword">Nouveau mot de passe</label>
+            <input
+              name="newPassword"
+              type="password"
+              defaultValue={""}
+              className="input input-bordered ml-2"
+            />
+          </div>
+          <div className="my-2">
+            <label htmlFor="oldPassword">Confirmer le mot de passe</label>
+            <input
+              name="confirmPassword"
+              type="password"
+              defaultValue={""}
+              className="input input-bordered ml-2"
+            />
+          </div>
+        </div>
+        <button type="submit" className="btn btn-primary mt-4">
+          Sauvegarder
+        </button>
       </form>
     </div>
   </div>
 );
 
 
-const renderPassword = () => <p>This is the password tab.</p>;
-
-
-
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("overview");
-  const { user, isLoading, isError } = useAuth();
+  const { setUser, user, isLoading, isError } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
     logo: "",
   });
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const renderCompany = () => <CompanyTab user={user} />;
 
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+  
+    fetch(`http://localhost:3001/user/`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.error) {
+          console.error(res.error);
+        } else {
+          setUser(res);
+          toast.success("Profil modifié");
+          navigate("/profile");
+        }
+      })
+      .catch((err) => console.error(err));
+  };
+
+  const handleFormSubmitPassword = (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+  
+    fetch(`http://localhost:3001/user/password`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.error) {
+          console.error(res.error);
+        } else {
+          toast.success("Mot de passe modifié");
+          navigate("/profile");
+        }
+      })
+      .catch((err) => console.error(err));
+  }
+
   const tabRenderers = {
     overview: renderOverview,
-    settings: renderSettings,
-    password: renderPassword,
+    settings: (user) => renderSettings(user, handleFormSubmit),
+    password: () => renderPassword(handleFormSubmitPassword),
     company: renderCompany,
   };
 
@@ -144,7 +247,12 @@ const Profile = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        window.location.reload();
+        if (data.error) {
+          setError(data.error);
+        } else {
+          toast.success("Entreprise ajoutée");
+          navigate("/profile");
+        }
       })
       .catch((error) => {
         console.error("Error:", error);

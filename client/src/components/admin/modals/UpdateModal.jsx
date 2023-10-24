@@ -2,69 +2,8 @@ import { useEffect, useState } from "react";
 
 const UpdateModal = ({ isOpen, data, type, onConfirm, onCancel }) => {
   const [formData, setFormData] = useState(data);
-  const [companies, setCompanies] = useState([]);
-  const [adverts, setAdverts] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [applications, setApplications] = useState([]);
 
   useEffect(() => {
-    const fetchData = async (url) => {
-      const headers = {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      };
-      const response = await fetch(url, { headers });
-      if (!response.ok) {
-        console.error("Failed to fetch data:", response);
-        throw new Error(`Failed to fetch ${url}`);
-      }
-      return response.json();
-    };
-
-    const getCompanies = async () => {
-      try {
-        const data = await fetchData("http://localhost:3001/superman/company");
-        setCompanies(data);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-      }
-    };
-
-    const getAdverts = async () => {
-      try {
-        const data = await fetchData(
-          "http://localhost:3001/superman/advertissements"
-        );
-        setAdverts(data);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-      }
-    };
-
-    const getUsers = async () => {
-      try {
-        const data = await fetchData("http://localhost:3001/superman/users");
-        setUsers(data);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-      }
-    };
-
-    const getApplications = async () => {
-      try {
-        const data = await fetchData(
-          "http://localhost:3001/superman/applications"
-        );
-        setApplications(data);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-      }
-    };
-
-    getCompanies();
-    getAdverts();
-    getUsers();
-    getApplications();
-
     if (type === "user") {
       if (!isOpen) return;
       setFormData({
@@ -87,7 +26,6 @@ const UpdateModal = ({ isOpen, data, type, onConfirm, onCancel }) => {
         name: data.name,
       });
     } else if (type === "advert") {
-      console.log(data);
       if (!isOpen) return;
       setFormData({
         advertissementId: data.advertissementId,
@@ -143,7 +81,7 @@ const UpdateModal = ({ isOpen, data, type, onConfirm, onCancel }) => {
               Email
             </label>
             <input
-              type="text"
+              type="email"
               name="email"
               id="email"
               className="input input-bordered w-full"
